@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>CodingPipe.com</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/" aria-current="page">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			<h1 id="favorite-links" tabindex="-1">Favorite Links <a class="header-anchor" href="#favorite-links">#</a></h1>
+<p>A list of link I find myself repeatedly referring to.</p>
+<p></p>
+<h2 id="general-stuff" tabindex="-1"><strong>General stuff</strong> <a class="header-anchor" href="#general-stuff">#</a></h2>
+<ul>
+<li>
+<p><a href="http://hintjens.com/blog:101">Ten Tips for Young Programmers - hintjens.com</a></p>
+</li>
+<li>
+<p><a href="http://hintjens.com/blog:98">Ten Habits of a Good Programmer - hintjens.com</a></p>
+</li>
+<li>
+<p><a href="https://noidea.dog/glue">Being Glue by Tanya Reilly</a></p>
+</li>
+<li>
+<p><a href="https://www.kitchensoap.com/2012/10/25/on-being-a-senior-engineer/">On Being A Senior Engineer - kitchensoap.com</a></p>
+</li>
+<li>
+<p><a href="https://staffeng.com/">Stories of reaching Staff-plus engineering roles</a></p>
+</li>
+<li>
+<p><a href="https://blog.ploeh.dk/2024/05/20/fundamentals/">Fundamentals by Mark Seeman</a></p>
+</li>
+<li>
+<p><a href="https://themanagershandbook.com/">The Manager's Handbook</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Category:Programming_principles">Programming principles</a></p>
+</li>
+<li>
+<p><a href="https://blog.codinghorror.com/code-smells/">Code Smells - codinghorror.com</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="on-software-design-and-architecture" tabindex="-1"><strong>On software design &amp; architecture</strong> <a class="header-anchor" href="#on-software-design-and-architecture">#</a></h2>
+<p>General:</p>
+<ul>
+<li>
+<p><a href="https://12factor.net/">https://12factor.net/</a></p>
+</li>
+<li>
+<p><a href="https://arc42.org/">https://arc42.org/</a></p>
+</li>
+<li>
+<p><a href="https://c4model.com/">https://c4model.com/</a></p>
+</li>
+<li>
+<p><a href="https://owasp.org/www-project-top-ten/">https://owasp.org/www-project-top-ten/</a></p>
+</li>
+</ul>
+<p></p>
+<p>Patterns catalog:</p>
+<ul>
+<li>
+<p><a href="https://refactoring.com/catalog/">https://refactoring.com/catalog/</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/eaaCatalog/">https://martinfowler.com/eaaCatalog/</a></p>
+</li>
+<li>
+<p><a href="https://www.enterpriseintegrationpatterns.com/">https://www.enterpriseintegrationpatterns.com/</a></p>
+</li>
+<li>
+<p><a href="https://www.infoq.com/minibooks/domain-driven-design-quickly/">https://www.infoq.com/minibooks/domain-driven-design-quickly/</a></p>
+</li>
+<li>
+<p><a href="https://github.com/donnemartin/system-design-primer?tab=readme-ov-file">https://github.com/donnemartin/system-design-primer?tab=readme-ov-file</a></p>
+</li>
+</ul>
+<p></p>
+<p>Reference architectures:</p>
+<ul>
+<li>
+<p><a href="https://learn.microsoft.com/en-us/azure/architecture/">https://learn.microsoft.com/en-us/azure/architecture/</a></p>
+</li>
+<li>
+<p><a href="https://aws.amazon.com/architecture">https://aws.amazon.com/architecture</a></p>
+</li>
+</ul>
+<p></p>
+<p>Articles:</p>
+<ul>
+<li>
+<p><a href="http://hintjens.com/blog:19">How to Design Perfect (Software) Products - hintjens.com</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=f84n5oFoZBc">Hammock Driven Development - Rich Hickey (2010)</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/articles/designDead.html">https://martinfowler.com/articles/designDead.html</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/bliki/BeckDesignRules.html">https://martinfowler.com/bliki/BeckDesignRules.html</a></p>
+</li>
+<li>
+<p><a href="https://blog.jbrains.ca/permalink/the-four-elements-of-simple-design">https://blog.jbrains.ca/permalink/the-four-elements-of-simple-design</a></p>
+</li>
+<li>
+<p><a href="https://www.sealights.io/blog/its-time-to-rethink-technical-debt-management/">https://www.sealights.io/blog/its-time-to-rethink-technical-debt-management/</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="on-git" tabindex="-1"><strong>On git</strong> <a class="header-anchor" href="#on-git">#</a></h2>
+<ul>
+<li>
+<p><a href="https://ohshitgit.com/">https://ohshitgit.com/</a></p>
+</li>
+<li>
+<p><a href="https://trunkbaseddevelopment.com/">https://trunkbaseddevelopment.com/</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/articles/branching-patterns.html">https://martinfowler.com/articles/branching-patterns.html</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="on-code-reviews" tabindex="-1"><strong>On code reviews</strong> <a class="header-anchor" href="#on-code-reviews">#</a></h2>
+<ul>
+<li>
+<p><a href="https://mtlynch.io/code-review-love/">https://mtlynch.io/code-review-love/</a></p>
+</li>
+<li>
+<p><a href="https://mtlynch.io/human-code-reviews-1/">https://mtlynch.io/human-code-reviews-1/</a></p>
+</li>
+<li>
+<p><a href="https://mtlynch.io/human-code-reviews-2/">https://mtlynch.io/human-code-reviews-2/</a></p>
+</li>
+<li>
+<p><a href="https://chelseatroy.com/2019/12/13/async-collaboration-1-submitting-pull-requests/">https://chelseatroy.com/2019/12/13/async-collaboration-1-submitting-pull-requests/</a></p>
+</li>
+<li>
+<p><a href="https://chelseatroy.com/2019/12/18/reviewing-pull-requests/">https://chelseatroy.com/2019/12/18/reviewing-pull-requests/</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="on-auth" tabindex="-1"><strong>On auth</strong> <a class="header-anchor" href="#on-auth">#</a></h2>
+<ul>
+<li>
+<p><a href="https://openid.net/developers/how-connect-works/">https://openid.net/developers/how-connect-works/</a></p>
+</li>
+<li>
+<p><a href="https://oauth.net/">https://oauth.net/</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="blogs-i-like" tabindex="-1"><strong>Blogs I like</strong> <a class="header-anchor" href="#blogs-i-like">#</a></h2>
+<ul>
+<li>
+<p><a href="https://jvns.ca/">https://jvns.ca/</a></p>
+</li>
+<li>
+<p><a href="https://lethain.com/">https://lethain.com/</a></p>
+</li>
+<li>
+<p><a href="https://mtlynch.io/">https://mtlynch.io/</a></p>
+</li>
+<li>
+<p><a href="https://www.hillelwayne.com/post/">https://www.hillelwayne.com/post/</a></p>
+</li>
+<li>
+<p><a href="http://hintjens.com/">http://hintjens.com/</a></p>
+</li>
+<li>
+<p><a href="https://katemats.com/blog">https://katemats.com/blog</a></p>
+</li>
+<li>
+<p><a href="https://martinfowler.com/">https://martinfowler.com/</a></p>
+</li>
+<li>
+<p><a href="https://blog.ploeh.dk/">https://blog.ploeh.dk/</a></p>
+</li>
+<li>
+<p><a href="https://staffeng.com/">https://staffeng.com/</a></p>
+</li>
+<li>
+<p><a href="https://newsletter.pragmaticengineer.com/">https://newsletter.pragmaticengineer.com/</a></p>
+</li>
+<li>
+<p><a href="https://www.architecture-weekly.com/">https://www.architecture-weekly.com/</a></p>
+</li>
+</ul>
+<p></p>
+<h2 id="books-i-like" tabindex="-1"><strong>Books I like</strong> <a class="header-anchor" href="#books-i-like">#</a></h2>
+<p><strong>Shelf 1:</strong></p>
+<ul>
+<li>
+<p>Code Complete, 2nd Edition</p>
+</li>
+<li>
+<p>The Pragmatic Programmer: your journey to mastery, 2nd Edition</p>
+</li>
+<li>
+<p>The Missing README: a guide for the new software engineer</p>
+</li>
+<li>
+<p>Code That Fits in Your Head: Heuristics for Software Engineering</p>
+</li>
+<li>
+<p>Software Mistakes and Tradeoffs</p>
+</li>
+</ul>
+<p></p>
+<p><strong>Shelf 2:</strong></p>
+<ul>
+<li>
+<p>Fundamentals of Software Architecture</p>
+</li>
+<li>
+<p>Head First Design Patterns</p>
+</li>
+<li>
+<p>Refactoring: Improving the Design of Existing Code</p>
+</li>
+<li>
+<p>Domain Driven Design Quickly</p>
+</li>
+<li>
+<p>Implementing Domain-Driven Design</p>
+</li>
+</ul>
+<p></p>
+<p><strong>Shelf 3:</strong></p>
+<ul>
+<li>
+<p>Mythical Man-Month, The Essays on Software Engineering</p>
+</li>
+<li>
+<p>Extreme Programming Explained: Embrace Change, 2nd Edition</p>
+</li>
+<li>
+<p>Scrum and XP from the Trenches</p>
+</li>
+<li>
+<p>Peopleware: Productive Projects and Teams</p>
+</li>
+<li>
+<p>The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change</p>
+</li>
+</ul>
+<p></p>
+<p><strong>Shelf 4:</strong></p>
+<ul>
+<li>
+<p>Don't Make Me Think</p>
+</li>
+<li>
+<p>Extreme Ownership: How U.S. Navy SEALs Lead and Win</p>
+</li>
+<li>
+<p>Flow: The Psychology of Optimal Experience</p>
+</li>
+<li>
+<p>Turn the Ship Around!: A True Story of Turning Followers into Leaders</p>
+</li>
+<li>
+<p>A Guide to the Good Life</p>
+</li>
+<li>
+<p>Four Thousand Weeks</p>
+</li>
+<li>
+<p>The Courage to be Disliked</p>
+</li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/links/` was built on 2024-07-29T21:31:10.598Z -->
+	</body>
+</html>
