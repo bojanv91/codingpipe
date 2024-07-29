@@ -1,12 +1,24 @@
 ---
 permalink: /tags/
 layout: layouts/home.njk
+eleventyNavigation:
+  key: Tags
+  order: 2
 ---
 <h1>Tags</h1>
 
-<ul>
+<br />
+
+Tags:
 {% for tag in collections.all | getAllTags | filterTagList %}
 	{% set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
-	<li><a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a></li>
+	<a href="{{ tagUrl }}" class="post-tag">{{ tag }}, </a>
 {% endfor %}
-</ul>
+
+{% for tag in collections.all | getAllTags | filterTagList %}
+	{% set tagUrl %}/tags/{{ tag | slugify }}/{% endset %}
+	<h3><a href="{{ tagUrl }}" class="post-tag">{{ tag }}</a></h3>
+	{% set postslist = collections[ tag ] %}
+	{% include "postslist.njk" %}
+{% endfor %}
+
