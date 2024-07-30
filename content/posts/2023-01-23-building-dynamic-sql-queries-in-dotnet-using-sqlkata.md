@@ -4,7 +4,7 @@ date: 2023-01-23
 dateUpdated: Last Modified
 permalink: /posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/
 tags:
-  - .NET
+  - .NET Core
   - Data Access
 layout: layouts/post.njk
 ---

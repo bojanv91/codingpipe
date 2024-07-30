@@ -5,6 +5,7 @@ date: 2018-06-10
 permalink: /posts/select-n-plus-1-problem/
 tags:
   - Data Access
+  - .NET Core
 layout: layouts/post.njk
 ---
 

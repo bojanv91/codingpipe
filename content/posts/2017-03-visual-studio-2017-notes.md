@@ -4,7 +4,7 @@ date: 2017-03-09
 dateUpdated: Last Modified
 permalink: /posts/visual-studio-2017-notes/
 tags:
-  - Tools
+  - Misc
 layout: layouts/post.njk
 ---
 

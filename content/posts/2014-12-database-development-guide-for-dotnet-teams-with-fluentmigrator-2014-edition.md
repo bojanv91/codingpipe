@@ -4,7 +4,7 @@ date: 2014-12-12
 dateUpdated: Last Modified
 permalink: /posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/
 tags:
-  - .NET
+  - .NET Framework
   - Data Access
 layout: layouts/post.njk
 ---

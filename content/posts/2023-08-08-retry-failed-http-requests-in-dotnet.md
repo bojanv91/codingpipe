@@ -4,7 +4,7 @@ date: 2023-08-08
 dateUpdated: Last Modified
 permalink: /posts/retry-failed-http-requests-in-dotnet/
 tags:
-  - .NET
+  - .NET Core
 layout: layouts/post.njk
 ---
 

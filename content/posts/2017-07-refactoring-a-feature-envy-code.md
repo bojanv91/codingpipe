@@ -4,7 +4,7 @@ date: 2017-07-29
 dateUpdated: Last Modified
 permalink: /posts/refactoring-a-feature-envy-code/
 tags:
-  - Software Design
+  - Code
 layout: layouts/post.njk
 ---
 

@@ -1,11 +1,10 @@
 ---
-title: "Serilog Setup for .NET Core Worker Services"
+title: "Serilog Setup for .NET Core Worker Service Project"
 date: 2023-08-18
 dateUpdated: Last Modified
 permalink: /posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/
 tags:
-  - .NET
-  - Worker
+  - .NET Core
   - Logging
 layout: layouts/post.njk
 ---

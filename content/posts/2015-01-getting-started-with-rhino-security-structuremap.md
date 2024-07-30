@@ -4,7 +4,7 @@ date: 2015-01-11
 dateUpdated: Last Modified
 permalink: /posts/getting-started-with-rhino-security-structuremap/
 tags:
-  - .NET
+  - .NET Framework
 layout: layouts/post.njk
 ---
 

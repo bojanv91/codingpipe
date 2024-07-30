@@ -4,7 +4,7 @@ date: 2023-08-16
 dateUpdated: Last Modified
 permalink: /posts/building-windows-service-applications-in-net-core/
 tags:
-  - .NET Worker
+  - .NET Core
 layout: layouts/post.njk
 ---
 

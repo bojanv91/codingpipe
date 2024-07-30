@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/rabbitmq-cheatsheet/
 tags:
   - Snippets
+  - RabbitMQ
 layout: layouts/post.njk
 ---
 

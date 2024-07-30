@@ -4,7 +4,7 @@ date: 2015-09-29
 dateUpdated: Last Modified
 permalink: /posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/
 tags:
-  - Software Design
+  - Code
 layout: layouts/post.njk
 ---
 

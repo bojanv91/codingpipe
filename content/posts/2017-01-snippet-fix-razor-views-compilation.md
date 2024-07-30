@@ -4,7 +4,7 @@ date: 2017-01-27
 dateUpdated: Last Modified
 permalink: /posts/snippet-fix-razor-views-compilation/
 tags:
-  - ASP.NET Framework
+  - .NET Framework
 layout: layouts/post.njk
 ---
 

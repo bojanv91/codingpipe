@@ -4,7 +4,7 @@ date: 2016-05-27
 dateUpdated: Last Modified
 permalink: /posts/feature-folders-structure-in-asp-net/
 tags:
-  - ASP.NET MVC5
+  - .NET Framework
   - Architecture
 layout: layouts/post.njk
 ---

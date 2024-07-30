@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/aws-cli-cheatsheet/
 tags:
   - Snippets
+  - AWS
 layout: layouts/post.njk
 ---
 

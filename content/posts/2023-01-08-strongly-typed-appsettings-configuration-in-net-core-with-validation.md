@@ -4,7 +4,7 @@ date: 2023-01-08
 dateUpdated: Last Modified
 permalink: /posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/
 tags:
-  - .NET
+  - .NET Core
 layout: layouts/post.njk
 ---
 

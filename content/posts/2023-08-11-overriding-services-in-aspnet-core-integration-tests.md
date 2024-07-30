@@ -4,7 +4,7 @@ date: 2023-08-11
 dateUpdated: Last Modified
 permalink: /posts/overriding-services-in-aspnet-core-integration-tests/
 tags:
-  - ASP.NET Core
+  - .NET Core
   - Testing
 layout: layouts/post.njk
 ---

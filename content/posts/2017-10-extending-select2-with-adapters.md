@@ -4,7 +4,6 @@ description: How to extend Select2 appearance and behavior using its adapters an
 date: 2017-10-24
 permalink: /posts/extending-select2-with-adapters/
 tags:
-  - Frontend
   - JavaScript
 layout: layouts/post.njk
 ---

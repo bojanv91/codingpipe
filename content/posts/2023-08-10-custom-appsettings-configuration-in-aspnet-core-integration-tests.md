@@ -4,7 +4,7 @@ date: 2023-08-10
 dateUpdated: Last Modified
 permalink: /posts/custom-appsettings-configuration-in-aspnet-core-integration-tests/
 tags:
-  - ASP.NET
+  - .NET Core
   - Testing
 layout: layouts/post.njk
 ---

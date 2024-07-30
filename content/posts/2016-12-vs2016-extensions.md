@@ -4,7 +4,7 @@ date: 2016-12-31
 dateUpdated: Last Modified
 permalink: /posts/vs2016-extensions/
 tags:
-  - Tools
+  - Misc
 layout: layouts/post.njk
 ---
 

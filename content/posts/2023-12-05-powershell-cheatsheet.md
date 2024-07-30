@@ -5,7 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/powershell-snippets/
 tags:
   - PowerShell
-  - Cheatsheets
+  - Snippets
 layout: layouts/post.njk
 ---
 
