@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Refactoring Feature Envy Code</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Refactoring Feature Envy Code</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2017-07-29">Jul 29, 2017</time></li>
+	<li><span> • </span></li>
+	<li><span>7 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/software-design/" class="post-tag">Software Design</a></li>
+</ul>
+
+<p>In a design review meeting a colleague asked: &quot;Why sometimes we directly manipulate dependent objects fields, and sometimes we put the manipulation logic behind methods in those objects? What are pros/cons in both approaches?&quot;<!--excerpt--> This was a great question, because it opened a productive discussion. Checking the <a href="https://blog.codinghorror.com/code-smells/">code smells taxonomy</a>, and analyzing the code under review deeper, we identified it belongs to the feature envy code smells category. And this is how we refactored it.<!--excerpt--></p>
+<p><strong>What is feature envy code?</strong>
+<em>Feature envy</em> is a code smell describing when an object accesses fields of another object to execute some operation, instead of just telling the object what to do.</p>
+<p>Let's analyze the following code segment, and try to refactor it.
+For better context, it addresses the requirement: <em>An active user can pay a pending order. For reporting purposes the order tracks when and who paid it.</em></p>
+<h2 id="original-code-segment-simplified" tabindex="-1">Original code segment (simplified) <a class="header-anchor" href="#original-code-segment-simplified">#</a></h2>
+<p>Here you can see the original code segment greatly simplified, so it's easier to follow.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PayOrderRequest</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> OrderId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PayOrderHandler</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BaseCommandHandler<span class="token punctuation">&lt;</span>PayOrderRequest<span class="token punctuation">></span></span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Handle</span><span class="token punctuation">(</span><span class="token class-name">PayOrderRequest</span> request<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> currentUser <span class="token operator">=</span> Session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Load</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>User<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>LoggedInUserId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> order <span class="token operator">=</span> Session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Load</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Order<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>OrderId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// checks if the order can be paid</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span>Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> currentUser<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">)</span> 
+        <span class="token punctuation">{</span>
+            <span class="token comment">// pay the order, and record related information</span>
+            order<span class="token punctuation">.</span>Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Completed<span class="token punctuation">;</span>
+            order<span class="token punctuation">.</span>PaidByUserId <span class="token operator">=</span> currentUser<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+            order<span class="token punctuation">.</span>PaidOnUtc <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">currentUser<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        
+        Session<span class="token punctuation">.</span><span class="token function">Store</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>The core problem with this code is that it breaks encapsulation. The command handler depends too much on the <code>order</code> internals, and forms tight coupling. The <code>order</code> leaked it's domain logic to the command handler, thus it became anemic data-object.</p>
+<p>Besides breaking encapsulation, it also makes the paying order functionality  hard to unit test. The command handler depends on the database via the session object, and to the logged in user provider. Writing a unit test for this, means we need to write mocks for both services. If we refactor it, fixing the encapsulation, we'll see that writing unit tests will be an easier task to do. Besides, why create mocks until deemed necessary?</p>
+<p>Ultimately, the command handler should only coordinate the workflow, and the order object should only deal with the domain logic. They should not mix responsibilities between themselves. But this is not the case we have here.</p>
+<p>Our question is, can the command handler <strong>tell</strong> the <code>order</code> what to do, encapsulating the logic, instead of asking it for too many details? Let's find out.</p>
+<h2 id="step-1-hold-precondition-result-in-an-inline-variable" tabindex="-1">Step 1 - hold precondition result in an inline variable <a class="header-anchor" href="#step-1-hold-precondition-result-in-an-inline-variable">#</a></h2>
+<p>Let's introduce <code>canOrderByPaid</code> boolean variable which will hold the result of the precondition for paying an order.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Original</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span>Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> currentUser<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">)</span> 
+<span class="token punctuation">{</span> <span class="token range operator">..</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+  
+
+<span class="token comment">// Refactored (step 1)</span>
+<span class="token class-name"><span class="token keyword">bool</span></span> canOrderByPaid <span class="token operator">=</span> order<span class="token punctuation">.</span>Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> currentUser<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>canOrderByPaid<span class="token punctuation">)</span>
+<span class="token punctuation">{</span> <span class="token range operator">..</span><span class="token punctuation">.</span> <span class="token punctuation">}</span></code></pre>
+<p>It's better to create a inline variable to describe more complex condition checks, and use it in the if-condition statement, than having bloated if-condition statement with a comment above, describing what it does.</p>
+<h2 id="step-2-encapsulate-the-precondition-in-the-order" tabindex="-1">Step 2 - encapsulate the precondition in the <code>Order</code> <a class="header-anchor" href="#step-2-encapsulate-the-precondition-in-the-order">#</a></h2>
+<p>Now it makes sense to encapsulate the precondition for paying an order, in the order object itself.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Original</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span>Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> currentUser<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">)</span> 
+<span class="token punctuation">{</span> <span class="token range operator">..</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+  
+
+<span class="token comment">// Refactored (step 1)</span>
+<span class="token class-name"><span class="token keyword">bool</span></span> canOrderByPaid <span class="token operator">=</span> order<span class="token punctuation">.</span>Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> currentUser<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>canOrderByPaid<span class="token punctuation">)</span>
+<span class="token punctuation">{</span> <span class="token range operator">..</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+
+
+<span class="token comment">// Refactored (step 2)</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">)</span> 
+<span class="token punctuation">{</span> <span class="token range operator">..</span><span class="token punctuation">.</span> <span class="token punctuation">}</span></code></pre>
+<p>The order class:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Order</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/* Code removed for clarity */</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> <span class="token function">CanBePaidBy</span><span class="token punctuation">(</span><span class="token class-name">User</span> user<span class="token punctuation">)</span> 
+        <span class="token operator">=></span> Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> user<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">;</span>
+
+    <span class="token comment">/* Code removed for clarity */</span>
+<span class="token punctuation">}</span></code></pre>
+<p>With this change, we eliminated coupling from the command handler to the fields of order and user classes (e.g. <code>order.Status</code>, <code>user.Status</code>). Imagine in more complex cases, how much direct coupling will be reduced only by following good encapsulation.</p>
+<h2 id="step-3-encapsulate-the-actual-operation" tabindex="-1">Step 3 - encapsulate the actual operation <a class="header-anchor" href="#step-3-encapsulate-the-actual-operation">#</a></h2>
+<p>Following the same way how we encapsulated the paying precondition, we'll encapsulate the paying operation.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Refactored (step 2)</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    order<span class="token punctuation">.</span>Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Completed<span class="token punctuation">;</span>
+    order<span class="token punctuation">.</span>PaidByUserId <span class="token operator">=</span> currentUser<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+    order<span class="token punctuation">.</span>PaidOnUtc <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">else</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">currentUser<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">// Refactored (step 3)</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    order<span class="token punctuation">.</span><span class="token function">Pay</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">else</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"User </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">currentUser<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>The order class:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Order</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/* Code removed for clarity */</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Pay</span><span class="token punctuation">(</span><span class="token class-name">User</span> payer<span class="token punctuation">)</span> 
+    <span class="token punctuation">{</span>
+        Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Completed<span class="token punctuation">;</span>
+        PaidByUserId <span class="token operator">=</span> payer<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+        PaidOnUtc <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/* Code removed for clarity */</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="step-4-encapsulate-further" tabindex="-1">Step 4 - encapsulate further <a class="header-anchor" href="#step-4-encapsulate-further">#</a></h2>
+<p>Seeing the refactoring changes in previous steps, this final refactoring change comes natural.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Refactored (step 3)</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>order<span class="token punctuation">.</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    order<span class="token punctuation">.</span><span class="token function">Pay</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">else</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"User </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">currentUser<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token comment">// Refactored (step 4)</span>
+order<span class="token punctuation">.</span><span class="token function">Pay</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>The order class:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Order</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/* Code removed for clarity */</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Pay</span><span class="token punctuation">(</span><span class="token class-name">User</span> payer<span class="token punctuation">)</span> 
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>payer<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"User </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">payer<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Completed<span class="token punctuation">;</span>
+        PaidByUserId <span class="token operator">=</span> payer<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+        PaidOnUtc <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment">/* Code removed for clarity */</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="the-final-refactored-code" tabindex="-1">The final refactored code <a class="header-anchor" href="#the-final-refactored-code">#</a></h2>
+<p>This is how the final refactored code looks like. Compare it to the original one in the beginning of this session. What key difference can you identify?</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PayOrderRequest</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> OrderId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PayOrderHandler</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BaseCommandHandler<span class="token punctuation">&lt;</span>PayOrderRequest<span class="token punctuation">></span></span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Handle</span><span class="token punctuation">(</span><span class="token class-name">PayOrderRequest</span> request<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> currentUser <span class="token operator">=</span> Session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Load</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>User<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>LoggedInUserId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> order <span class="token operator">=</span> Session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Load</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Order<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>OrderId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        order<span class="token punctuation">.</span><span class="token function">Pay</span><span class="token punctuation">(</span>currentUser<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        Session<span class="token punctuation">.</span><span class="token function">Store</span><span class="token punctuation">(</span>order<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>And the <code>Order</code> class, encapsulating the domain logic:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Order</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/* Code removed for clarity */</span>
+  
+    <span class="token keyword">public</span> <span class="token return-type class-name">OrderStatus</span> Status <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">Guid</span> PaidByUserId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name">DateTime</span> PaidOnUtc <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Pay</span><span class="token punctuation">(</span><span class="token class-name">User</span> payer<span class="token punctuation">)</span> 
+    <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">CanBePaidBy</span><span class="token punctuation">(</span>payer<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">CoreException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"User </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">payer<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string"> cannot pay this order."</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        order<span class="token punctuation">.</span>Status <span class="token operator">=</span> OrderStatus<span class="token punctuation">.</span>Completed<span class="token punctuation">;</span>
+        order<span class="token punctuation">.</span>PaidByUserId <span class="token operator">=</span> payer<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+        order<span class="token punctuation">.</span>PaidOnUtc <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">bool</span></span> <span class="token function">CanBePaidBy</span><span class="token punctuation">(</span><span class="token class-name">User</span> user<span class="token punctuation">)</span> 
+        <span class="token operator">=></span> Status <span class="token operator">==</span> OrderStatus<span class="token punctuation">.</span>Pending <span class="token operator">&amp;&amp;</span> user<span class="token punctuation">.</span>Status <span class="token operator">==</span> UserStatus<span class="token punctuation">.</span>Active<span class="token punctuation">;</span>
+
+    <span class="token comment">/* Code removed for clarity */</span>
+<span class="token punctuation">}</span></code></pre>
+<p>You can see we moved the domain logic out of the command handler, and we put it to the <code>Order</code> entity, where it belongs.</p>
+<h2 id="conclusion" tabindex="-1">Conclusion <a class="header-anchor" href="#conclusion">#</a></h2>
+<p>The benefits we achieved from this refactoring session are:</p>
+<ul>
+<li>The command handler <strong>stops asking</strong> for details (and internals). Now it <strong>tells</strong> what other objects should do. Does not care about the details anymore. With this, we fulfilled the <strong>Tell Don't Ask Principle</strong>.</li>
+<li>The direct <strong>coupling</strong> from the command handler to the fields in user and order classes is <strong>eliminated</strong>. Less coupling, more sanity.</li>
+<li>The <code>Order</code> class is not a bag of public set properties anymore. It's not anemic, it's not a data-class. Now it has cohesive responsibility, <strong>encapsulating the actions it can perform</strong>.</li>
+<li><strong>Domain logic</strong> for paying <strong>is not leaked</strong> in other classes anymore. Now it's located in the responsible class itself. So, only by looking at the <code>Order</code> class we can understand what it can do. No need to open other related classes.</li>
+<li>Paying functionality can be easily <strong>unit tested</strong>, without having to deal with special mocking techniques. Less mocks, better tests.</li>
+</ul>
+<p><strong>Rule of thumb:</strong> Where ever you see a method uses fields of another class extensively to perform some action, consider moving the action's logic into <em>that</em> class itself.</p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/visual-studio-2017-notes/">Visual Studio 2017 Tips</a></li><li>Next: <a href="/codingpipe/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/refactoring-a-feature-envy-code/` was built on 2024-07-30T15:26:17.845Z -->
+	</body>
+</html>

@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Business Rules Refactoring Using the Specification Pattern</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Business Rules Refactoring Using the Specification Pattern</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2015-09-29">Sep 29, 2015</time></li>
+	<li><span> • </span></li>
+	<li><span>5 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/software-design/" class="post-tag">Software Design</a></li>
+</ul>
+
+<p>The other day, one of my colleges asked me for code review on a specific part of code and I said let's dig a little deeper into the options that we have. In this article, I demonstrate the re-factoring steps in detail that we've taken and eventually how we employed the <code>Specification Pattern</code> <!--excerpt-->. Have in mind that, I choose a very basic example in order to keep things simple and avoid confusion that can be arouse from domain complexity.<!--excerpt--></p>
+<p>Here is the original code:</p>
+<pre><code>//..
+
+var newCompany = new Company(message.Name, message.CountryId);
+	
+// Query all companies from database 
+var companies = _companyRepository.Query().ToList();
+// Check if the newly created company is unique
+if (companies.Any(x =&gt; x.Name == newCompany.Name &amp;&amp; x.CountryId == newCompany.CountryId))
+	throw new Exception(&quot;A company with the same name and country already exists&quot;);
+
+session.Save(newCompany);
+//..
+</code></pre>
+<p>Here, we can see a few problems. First, all companies are queried from the database, and that can create performance issues. Another problem is too much operations happening in the <code>If</code> check line; thus, the lengthy line is making the code harder to read. And, the final problem is very plain practice of <code>Exception</code> throwing. Although, I like expressing explicit guard checks, that code can be better. Let's tackle these problems, one by one, in a few steps along this article and provide some improvement suggestions.</p>
+<p>Also, I provide here the <code>tl;dr;</code> version of the code:</p>
+<pre><code>//..
+
+var newCompany = new Company(message.Name, message.CountryId);
+	
+var spec = new UniqueCompanySpecification(_companyRepository);
+if (spec.IsSatisfiedBy(newCompany) == false)
+	throw new CompanyAlreadyExistsException();
+
+session.Save(newCompany);
+//..
+</code></pre>
+<h1 id="how-we-get-there" tabindex="-1">How we get there? <a class="header-anchor" href="#how-we-get-there">#</a></h1>
+<h2 id="step-1-solve-the-query-performance-issues" tabindex="-1">Step 1 - Solve The Query Performance Issues <a class="header-anchor" href="#step-1-solve-the-query-performance-issues">#</a></h2>
+<pre><code>var numberOfSameCompanies = _companyRepository.Query()
+	.Where(x =&gt; x.Name == newCompany.Name &amp;&amp; x.CountryId == newCompany.CountryId)
+	.Count();
+if (numberOfSameCompanies &gt; 0)
+	throw new Exception(&quot;A company with the same name and country already exists&quot;);
+</code></pre>
+<p>The query above retrieves the number of companies satisfying the given <code>where</code> condition. Performance issues have been solved.</p>
+<h2 id="step-2-make-the-if-condition-check-explicit" tabindex="-1">Step 2 - Make The <code>if</code> Condition Check Explicit <a class="header-anchor" href="#step-2-make-the-if-condition-check-explicit">#</a></h2>
+<pre><code>var numberOfSameCompanies = _companyRepository.Query()
+	.Where(x =&gt; x.Name == newCompany.Name &amp;&amp; x.CountryId == newCompany.CountryId)
+	.Count();
+var doesCompanyAlreadyExists = numberOfSameCompanies &gt; 0;
+if (doesCompanyAlreadyExists)
+	throw new Exception(&quot;A company with the same name and country already exists&quot;);
+</code></pre>
+<p>By setting some explicit conditions, we gain clear understanding of what the code does.</p>
+<h2 id="step-3-make-the-business-rule-violation-explicit" tabindex="-1">Step 3 - Make The Business Rule Violation Explicit <a class="header-anchor" href="#step-3-make-the-business-rule-violation-explicit">#</a></h2>
+<p>Original:</p>
+<pre><code>throw new Exception(&quot;A company with the same name and country already exists&quot;);
+</code></pre>
+<p>Re-factored to:</p>
+<pre><code>throw new CompanyAlreadyExistsException();
+</code></pre>
+<p>And the implementation of the exception:</p>
+<pre><code>public class CompanyAlreadyExistsException : Exception
+{
+  CompanyAlreadyExistsException()
+    :base(&quot;A company with the same name and country already exists&quot;)
+  {
+  }
+}
+</code></pre>
+<p>Now, it looks better. Anyway, we have still room for improvements.</p>
+<h2 id="step-4-encapsulate-the-business-rule-check-by-employing-the-specification-pattern" tabindex="-1">Step 4 - Encapsulate The Business Rule Check By Employing 'The Specification Pattern' <a class="header-anchor" href="#step-4-encapsulate-the-business-rule-check-by-employing-the-specification-pattern">#</a></h2>
+<p>The 'Specification Pattern' is a tactical design pattern presented in Eric Evans’ book Domain Driven Design. The <code>Specification Pattern</code> is a way of encapsulating business rule(s) and testing it against a candidate object to see if that object satisfies all requirements expressed in a specification. This pattern fits very good with the Single-Responsibility-Principle (SRP), which states that one class should have only one reason to change. Furthermore, this specification object can be easily unit tested and reused.</p>
+<p>Here, you can see how it is used:</p>
+<pre><code>	var spec = new UniqueCompanySpecification(_companyRepository);
+	if (spec.IsSatisfiedBy(newCompany) == false)
+		throw new CompanyAlreadyExistsException();
+</code></pre>
+<p>And the implementation details:</p>
+<pre><code>	public class UniqueCompanySpecification : ISpecification&lt;Company&gt;
+	{
+		readonly ICompanyRepository _companyRepository;
+
+		public UniqueCompanySpecification(ICompanyRepository companyRepository)
+		{
+			_companyRepository = companyRepository;
+		}
+
+		public bool IsSatisfiedBy(Company candidate)
+		{
+			var numberOfSameCompanies = _companyRepository.Query()
+				.Where(x =&gt; x.Name == newCompany.Name &amp;&amp; x.CountryId == newCompany.CountryId)
+				.Count();
+			bool isUnique = numberOfSameCompanies == 0;
+			return isUnique;
+		}
+	}
+
+	public interface ISpecification&lt;T&gt;
+	{
+		bool IsSatisfiedBy(T candidate);
+	} 
+</code></pre>
+<p>After all re-factoring steps, the final code is as following:</p>
+<pre><code>	//..
+
+	var newCompany = new Company(message.Name, message.CountryId);
+	
+	var spec = new UniqueCompanySpecification(_companyRepository);
+	if (spec.IsSatisfiedBy(newCompany) == false)
+		throw new CompanyAlreadyExistsException();
+
+	session.Save(newCompany);
+	//..
+</code></pre>
+<h1 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h1>
+<p>In this article, I've shown a re-factoring process and usage of the Specification Pattern in order to satisfy an explicit business rule.<br>
+The re-factoring steps we took:</p>
+<ol>
+<li>Solve the query performance issues</li>
+<li>Make the <code>if</code> condition check explicit</li>
+<li>Make the business rule violation explicit</li>
+<li>Encapsulate the business rule check by employing the Specification Pattern</li>
+</ol>
+<p>The Specification Pattern lets you decouple the design of requirements, fulfillment, and validation. It also allows you to make your system definitions more clear and declarative, but be careful not to fall into temptation to over-use it.</p>
+<p><strong>References:</strong></p>
+<ul>
+<li><a href="http://martinfowler.com/apsupp/spec.pdf">Specification Pattern by Eric Evans and Martin Fowler</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Specification_pattern">https://en.wikipedia.org/wiki/Specification_pattern</a></li>
+<li><a href="http://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215">Book: Domain Driven Design, Tackling Complexity In The Hearth of Software - by Eric Evans</a></li>
+</ul>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/getting-started-with-rhino-security-structuremap/">Rhino Security and StructureMap Integration Guide</a></li><li>Next: <a href="/codingpipe/posts/feature-folders-structure-in-asp-net/">ASP.NET MVC5 Feature Folders Structure</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/` was built on 2024-07-30T15:26:17.843Z -->
+	</body>
+</html>

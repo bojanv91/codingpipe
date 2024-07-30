@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>.NET Database Development with FluentMigrator (2014 Edition)</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>.NET Database Development with FluentMigrator (2014 Edition)</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2014-12-12">Dec 12, 2014</time></li>
+	<li><span> • </span></li>
+	<li><span>7 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/net/" class="post-tag">.NET</a> • </li>
+		<li><a href="/codingpipe/tags/data-access/" class="post-tag">Data Access</a></li>
+</ul>
+
+<p>I have been thinking a lot lately about how properly and simply to implement database versioning strategy. These years I've experienced working with different types of database setup and furthermore researched and analyzed some more approaches and tools regarding this topic. In this posting I write about my findings and why I like Fluent Migrator as a help tool in order to get the job done. But first, let's talk about the <em>goals</em> we try to achieve. <!--excerpt--></p>
+<h1 id="goals" tabindex="-1">Goals <a class="header-anchor" href="#goals">#</a></h1>
+<ul>
+<li>Auditing schema changes</li>
+<li>Auditing test data changes</li>
+<li>Keeping schema and test data integrity across machines</li>
+<li>Versioning via source version control systems</li>
+<li>DB-provider agnostic migration (MSSQL, PostgreSql, MySql, Oracle)</li>
+<li>Simple and automated migration strategy (local and in production)</li>
+<li>New developers on project should not sweat while making the database work on their machines, neither the CI server</li>
+</ul>
+<p>Links to <a href="https://github.com/schambers/fluentmigrator/wiki">Fluent Migrator</a> and <a href="https://github.com/bojanv91/DatabaseMigrationsExample">this guide's project</a>.</p>
+<p>In the end - all you just need to do is run MSBuildMigrator.Migrate.bat file and watch your database being deployed, upgraded, downgraded...it will figure out ;) .</p>
+<h1 id="step-by-step-guide" tabindex="-1">Step by step guide <a class="header-anchor" href="#step-by-step-guide">#</a></h1>
+<h2 id="1-open-visual-studio-and-create-new-class-library-project" tabindex="-1">1. Open Visual Studio and create New Class Library Project <a class="header-anchor" href="#1-open-visual-studio-and-create-new-class-library-project">#</a></h2>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img01.png" alt="Open Visual Studio and create New Class Library Project"></p>
+<h2 id="2-install-package-fluentmigrator" tabindex="-1">2. Install-Package FluentMigrator <a class="header-anchor" href="#2-install-package-fluentmigrator">#</a></h2>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img02.png" alt="Install-Package FluentMigrator"></p>
+<h2 id="3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files" tabindex="-1">3. Create new folder &quot;Migrations&quot; to project - here we are going to store migration files <a class="header-anchor" href="#3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files">#</a></h2>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img03.png" alt="Create new folder &quot;Migrations&quot; to project - here we are going to store migration files"></p>
+<h2 id="4-now-let-s-create-database-tables-with-migration-files" tabindex="-1">4. Now, let's create database tables with migration files <a class="header-anchor" href="#4-now-let-s-create-database-tables-with-migration-files">#</a></h2>
+<pre><code>[FluentMigrator.Migration(0)]
+public class Baseline : FluentMigrator.Migration
+{
+    public override void Up()
+    {
+        Create.Table(&quot;Category&quot;)
+            .WithColumn(&quot;Id&quot;).AsGuid().NotNullable().PrimaryKey()
+            .WithColumn(&quot;Name&quot;).AsString(255);
+
+        Create.Table(&quot;Product&quot;)
+            .WithColumn(&quot;Id&quot;).AsGuid().NotNullable().PrimaryKey()
+            .WithColumn(&quot;CategoryId&quot;).AsGuid().ForeignKey(&quot;Category&quot;, &quot;Id&quot;)
+            .WithColumn(&quot;Name&quot;).AsString(255)
+            .WithColumn(&quot;Price&quot;).AsDecimal();
+    }
+
+    public override void Down()
+    {
+        Delete.Table(&quot;Product&quot;);
+        Delete.Table(&quot;Category&quot;);
+    }
+}
+</code></pre>
+<p>That is all what is needed. In essence a migration is a class which drives from <strong>Migration abstract class</strong>  and implements <strong>'Up'</strong> and <strong>'Down'</strong> methods. Additionally you will also need to define <strong>Migration Attribute</strong> with unique identifier in order the migration runner to know the order of migration files. I like it how FM API is designed, it really follows the SQL language and how I would write this script in plain SQL.
+Read further <a href="https://github.com/schambers/fluentmigrator/wiki/Migration">here</a>.</p>
+<p>Just for providing more examples I have added one more migration file for adding one more column to Product table for storing image URL.</p>
+<pre><code>[Migration(201411131100)]
+public class M201411131100_Product_added_column_for_storing_image_url : Migration
+{
+    public override void Up()
+    {
+        Alter.Table(&quot;Product&quot;)
+            .AddColumn(&quot;ImageUrl&quot;).AsString(255);
+    }
+
+    public override void Down()
+    {
+        Delete.Column(&quot;ImageUrl&quot;).FromTable(&quot;Product&quot;);
+    }
+}
+</code></pre>
+<p>Now this is how everything looks in my solution.</p>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img04.png" alt=""></p>
+<p>Next, let's initialize the database with our script.</p>
+<h2 id="5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config" tabindex="-1">5. Creating Migration Runner (MSBuild), Migrator (.BAT) and ConnectionStrings (.CONFIG) <a class="header-anchor" href="#5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config">#</a></h2>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img05.png" alt=""></p>
+<h3 id="1-msbuildmigrationrunner-proj" tabindex="-1">1. MSBuildMigrationRunner.proj <a class="header-anchor" href="#1-msbuildmigrationrunner-proj">#</a></h3>
+<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;Project xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot; DefaultTargets=&quot;Migrate&quot;&gt;
+	&lt;PropertyGroup&gt;
+		&lt;DatabaseProvider&gt;&lt;/DatabaseProvider&gt;
+		&lt;ConnectionStringConfigPath&gt;&lt;/ConnectionStringConfigPath&gt;
+		&lt;ConnectionStringName&gt;&lt;/ConnectionStringName&gt;
+		&lt;DataMigrationProjectName&gt;DatabaseMigrationsExample&lt;/DataMigrationProjectName&gt;
+		&lt;DataMigrationProjectRootPath&gt;$(MSBuildProjectDirectory)&lt;/DataMigrationProjectRootPath&gt;
+		&lt;MigratorTasksDirectory&gt;&lt;/MigratorTasksDirectory&gt;
+				
+		&lt;DataMigrationProjectBuildDLL&gt;$(DataMigrationProjectRootPath)\bin\Debug\$(DataMigrationProjectName).dll&lt;/DataMigrationProjectBuildDLL&gt;
+		&lt;DataMigrationProjectCsproj&gt;$(DataMigrationProjectRootPath)\$(DataMigrationProjectName).csproj&lt;/DataMigrationProjectCsproj&gt;
+	&lt;/PropertyGroup&gt;
+		
+	&lt;UsingTask TaskName=&quot;FluentMigrator.MSBuild.Migrate&quot; AssemblyFile=&quot;$(MigratorTasksDirectory)FluentMigrator.MSBuild.dll&quot;/&gt;
+			
+	&lt;Target Name=&quot;Build&quot;&gt;
+		&lt;MSBuild Projects=&quot;$(DataMigrationProjectCsproj)&quot; Properties=&quot;Configuration=Debug&quot;/&gt;
+	&lt;/Target&gt;
+			
+	&lt;Target Name=&quot;Migrate&quot; DependsOnTargets=&quot;Build&quot;&gt;
+		&lt;Message Text=&quot;Starting FluentMigrator Migration&quot;/&gt;
+		&lt;Migrate Database=&quot;$(DatabaseProvider)&quot;
+					Connection=&quot;$(ConnectionStringName)&quot;
+					ConnectionStringConfigPath=&quot;$(ConnectionStringConfigPath)&quot;
+					Target=&quot;$(DataMigrationProjectBuildDLL)&quot;
+					Output=&quot;True&quot;
+					Verbose=&quot;True&quot;&gt;
+		&lt;/Migrate&gt;
+	&lt;/Target&gt;
+		
+	&lt;Target Name=&quot;MigratePreview&quot; DependsOnTargets=&quot;Build&quot;&gt;
+		&lt;Message Text=&quot;Previewing FluentMigrator Migration&quot;/&gt;
+		&lt;Migrate Database=&quot;$(DatabaseProvider)&quot;
+					Connection=&quot;$(ConnectionStringName)&quot;
+					ConnectionStringConfigPath=&quot;$(ConnectionStringConfigPath)&quot;
+					Target=&quot;$(DataMigrationProjectBuildDLL)&quot;
+					Output=&quot;True&quot;
+					Verbose=&quot;True&quot;
+					PreviewOnly=&quot;True&quot;&gt;
+		&lt;/Migrate&gt;
+	&lt;/Target&gt;
+&lt;/Project&gt;
+</code></pre>
+<h3 id="2-connectionstrings-config" tabindex="-1">2. ConnectionStrings.config <a class="header-anchor" href="#2-connectionstrings-config">#</a></h3>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;configuration&gt;
+	&lt;connectionStrings&gt;
+		&lt;clear /&gt;
+		&lt;add name=&quot;Default&quot; connectionString=&quot;Server=###;User ID=###;Password=###;Database=###;&quot;/&gt;
+	&lt;/connectionStrings&gt;
+&lt;/configuration&gt;
+</code></pre>
+<h3 id="3-msbuildmigrator-migrate-bat" tabindex="-1">3. MSBuildMigrator.Migrate.bat <a class="header-anchor" href="#3-msbuildmigrator-migrate-bat">#</a></h3>
+<pre><code>C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe MSBuildMigrationRunner.proj /t:Migrate /p:DatabaseProvider=SqlServer2012 /p:ConnectionStringConfigPath=ConnectionStrings.config /p:ConnectionStringName=Default /p:DataMigrationProjectName=DatabaseMigrationsExample /p:DataMigrationProjectRootPath=. /p:MigratorTasksDirectory=..\packages\FluentMigrator.1.3.1.0\tools\
+pause
+</code></pre>
+<ul>
+<li>/t:Migrate - performs Migration</li>
+<li>/t:MigratePreview - performs previewing of what would happen when migration is called</li>
+<li>/p:DatabaseProvider=? - specify your database providers name (SqlServer2012, postgres, mysql, oracle, sqlite and other can be found in FluentMigrator documentation)</li>
+<li>/p:ConnectionStringConfigPath=? - path to connection strings file</li>
+<li>/p:ConnectionStringName=? - name of the connection string to use from the configuration file</li>
+<li>/p:DataMigrationProjectName=? - Visual Studio project name where your migration files reside</li>
+<li>/p:DataMigrationProjectRootPath=? - path to where your Visual Studio migration project resides</li>
+<li>/p:MigratorTasksDirectory=? - path to FluentMigrator tools folder</li>
+</ul>
+<p>Viola, this is all you need to do. For your project you will need to put the connection string to your database and make changes where needed in the .BAT file, such as database provider and project name as an essential changes. Other config stuff should be pretty common, but if you have different structure than mine, you have full power and control with the flexibility provided here.</p>
+<h2 id="5-run-your-msbuildmigrator-migrate-bat-file" tabindex="-1">5. Run your MSBuildMigrator.Migrate.bat file <a class="header-anchor" href="#5-run-your-msbuildmigrator-migrate-bat-file">#</a></h2>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img06.png" alt=""></p>
+<p>Table VersionInfo is used for storing migration metadata.</p>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img07.png" alt=""></p>
+<p>All of our tables are created.</p>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img08.png" alt=""></p>
+<p>In VersionInfo table you can see the &quot;commits&quot;.</p>
+<p><img src="/codingpipe/img/2014-12-12-database-development-guidance/img09.png" alt=""></p>
+<h1 id="rules-of-thumb" tabindex="-1">Rules of Thumb <a class="header-anchor" href="#rules-of-thumb">#</a></h1>
+<ul>
+<li>First migration is always called &quot;BaseLine&quot; with migration ID: 0. Everything starts from there.</li>
+<li>Migration unique identification number is composed of current datetime when the migration is being created in format #yyyyMMddhhmm#<br>
+(example: now is 2014-11-13 10:15, so migration ID would be 201411131015)</li>
+<li>Migration filename should explain what is being changed - just like how you would write a commit message - in format 'M#yyyyMMddhhmm#_Message.cs'<br>
+(example: M201411131015_created_all_initial_tables)</li>
+<li>Class name should follow the exact convention like the filename<br>
+(example: class M201411131015_created_all_initial_tables { .. }</li>
+<li>MSBuildMigrationRunner.proj, ConnectionStrings.config, MSBuildMigrator.Migrate.bat are stored in Migration project root folder</li>
+</ul>
+<hr>
+<p>Happy coding folks! Having questions or concerns? Shoot me a tweet -&gt; @bojanv91</p>
+
+<ul class="links-nextprev"><li>Next: <a href="/codingpipe/posts/getting-started-with-rhino-security-structuremap/">Rhino Security and StructureMap Integration Guide</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/` was built on 2024-07-30T15:26:17.842Z -->
+	</body>
+</html>

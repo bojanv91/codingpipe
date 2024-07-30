@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Understanding and Solving the Select N+1 Problem</title>
+		<meta name="description" content="Select N+1 is a data-access performance problem. Any code that iterates thru a collection of elements, and executes additional query for each element, has this problem.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Understanding and Solving the Select N+1 Problem</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2018-06-10">Jun 10, 2018</time></li>
+	<li><span> • </span></li>
+	<li><span>4 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/data-access/" class="post-tag">Data Access</a></li>
+</ul>
+
+<p>Select N+1 is a data-access performance problem. Any code that iterates thru a collection of elements, and executes additional query for each element, has this problem. Thought, this behavior is avoidable.</p>
+<p>Let's look at this sample code:</p>
+<p><img src="/codingpipe/img/select-n-plus-1-problem-diagram.jpg" alt="diagram"></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> <span class="token function">LoadBooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">// 1st query</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> <span class="token function">LoadBookReviews</span><span class="token punctuation">(</span>book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 2nd query, called N times</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p><code>LoadBooks()</code> makes a database query to load books. Then, for each book <code>LoadBookReviews(book.Id)</code> makes a query to load reviews for the given book. Loading books is one query, plus N additional queries for loading book reviews, results in N+1 database queries, where N is the number of books.</p>
+<p>If there are 100 loaded books, the above code will call 101 database queries, thus causing performance problems. Imagine if multiple users open the same page at the same time...</p>
+<p><strong>How does this look in SQL?</strong></p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- 1st query</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Book <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token comment">-- 2nd query, N times</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> BookReview <span class="token keyword">WHERE</span> BookId <span class="token operator">=</span> <span class="token number">1</span>    <span class="token comment">-- BookId = @BookId</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> BookReview <span class="token keyword">WHERE</span> BookId <span class="token operator">=</span> <span class="token number">2</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> BookReview <span class="token keyword">WHERE</span> BookId <span class="token operator">=</span> <span class="token number">3</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
+<h2 id="solution-load-necessary-data-before-iterating-through-it" tabindex="-1">Solution: Load necessary data before iterating through it <a class="header-anchor" href="#solution-load-necessary-data-before-iterating-through-it">#</a></h2>
+<p>One solution to N+1 problem is to load all necessary data before iterating through it. This way we won't need to execute additional database queries to load child data in for-loops, since we will have that data loaded before.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> <span class="token function">LoadBooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">// 1st query</span>
+<span class="token class-name"><span class="token keyword">var</span></span> reviews <span class="token operator">=</span> <span class="token function">LoadBookReviewsFor</span><span class="token punctuation">(</span>books<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 2nd query, called once</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> reviews<span class="token punctuation">.</span><span class="token function">FirstOrDefault</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId <span class="token operator">==</span> book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p><code>LoadBooks()</code> does the same thing as before, where <code>LoadBookReviewsFor(..book ids..)</code> queries the database to load all book reviews for a given list of books, instead for a single book.</p>
+<p>In this case, no matter how many books or reviews are there, the code will always call only 2 database queries; thus fixing the N+1 problem.</p>
+<p><strong>How does this look in SQL?</strong></p>
+<pre class="language-sql" tabindex="0"><code class="language-sql"><span class="token comment">-- 1st query</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> Book <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token comment">-- 2nd query</span>
+<span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> BookReview <span class="token keyword">WHERE</span> BookId <span class="token operator">IN</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>   <span class="token comment">-- BookId IN @BookIds</span></code></pre>
+<h2 id="example-in-entity-framework-with-navigation-properties-and-lazy-loading" tabindex="-1">Example in Entity Framework with navigation properties and lazy loading <a class="header-anchor" href="#example-in-entity-framework-with-navigation-properties-and-lazy-loading">#</a></h2>
+<p>Bad:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>Books<span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 1st query</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> book<span class="token punctuation">.</span>Reviews<span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 2nd query, called N times via lazy loading</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Good: refactor to eager loading, using the <strong>Include</strong> feature.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>Books<span class="token punctuation">.</span><span class="token function">Include</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Reviews<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 1st query, batched</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> book<span class="token punctuation">.</span>Reviews<span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// in-memory, no additional queries</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>By using <code>.Include(x =&gt; x.Reviews)</code> in Entity Framework (or <code>.Fetch(x =&gt; x.Reviews)</code> in NHibernate) we eagerly load related book reviews in a single database query. This approach solves the Select N+1 problem, but opens doors to loading too many objects in memory, especially when we need to load many related collections; in such cases, plain old SQL approach is preferred.</p>
+<h2 id="example-in-entity-framework-without-navigation-properties" tabindex="-1">Example in Entity Framework without navigation properties <a class="header-anchor" href="#example-in-entity-framework-without-navigation-properties">#</a></h2>
+<p>Bad:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>Books<span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 1st query</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">// 2nd query, called N times explicitelly </span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>BookReviews<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId <span class="token operator">==</span> book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Good: <strong>load necessary data before iterating through it</strong></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>Books<span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            <span class="token comment">// 1st query</span>
+<span class="token class-name"><span class="token keyword">var</span></span> bookIds <span class="token operator">=</span> books<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> allReviews <span class="token operator">=</span> dbContext<span class="token punctuation">.</span>BookReviews           <span class="token comment">// 2nd query</span>
+    <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> bookIds<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span>x<span class="token punctuation">.</span>BookId<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> allReviews<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId <span class="token operator">==</span> book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// no additional query</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="example-in-marten-document-database" tabindex="-1">Example in Marten document database <a class="header-anchor" href="#example-in-marten-document-database">#</a></h2>
+<p>Bad:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Query</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Book<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token comment">// 1st query</span>
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">// 2nd query, called N times explicitelly </span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Query</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>BookReview<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId <span class="token operator">==</span> book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Good: same approach, <strong>load necessary data before iterating through it</strong></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Query</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Book<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>		<span class="token comment">// 1st query</span>
+<span class="token class-name"><span class="token keyword">var</span></span> bookIds <span class="token operator">=</span> books<span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">var</span></span> allReviews <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Query</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>BookReview<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment">// 2nd query</span>
+    <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId<span class="token punctuation">.</span><span class="token function">IsOneOf</span><span class="token punctuation">(</span>bookIds<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">ToList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>								
+
+<span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> bookReviews <span class="token operator">=</span> allReviews<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span>BookId <span class="token operator">==</span> book<span class="token punctuation">.</span>Id<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// no additional query</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
+<p>Select N+1 is a performance problem that can really slow down your application. The more &quot;N&quot; results the application has, the less performant it will be when this problem is not detected and fixed.</p>
+<p>Here we've seen how to detect such problem and how to fix it. The common approach follows a straightforward practice: <strong>load necessary data before iterating through it.</strong></p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li><li>Next: <a href="/codingpipe/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/">Typed AppSettings Configuration in .NET Core</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/select-n-plus-1-problem/` was built on 2024-07-30T15:26:17.845Z -->
+	</body>
+</html>

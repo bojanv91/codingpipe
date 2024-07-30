@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Typed AppSettings Configuration in .NET Core</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Typed AppSettings Configuration in .NET Core</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2023-01-08">Jan 8, 2023</time></li>
+	<li><span> • </span></li>
+	<li><span>4 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/net/" class="post-tag">.NET</a></li>
+</ul>
+
+<p>The default way to access .NET app configuration is by using the <code>IConfiguration</code> object.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Service</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IConfiguration</span> _config<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token function">Service</span><span class="token punctuation">(</span><span class="token class-name">IConfiguration</span> config<span class="token punctuation">)</span> <span class="token operator">=></span> _config <span class="token operator">=</span> config<span class="token punctuation">;</span>
+  
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _config<span class="token punctuation">[</span><span class="token string">"ConnectionString"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>This approach can be error-prone in larger codebases because it uses magic-string keys. Common issues are:</p>
+<ul>
+<li>incorrect casing of the key names (e.g. <code>connectionString</code> instead of <code>ConnectionString</code>)</li>
+<li>typos in the key names (e.g. <code>ConectiongString</code>)</li>
+<li>no intellisense in the IDE for ease of access</li>
+<li>you must check the config JSON structure whenever you want to use a configuration</li>
+</ul>
+<h2 id="introducing-the-strongly-typed-configuration-class-appsettings" tabindex="-1">Introducing the strongly typed configuration class &quot;AppSettings&quot; <a class="header-anchor" href="#introducing-the-strongly-typed-configuration-class-appsettings">#</a></h2>
+<p>To solve this, create a strongly-typed class that will serve as a model for your app configuration:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ConnectionString <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> AppName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> AppVersion <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Then, configure it on app startup:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> appSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">AppSettings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+configuration<span class="token punctuation">.</span><span class="token function">Bind</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// copy IConfiguration key-value pairs to appSettings</span>
+services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// register it in the DI</span></code></pre>
+<p>And finally use it in your app code:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Service</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token function">Service</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> appSettings<span class="token punctuation">)</span> <span class="token operator">=></span> _appSettings <span class="token operator">=</span> appSettings<span class="token punctuation">;</span>
+  
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>ConnectionString<span class="token punctuation">;</span>
+    <span class="token comment">// ...</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="accessing-nested-configurations" tabindex="-1">Accessing nested configurations <a class="header-anchor" href="#accessing-nested-configurations">#</a></h2>
+<p>Let's say your configuration JSON contains the following structure:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"Smtp"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"Host"</span><span class="token operator">:</span> <span class="token string">"..."</span><span class="token punctuation">,</span>
+    <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token string">"..."</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>You can access the nested configurations through <code>IConfiguration</code> like this:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// IConfiguration _config = ...</span>
+<span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _config<span class="token punctuation">[</span><span class="token string">"Smtp:Host"</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+<p>To make this work in your strongly-typed access approach, change the <code>AppSettings</code> class into this:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name">SmtpSection</span> Smtp <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SmtpSection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment">// ...</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SmtpSection</span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Host <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Port <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>And then use it like this in your app code:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// AppSettings _appSettings = ...</span>
+<span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>Smtp<span class="token punctuation">.</span>Host<span class="token punctuation">;</span></code></pre>
+<h2 id="validating-strongly-typed-configuration" tabindex="-1">Validating strongly typed configuration <a class="header-anchor" href="#validating-strongly-typed-configuration">#</a></h2>
+<p>Call the <code>appSettings.Validate()</code> method early in the app startup. It will trigger self validation, throwing an exception on errors.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> appSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">AppSettings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+configuration<span class="token punctuation">.</span><span class="token function">Bind</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span>
+appSettings<span class="token punctuation">.</span><span class="token function">Validate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// NEW: add this here</span>
+services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Here is a generic implementation to detect missing configurations.
+NOTE: tweak, extend, and change it as per your configuration validation needs.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Property1 <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Property2 <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token comment">// ...</span>
+  
+  <span class="token comment">/// &lt;summary></span>
+  <span class="token comment">/// Ensures all configuration properties have a value that is not null and not empty.</span>
+  <span class="token comment">/// It does not validate if the format of each property value is correct. </span>
+  <span class="token comment">/// &lt;/summary></span>
+  <span class="token comment">/// &lt;exception cref="InvalidOperationException">&lt;/exception></span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Validate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> missingProperties <span class="token operator">=</span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>missingProperties<span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">string</span></span> msg <span class="token operator">=</span> <span class="token string">"AppSettings - missing configs:"</span><span class="token punctuation">;</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">InvalidOperationException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">msg</span><span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp"><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">,</span> missingProperties<span class="token punctuation">)</span></span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token comment">/// &lt;summary></span>
+  <span class="token comment">/// Find any missing configuration values with recursion.</span>
+  <span class="token comment">/// &lt;/summary></span>
+  <span class="token comment">/// &lt;param name="obj">&lt;/param></span>
+  <span class="token comment">/// &lt;returns>&lt;/returns></span>
+  <span class="token keyword">private</span> <span class="token return-type class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span></span> obj<span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> missingProperties <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  
+    <span class="token class-name"><span class="token keyword">var</span></span> props <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">GetType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">GetProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> prop <span class="token keyword">in</span> props<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      <span class="token class-name"><span class="token keyword">var</span></span> <span class="token keyword">value</span> <span class="token operator">=</span> prop<span class="token punctuation">.</span><span class="token function">GetValue</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">value</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token keyword">value</span><span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">""</span><span class="token punctuation">)</span>
+      <span class="token punctuation">{</span>
+        missingProperties<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>prop<span class="token punctuation">.</span>Name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">else</span>
+      <span class="token punctuation">{</span>
+        <span class="token comment">// If the property value is a complex object, then check it's</span>
+        <span class="token comment">// nested properties. </span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">value</span> <span class="token keyword">is</span> <span class="token class-name"><span class="token keyword">object</span></span> <span class="token keyword">and</span> <span class="token keyword">not</span> <span class="token punctuation">(</span><span class="token keyword">string</span> <span class="token keyword">or</span> IEnumerable<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+          <span class="token class-name"><span class="token keyword">var</span></span> nestedMissingProperties <span class="token operator">=</span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> missingProperty <span class="token keyword">in</span> nestedMissingProperties<span class="token punctuation">)</span>
+          <span class="token punctuation">{</span>
+            missingProperties<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">prop<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string">.</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">missingProperty</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  
+    <span class="token keyword">return</span> missingProperties<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/select-n-plus-1-problem/">Understanding and Solving the Select N+1 Problem</a></li><li>Next: <a href="/codingpipe/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL Query Building With SqlKata in .NET Core</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2024-07-30T15:26:17.845Z -->
+	</body>
+</html>

@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Building .NET Core Windows Services</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Building .NET Core Windows Services</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2023-08-16">Aug 16, 2023</time></li>
+	<li><span> • </span></li>
+	<li><span>3 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/net-worker/" class="post-tag">.NET Worker</a></li>
+</ul>
+
+<p>Running your console app as a Windows Service is a great way to execute long running or time-scheduled operations in the background, outside of your web endpoints handlers.</p>
+<p>In this post, we'll create a console application that also can be started as a Windows Service. Then, we'll add logging with <em>Serilog</em> to ensure log files will be created in the correct directories.</p>
+<h2 id="step-1-create-new-worker-service-project" tabindex="-1">Step 1 - Create new &quot;Worker Service&quot; project <a class="header-anchor" href="#step-1-create-new-worker-service-project">#</a></h2>
+<p><strong>First</strong>, create a new project in Visual Studio choosing the &quot;Worker Service&quot; template. I'll name my project <code>PlaygroundWorkerService</code>. This template creates the following folders and files structure from which we can infer how to add new functionalities:</p>
+<pre><code>appsettings.json
+appsettings.Development.json
+Program.cs
+Worker.cs
+</code></pre>
+<p><code>Program.cs</code> holds the project initialization code.
+<code>Worker.cs</code> is a sample <code>HostedService</code> implementation.</p>
+<p>If you Ctrl+F5 start this project it will properly run as a console application in the terminal.</p>
+<h2 id="step-2-setup-the-windows-services-hosting-extension" tabindex="-1">Step 2 - Setup the Windows Services hosting extension <a class="header-anchor" href="#step-2-setup-the-windows-services-hosting-extension">#</a></h2>
+<p><strong>Next</strong>, install the <em>Microsoft.Extensions.Hosting.WindowsServices</em> NuGet package to the project:</p>
+<pre><code>dotnet add package Microsoft.Extensions.Hosting.WindowsServices
+</code></pre>
+<p><strong>Next</strong>, call the <code>.UseWindowsService()</code> extension method in <code>Program.cs</code>, just before <code>.Build()</code>.
+<strong>And then,</strong> set the current directory to the actual base directory of your app - a fix to the base app path for Windows Service apps.</p>
+<pre class="language-diff-csharp" tabindex="0"><code class="language-diff-csharp">namespace PlaygroundWorkerService
+{
+<span class="token unchanged language-csharp"><span class="token prefix unchanged"> </span>   <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Program</span>
+<span class="token prefix unchanged"> </span>   <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>       <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>       <span class="token punctuation">{</span>
+</span><span class="token inserted-sign inserted language-csharp"><span class="token prefix inserted">+</span>	        Directory<span class="token punctuation">.</span><span class="token function">SetCurrentDirectory</span><span class="token punctuation">(</span>AppDomain<span class="token punctuation">.</span>CurrentDomain<span class="token punctuation">.</span>BaseDirectory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-csharp"><span class="token prefix unchanged"> </span>           <span class="token class-name">IHost</span> host <span class="token operator">=</span> Host<span class="token punctuation">.</span><span class="token function">CreateDefaultBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>               <span class="token punctuation">.</span><span class="token function">ConfigureServices</span><span class="token punctuation">(</span>services <span class="token operator">=></span>
+<span class="token prefix unchanged"> </span>               <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>                   services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>               <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</span><span class="token inserted-sign inserted language-csharp"><span class="token prefix inserted">+</span>                <span class="token punctuation">.</span><span class="token function">UseWindowsService</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</span><span class="token unchanged language-csharp"><span class="token prefix unchanged"> </span>               <span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-csharp"><span class="token prefix unchanged"> </span>           host<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>       <span class="token punctuation">}</span>
+<span class="token prefix unchanged"> </span>   <span class="token punctuation">}</span>
+</span>}</code></pre>
+<p><strong>NOTE:</strong> When the app runs as a service, <code>.UseWindowsService()</code> sets the <a href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostenvironment.contentrootpath#microsoft-extensions-hosting-ihostenvironment-contentrootpath">ContentRootPath</a> to <a href="https://learn.microsoft.com/en-us/dotnet/api/system.appcontext.basedirectory#system-appcontext-basedirectory">AppContext.BaseDirectory</a> which for a Windows Service defaults to <code>C:\Windows\system32</code>. This means that any log files (or any other files) that you would expect to find in your local app folder, will appear in the system32 folder. The fix for this side effect is the following line of code which we already added above:</p>
+<pre class="language-cs" tabindex="0"><code class="language-cs">Directory<span class="token punctuation">.</span><span class="token function">SetCurrentDirectory</span><span class="token punctuation">(</span>AppDomain<span class="token punctuation">.</span>CurrentDomain<span class="token punctuation">.</span>BaseDirectory<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>Now</strong>, if you Ctrl+F5 start this project it will still properly run as a console application in the terminal, but also can be started as a Windows Service and run in the background.</p>
+<h2 id="step-3-publish-and-host-the-console-app-as-a-windows-service" tabindex="-1">Step 3 - Publish and host the console app as a Windows Service <a class="header-anchor" href="#step-3-publish-and-host-the-console-app-as-a-windows-service">#</a></h2>
+<p>Next, publish your console app to a publish output directory:</p>
+<pre><code>dotnet publish -r win-x64 --no-self-contained -c Release --output &quot;D:\win-services\PlaygroundWorkerService&quot;
+</code></pre>
+<p><strong>Next</strong>, open your terminal as an administrator, navigate to your publish output directory (mine is: <code>D:\win-services\PlaygroundWorkerService</code>), and run the following command to host your console app as a Windows Service:</p>
+<pre><code>sc create &quot;PlaygroundWorkerService&quot; binpath=&quot;D:\win-services\PlaygroundWorkerService\PlaygroundWorkerService.exe&quot; start=&quot;auto&quot;
+</code></pre>
+<p>The terminal shows <code>[SC] CreateService SUCCESS</code> to inform you that the Windows Service has been successfully created with autostart mode enabled (meaning - when the OS restarts, the service will start automatically on startup).</p>
+<p><strong>Next</strong>, start your service:</p>
+<pre><code>sc start &quot;PlaygroundWorkerService&quot;
+</code></pre>
+<p><strong>Finally</strong>, check if your service is running:</p>
+<pre><code>sc query &quot;PlaygroundWorkerService&quot;
+</code></pre>
+<p>The last command will return the following status if the service is successfully running:</p>
+<pre><code>SERVICE_NAME: PlaygroundWorkerService
+        TYPE               : 10  WIN32_OWN_PROCESS
+        STATE              : 4  RUNNING
+                                (STOPPABLE, NOT_PAUSABLE, ACCEPTS_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+</code></pre>
+<h2 id="additionally-stopping-and-deleting-a-windows-service" tabindex="-1">Additionally - Stopping and deleting a Windows Service <a class="header-anchor" href="#additionally-stopping-and-deleting-a-windows-service">#</a></h2>
+<p>If you need to stop or delete your service, you can run the following commands:</p>
+<pre><code>sc stop &quot;PlaygroundWorkerService&quot;
+
+sc delete &quot;PlaygroundWorkerService&quot;
+</code></pre>
+<h2 id="further-reading" tabindex="-1">Further reading <a class="header-anchor" href="#further-reading">#</a></h2>
+<ul>
+<li><a href="/codingpipe/2023-08-16-creating-and-deploying-a-windows-service-app-in-dotnet">Adding Serilog logger to a .NET Core Windows Service app</a></li>
+</ul>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/a-step-by-step-example-in-pseudocode-driven-programming/">Pseudocode-Driven Programming: Step-by-Step Example</a></li><li>Next: <a href="/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/">Serilog Setup for .NET Core Worker Services</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/building-windows-service-applications-in-net-core/` was built on 2024-07-30T15:26:17.846Z -->
+	</body>
+</html>

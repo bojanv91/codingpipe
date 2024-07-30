@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Serilog Setup for .NET Core Worker Services</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Serilog Setup for .NET Core Worker Services</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2023-08-18">Aug 18, 2023</time></li>
+	<li><span> • </span></li>
+	<li><span>3 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/net/" class="post-tag">.NET</a> • </li>
+		<li><a href="/codingpipe/tags/worker/" class="post-tag">Worker</a> • </li>
+		<li><a href="/codingpipe/tags/logging/" class="post-tag">Logging</a></li>
+</ul>
+
+<p>In this post, we'll add and configure the <em>Serilog</em> logger to a Windows Service app. This post assumes you've already <a href="/codingpipe/building-windows-service-applications-in-net-core">built a Windows Service app project</a> and made sure your current app directory path is fixed as described in the referenced post.</p>
+<h2 id="add-and-configure-serilog" tabindex="-1">Add and configure <em>Serilog</em> <a class="header-anchor" href="#add-and-configure-serilog">#</a></h2>
+<p><strong>First,</strong> we need to install the following <em>Serilog</em> NuGet packages into our app:</p>
+<ul>
+<li><em>Serilog</em> - the main package</li>
+<li><em>Serilog.Extensions.Hosting</em> - enables the use of <code>IHostBuilder.UseSerilog()</code></li>
+<li><em>Serilog.Settings.Configuration</em> - enables reading log configuration from <em>appsettings.json</em></li>
+<li><em>Serilog.Sinks.Console</em> - enables writing to the Console</li>
+<li><em>Serilog.Sinks.File</em> - enables writing to log files</li>
+</ul>
+<pre><code>dotnet add package Serilog
+dotnet add package Serilog.Extensions.Hosting
+dotnet add package Serilog.Settings.Configuration
+dotnet add package Serilog.Sinks.Console
+dotnet add package Serilog.Sinks.File
+</code></pre>
+<p><strong>Next</strong>, in the <em>Program.cs</em> file we wrap the startup code in a <code>try</code>/<code>catch</code> block to ensure that any configuration issues will be appropriately logged:</p>
+<pre class="language-diff-cs" tabindex="0"><code class="language-diff-cs">using Serilog;
+
+namespace PlaygroundWorkerService
+{
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>   <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Program</span>
+<span class="token prefix unchanged"> </span>   <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>       <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>       <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>           Directory<span class="token punctuation">.</span><span class="token function">SetCurrentDirectory</span><span class="token punctuation">(</span>AppDomain<span class="token punctuation">.</span>CurrentDomain<span class="token punctuation">.</span>BaseDirectory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token comment">// The initial bootstrap logger is able to log errors during start-up.</span>
+<span class="token prefix unchanged"> </span>           <span class="token comment">// It's fully replaced by the logger configured in `UseSerilog()`.</span>
+</span><span class="token inserted-sign inserted language-cs"><span class="token prefix inserted">+</span>            Log<span class="token punctuation">.</span>Logger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LoggerConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token prefix inserted">+</span>                <span class="token punctuation">.</span>WriteTo<span class="token punctuation">.</span><span class="token function">Console</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token prefix inserted">+</span>                <span class="token punctuation">.</span><span class="token function">CreateBootstrapLogger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Starting up"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token keyword">try</span>
+<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>               <span class="token class-name">IHost</span> host <span class="token operator">=</span> Host<span class="token punctuation">.</span><span class="token function">CreateDefaultBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">ConfigureServices</span><span class="token punctuation">(</span>services <span class="token operator">=></span>
+<span class="token prefix unchanged"> </span>                   <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>                       services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>                   <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</span><span class="token inserted-sign inserted language-cs"><span class="token prefix inserted">+</span>                    <span class="token punctuation">.</span><span class="token function">UseSerilog</span><span class="token punctuation">(</span><span class="token punctuation">(</span>hostingContext<span class="token punctuation">,</span> services<span class="token punctuation">,</span> loggerConfiguration<span class="token punctuation">)</span> <span class="token operator">=></span> loggerConfiguration
+<span class="token prefix inserted">+</span>                        <span class="token punctuation">.</span>ReadFrom<span class="token punctuation">.</span><span class="token function">Configuration</span><span class="token punctuation">(</span>hostingContext<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</span><span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">UseWindowsService</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>                   
+<span class="token prefix unchanged"> </span>               host<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Stopped cleanly"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</span>
+<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
+<span class="token prefix unchanged"> </span>           <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"An unhandled exception occured during bootstrapping"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
+<span class="token prefix unchanged"> </span>           <span class="token keyword">finally</span>
+<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
+<span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">CloseAndFlush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
+<span class="token prefix unchanged"> </span>       <span class="token punctuation">}</span>
+<span class="token prefix unchanged"> </span>   <span class="token punctuation">}</span>
+</span>}</code></pre>
+<p>The <code>.UseSerilog()</code> call will redirect all log events through your <em>Serilog</em> pipeline.</p>
+<p><strong>Next,</strong> we'll configure the logger using JSON configuration strings placed in the <em>appsettings.json</em>:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"Serilog"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"Using"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"Serilog.Sinks.Console"</span><span class="token punctuation">,</span> <span class="token string">"Serilog.Sinks.File"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"MinimumLevel"</span><span class="token operator">:</span> <span class="token string">"Information"</span><span class="token punctuation">,</span>
+    <span class="token property">"Override"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"Microsoft"</span><span class="token operator">:</span> <span class="token string">"Information"</span><span class="token punctuation">,</span>
+      <span class="token property">"System"</span><span class="token operator">:</span> <span class="token string">"Warning"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"WriteTo:Async"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"Async"</span><span class="token punctuation">,</span>
+      <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"configure"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token punctuation">{</span>
+            <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"File"</span><span class="token punctuation">,</span>
+            <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+              <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"logs/log.txt"</span><span class="token punctuation">,</span>
+              <span class="token property">"outputTemplate"</span><span class="token operator">:</span> <span class="token string">"[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}"</span><span class="token punctuation">,</span>
+              <span class="token property">"rollingInterval"</span><span class="token operator">:</span> <span class="token string">"Day"</span><span class="token punctuation">,</span>
+              <span class="token property">"shared"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"WriteTo"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"Console"</span><span class="token punctuation">,</span>
+        <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">"outputTemplate"</span><span class="token operator">:</span> <span class="token string">"[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}"</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"Enrich"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"FromLogContext"</span><span class="token punctuation">,</span> <span class="token string">"WithMachineName"</span><span class="token punctuation">,</span> <span class="token string">"WithThreadId"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"Properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"Application"</span><span class="token operator">:</span> <span class="token string">"Sample"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>Finally,</strong> we can start our application and logs will show up in the app's <em>/logs</em> directory, as well in the Console/Terminal if you start it as a console app.</p>
+<h2 id="use-the-serilog-logger" tabindex="-1">Use the <em>Serilog</em> logger <a class="header-anchor" href="#use-the-serilog-logger">#</a></h2>
+<p>Here is how we can use the <em>Serilog</em> logger from our hosted service:</p>
+<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token keyword">using</span> <span class="token namespace">Serilog</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token class-name">ILogger</span> <span class="token operator">=</span> <span class="token class-name">Serilog<span class="token punctuation">.</span>ILogger</span><span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> <span class="token namespace">PlaygroundWorkerService</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Worker</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BackgroundService</span></span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger</span> _logger <span class="token operator">=</span> Log<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">ForContext</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ExecuteAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> stoppingToken<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>stoppingToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                _logger<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Worker running at: {time}"</span><span class="token punctuation">,</span> DateTimeOffset<span class="token punctuation">.</span>Now<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">,</span> stoppingToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="references" tabindex="-1">References <a class="header-anchor" href="#references">#</a></h2>
+<ul>
+<li>https://github.com/serilog/serilog-extensions-hosting#inline-initialization</li>
+<li>https://github.com/serilog/serilog-settings-configuration</li>
+</ul>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/building-windows-service-applications-in-net-core/">Building .NET Core Windows Services</a></li><li>Next: <a href="/codingpipe/posts/powershell-snippets/">PowerShell Command Snippets</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/` was built on 2024-07-30T15:26:17.847Z -->
+	</body>
+</html>

@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Extending Select2 with Adapters</title>
+		<meta name="description" content="How to extend Select2 appearance and behavior using its adapters and decorators feature">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Extending Select2 with Adapters</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2017-10-24">Oct 24, 2017</time></li>
+	<li><span> • </span></li>
+	<li><span>7 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/frontend/" class="post-tag">Frontend</a> • </li>
+		<li><a href="/codingpipe/tags/javascript/" class="post-tag">JavaScript</a></li>
+</ul>
+
+<p>Starting from version 4.0, the Select2 jQuery plugin uses the adapter pattern as a way for developers to extend its features and behavior. Having implemented very custom select-based components, I can assure you that this is very powerful and useful feature.<!--excerpt--></p>
+<p>Unfortunately, the docs about this feature do not include concrete usage examples, so it's quite difficult to get started, to understand how to use it, and how to build on top of it - especially if you haven't worked with jQuery plugins for a while. So, this article offers usage examples and describes how to use Select2 <a href="https://select2.org/advanced/adapters-and-decorators">adapters and decorators</a> feature.<!--excerpt--></p>
+<h2 id="what-are-adapters-and-decorators-in-select2" tabindex="-1">What are adapters and decorators in Select2? <a class="header-anchor" href="#what-are-adapters-and-decorators-in-select2">#</a></h2>
+<p>Adapter, adapts interface of an existing class to another interface. For example replacing the appearance of the selection input element with icon element.</p>
+<p>Decorator, attach additional responsibilities to an object dynamically. For example adding functional checkboxes in multiple select dropdown items, or dedicated search field in multiple selection dropdown.</p>
+<p>Select2 has several built-in adapters that can be used, overridden, and modified. You can find them explained in the <a href="https://select2.org/advanced/default-adapters">advanced section in the docs</a>, and their source code in the <a href="https://github.com/select2/select2/tree/062c6c3af5f0f39794c34c0a343a3857e587cc97/src/js/select2">GitHub repository</a>. For example, here is how <code>SelectionAdapter</code> is implemented (<a href="https://github.com/select2/select2/blob/062c6c3af5f0f39794c34c0a343a3857e587cc97/src/js/select2/selection/single.js">link to source file</a>).</p>
+<p>From the internal use of the adapters in select2 source code you can actually re-use and adapt their code in your apps. This is the approach that helped me to better understand how to use this feature.</p>
+<p>You can take total control of the appearance and behavior of select2-based elements in your web apps by learning and exposing the full potential of this feature.</p>
+<h2 id="defining-and-using-custom-adapters" tabindex="-1">Defining and using custom adapters <a class="header-anchor" href="#defining-and-using-custom-adapters">#</a></h2>
+<p>A Select2 adapter is defined using an AMD module. Adapters can use other adapters or objects (to extend or decorate) by taking AMD module dependencies. Select2 automatically loads modules when the adapters are being constructed.</p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript">$<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"CustomSelectionAdapter"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">[</span>
+        <span class="token string">"select2/utils"</span><span class="token punctuation">,</span>
+        <span class="token string">"select2/selection/multiple"</span><span class="token punctuation">,</span>
+        <span class="token string">"select2/selection/placeholder"</span><span class="token punctuation">,</span>
+        <span class="token string">"select2/selection/eventRelay"</span><span class="token punctuation">,</span>
+        <span class="token string">"select2/selection/single"</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token keyword">function</span> <span class="token punctuation">(</span>Utils<span class="token punctuation">,</span> MultipleSelection<span class="token punctuation">,</span> Placeholder<span class="token punctuation">,</span> EventRelay<span class="token punctuation">,</span> SingleSelection<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// Here goes the code of this custom adapter</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>This piece of code defines a custom <code>SelectionAdapter</code>. It should be executed only once. Usually it is called from application start, just after external libraries (like jQuery, Select2) are loaded, or just before it's first usage, in a lazy-execution way. For single-page applications, the lazy-execution is preferred approach.</p>
+<p>Custom adapters can be used when constructing select2 elements, by <em>requiring</em> the AMD module in which they are defined to the select2 configuration API. Bellow is an example where the already defined custom selection adapter is used.</p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token function">$</span><span class="token punctuation">(</span>htmlElement<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">select2</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    data<span class="token operator">:</span> sampleDataAsArray<span class="token punctuation">,</span>
+    selectionAdapter<span class="token operator">:</span> $<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token keyword">require</span><span class="token punctuation">(</span><span class="token string">"CustomSelectionAdapter"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Now, the <code>htmlElement</code> will be transformed to a select2 element with customized <em>selection</em> interface and behavior, as defined in <code>CustomSelectionAdapter</code>. Besides customizing the <code>selectionAdapter</code>, you can customize also the <code>resultsAdapter</code>, <code>dataAdapter</code>, <code>ajaxAdapter</code>, <code>resultsAdapter</code>, and <code>dropdownAdapter</code>.</p>
+<h2 id="example-custom-multiple-select" tabindex="-1">Example: Custom multiple select <a class="header-anchor" href="#example-custom-multiple-select">#</a></h2>
+<p>This example demonstrates the full power of adapters and decorators feature. It extends<code>SelectionAdapter</code> and <code>DropdownAdapter</code> to fulfil the goals.</p>
+<p>Default behavior of the multiple select, to be modified is:</p>
+<ol>
+<li>Ability to search for items directly from the selection-box.</li>
+<li>Show selected items in the selection-box.</li>
+</ol>
+<p>Desired new behavior:</p>
+<ol>
+<li>Ability to search items from a dedicated search box, shown in the dropdown (same as in single select).</li>
+<li>Show number of selected items out of the total in the selection-box. Also, show arrow icon in the selection-box.</li>
+</ol>
+<p>At image bellow, the default and desired outcomes are visualized.</p>
+<p><img src="/codingpipe/img/extending-select2-with-adapters.png" alt="Custom multiple select"></p>
+<p>To make select2 do the desired behavior, two custom adapters need to be written, a <code>SelectionAdapter</code> and a <code>DropdownAdapter</code>.</p>
+<blockquote>
+<p>Find the complete solution example on <a href="https://jsfiddle.net/bojanv91/ou7ohLd1/15">jsFiddle</a>.</p>
+</blockquote>
+<p><strong>Step 1 - create custom selection adapter</strong></p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript">$<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"CustomSelectionAdapter"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+    <span class="token string">"select2/utils"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/selection/multiple"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/selection/placeholder"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/selection/eventRelay"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/selection/single"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token keyword">function</span><span class="token punctuation">(</span>Utils<span class="token punctuation">,</span> MultipleSelection<span class="token punctuation">,</span> Placeholder<span class="token punctuation">,</span> EventRelay<span class="token punctuation">,</span> SingleSelection<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">// Decorates MultipleSelection with Placeholder</span>
+    <span class="token keyword">let</span> adapter <span class="token operator">=</span> Utils<span class="token punctuation">.</span><span class="token function">Decorate</span><span class="token punctuation">(</span>MultipleSelection<span class="token punctuation">,</span> Placeholder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">// Decorates adapter with EventRelay - ensures events will continue to fire</span>
+    <span class="token comment">// e.g. selected, changed</span>
+    adapter <span class="token operator">=</span> Utils<span class="token punctuation">.</span><span class="token function">Decorate</span><span class="token punctuation">(</span>adapter<span class="token punctuation">,</span> EventRelay<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    adapter<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">render</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// Use selection-box from SingleSelection adapter</span>
+      <span class="token comment">// This implementation overrides the default implementation</span>
+      <span class="token keyword">let</span> $selection <span class="token operator">=</span> SingleSelection<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> $selection<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    adapter<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">update</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// copy and modify SingleSelection adapter</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">let</span> $rendered <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$selection<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">'.select2-selection__rendered'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">let</span> noItemsSelected <span class="token operator">=</span> data<span class="token punctuation">.</span>length <span class="token operator">===</span> <span class="token number">0</span><span class="token punctuation">;</span>
+      <span class="token keyword">let</span> formatted <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>noItemsSelected<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        formatted <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>options<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"placeholder"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">""</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">let</span> itemsData <span class="token operator">=</span> <span class="token punctuation">{</span>
+          selected<span class="token operator">:</span> data <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+          all<span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>$element<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">"option"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+        <span class="token comment">// Pass selected and all items to display method</span>
+        <span class="token comment">// which calls templateSelection</span>
+        formatted <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span>itemsData<span class="token punctuation">,</span> $rendered<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      $rendered<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>formatted<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      $rendered<span class="token punctuation">.</span><span class="token function">prop</span><span class="token punctuation">(</span><span class="token string">'title'</span><span class="token punctuation">,</span> formatted<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> adapter<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>Step 2 - create custom dropdown adapter</strong></p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript">$<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token function">define</span><span class="token punctuation">(</span><span class="token string">"CustomDropdownAdapter"</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>
+    <span class="token string">"select2/utils"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/dropdown"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/dropdown/attachBody"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/dropdown/attachContainer"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/dropdown/search"</span><span class="token punctuation">,</span>
+    <span class="token string">"select2/dropdown/minimumResultsForSearch"</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token keyword">function</span><span class="token punctuation">(</span>Utils<span class="token punctuation">,</span> Dropdown<span class="token punctuation">,</span> AttachBody<span class="token punctuation">,</span> AttachContainer<span class="token punctuation">,</span> Search<span class="token punctuation">,</span> MinimumResultsForSearch<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token comment">// Decorate Dropdown with Search functionalities</span>
+    <span class="token keyword">let</span> dropdownWithSearch <span class="token operator">=</span> Utils<span class="token punctuation">.</span><span class="token function">Decorate</span><span class="token punctuation">(</span>Dropdown<span class="token punctuation">,</span> Search<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    dropdownWithSearch<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function-variable function">render</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment">// Copy and modify default search render method</span>
+      <span class="token keyword">var</span> $rendered <span class="token operator">=</span> Dropdown<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment">// Add ability for a placeholder in the search box</span>
+      <span class="token keyword">let</span> placeholder <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>options<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"placeholderForSearch"</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">""</span><span class="token punctuation">;</span>
+      <span class="token keyword">var</span> $search <span class="token operator">=</span> <span class="token function">$</span><span class="token punctuation">(</span>
+        <span class="token string">'&lt;span class="select2-search select2-search--dropdown">'</span> <span class="token operator">+</span>
+        <span class="token string">'&lt;input class="select2-search__field" placeholder="'</span> <span class="token operator">+</span> placeholder <span class="token operator">+</span> <span class="token string">'" type="search"'</span> <span class="token operator">+</span>
+        <span class="token string">' tabindex="-1" autocomplete="off" autocorrect="off" autocapitalize="off"'</span> <span class="token operator">+</span>
+        <span class="token string">' spellcheck="false" role="textbox" />'</span> <span class="token operator">+</span>
+        <span class="token string">'&lt;/span>'</span>
+      <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">this</span><span class="token punctuation">.</span>$searchContainer <span class="token operator">=</span> $search<span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>$search <span class="token operator">=</span> $search<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token string">'input'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      $rendered<span class="token punctuation">.</span><span class="token function">prepend</span><span class="token punctuation">(</span>$search<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> $rendered<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// Decorate the dropdown+search with necessary containers</span>
+    <span class="token keyword">let</span> adapter <span class="token operator">=</span> Utils<span class="token punctuation">.</span><span class="token function">Decorate</span><span class="token punctuation">(</span>dropdownWithSearch<span class="token punctuation">,</span> AttachContainer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    adapter <span class="token operator">=</span> Utils<span class="token punctuation">.</span><span class="token function">Decorate</span><span class="token punctuation">(</span>adapter<span class="token punctuation">,</span> AttachBody<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> adapter<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>Step 3 - use the defined adapters</strong></p>
+<pre class="language-typescript" tabindex="0"><code class="language-typescript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#multipleWithSearch"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">select2</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  data<span class="token operator">:</span> testData<span class="token punctuation">,</span>
+  placeholder<span class="token operator">:</span> <span class="token string">"Select items"</span><span class="token punctuation">,</span>
+  placeholderForSearch<span class="token operator">:</span> <span class="token string">"Filter items"</span><span class="token punctuation">,</span>		<span class="token comment">// additional placeholder for search box</span>
+  closeOnSelect<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token comment">// Make selection-box similar to single select</span>
+  selectionAdapter<span class="token operator">:</span> $<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token keyword">require</span><span class="token punctuation">(</span><span class="token string">"CustomSelectionAdapter"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">templateSelection</span><span class="token operator">:</span> <span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">Selected </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>data<span class="token punctuation">.</span>selected<span class="token punctuation">.</span>length<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string"> out of </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>data<span class="token punctuation">.</span>all<span class="token punctuation">.</span>length<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token comment">// Add search box in dropdown</span>
+  dropdownAdapter<span class="token operator">:</span> $<span class="token punctuation">.</span>fn<span class="token punctuation">.</span>select2<span class="token punctuation">.</span>amd<span class="token punctuation">.</span><span class="token keyword">require</span><span class="token punctuation">(</span><span class="token string">"CustomDropdownAdapter"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Find the complete solution example on <a href="https://jsfiddle.net/bojanv91/ou7ohLd1/15">jsFiddle</a>.</p>
+<h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
+<p>This article explains how you can extend Select2 plugin by utilizing its adapters and decorators feature.</p>
+<p>To create better custom adapters, try to re-use the built-in adapters, and modify them on the go. By doing that you will learn more about select2 internals, thus your custom adapters will be much cleaner and you will have less code to debug.</p>
+<p>Finally, observe the example code on <a href="https://jsfiddle.net/bojanv91/ou7ohLd1/15">jsFiddle</a>, modify it and see how you can further customize select2 as per your needs.</p>
+<p>NOTE: I use the select2 plugin in my Aurelia apps by wrapping common behavior in custom elements. So far, so good. It's nice that we are able to easily re-use proven components/plugins from other major platforms.</p>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/refactoring-a-feature-envy-code/">Refactoring Feature Envy Code</a></li><li>Next: <a href="/codingpipe/posts/select-n-plus-1-problem/">Understanding and Solving the Select N+1 Problem</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/extending-select2-with-adapters/` was built on 2024-07-30T15:26:17.845Z -->
+	</body>
+</html>

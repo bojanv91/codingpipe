@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Global Day of Coderetreat 2016 Skopje Event Recap</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Global Day of Coderetreat 2016 Skopje Event Recap</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2016-10-27">Oct 27, 2016</time></li>
+	<li><span> • </span></li>
+	<li><span>4 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/meetups/" class="post-tag">Meetups</a></li>
+</ul>
+
+<p><code>#GDCR16</code> is a day for celebrating passion and software craftsmanship. This year's event in Skopje, Macedonia was a blast! Fresh ideas, new perspectives and great people is everything you need for such an event.<!--excerpt--></p>
+<h2 id="about-the-event" tabindex="-1">About the event <a class="header-anchor" href="#about-the-event">#</a></h2>
+<p><a href="http://globalday.coderetreat.org/">Coderetreat</a> is a one day event that provides developers the opportunity for skills improvement by focusing on software development and <strong>design fundamentals</strong>. By practicing the basic principles of <strong>modular and object-oriented design</strong>, participants can improve their ability to write code that <strong>minimizes the cost of change over time</strong>. It aims to shrink the gap between the code we write under pressure of needing to deliver on time and the perfect code.</p>
+<p><img src="/codingpipe/img/2016-10-27-global-day-of-coderetreat-2016-haselt-macedonia/6.png" alt="Global Day of Coderetreat 2016 in Skopje, Macedonia"></p>
+<h2 id="hosting-and-facilitating" tabindex="-1">Hosting and facilitating <a class="header-anchor" href="#hosting-and-facilitating">#</a></h2>
+<p>Having the huge enthusiasm about community work and passion in software development and coding, <a href="http://www.haselt.com/">HASELT</a> supported this year's Coderetreat in Macedonia by providing sponsorship, logistics for organization and space where programmers were gathered. We've had the pleasure to have with us <a href="dalibornasevic.com">Dalibor Nasevic</a>, who is long-time facilitator of Coderetreat events in Macedonia and helped all attendees to make the most out of the event.</p>
+<p><img src="/codingpipe/img/2016-10-27-global-day-of-coderetreat-2016-haselt-macedonia/2.png" alt="Global Day of Coderetreat 2016 in Skopje, Macedonia"></p>
+<p><img src="/codingpipe/img/2016-10-27-global-day-of-coderetreat-2016-haselt-macedonia/3.png" alt="Global Day of Coderetreat 2016 in Skopje, Macedonia"></p>
+<h2 id="sessions" tabindex="-1">Sessions <a class="header-anchor" href="#sessions">#</a></h2>
+<p>Starting early in the morning the facilitator introduced the agenda for the day. There were five sessions of pair programming. After each session, retrospective meetings were held where each pair discussed what they did. After that, participants switched pairs and prepared for the next session.</p>
+<p>The first session was intended to get the participants familiar with the problem, and introduction to <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a>. In the second session, &quot;Ping-pong pair programming&quot;, the pairs learned the importance of communication when pairing and collaborate together to see other ways of writing code. The third session was &quot;No primitives across method boundaries (input or output)&quot;. In the fourth session, &quot;No conditionals&quot;, the pairs had to find ways of avoiding conditionals and fewer logical paths. The last session, &quot;Evil pair programming&quot; was designed to practice writing quality tests, where the tester tries to write good tests and the coder writes just enough code to pass tests.</p>
+<p>At the end of all sessions, the participants had the final retrospective with Dalibor. He asked the following questions, to which all participants shared their thoughts:</p>
+<ul>
+<li>What, if anything, did you learn today?</li>
+<li>What, if anything, surprised you today?</li>
+<li>What, if anything, will you do differently moving forward?</li>
+</ul>
+<p><img src="/codingpipe/img/2016-10-27-global-day-of-coderetreat-2016-haselt-macedonia/4.png" alt="Global Day of Coderetreat 2016 in Skopje, Macedonia"></p>
+<h2 id="impressions-from-the-event" tabindex="-1">Impressions from the event <a class="header-anchor" href="#impressions-from-the-event">#</a></h2>
+<p>Being able to see so diverse thoughts about designing software was truly inspirational, and the way how people collaborated and shared their ideas was really empowering to everyone, including myself.</p>
+<p>Personally, if I have to choose only a single event that I would like to attend to, Coderetreat would be definitely <em>that</em> one.</p>
+<p><strong>Here are impressions shared by my awesome colleagues, the driving force of the whole organization:</strong></p>
+<blockquote>
+<p>We had an amazing time, meeting developers willing to learn, improve and also share their knowledge with others. We hope that the participants found this event as inspirational and productive as we do.</p>
+</blockquote>
+<p><strong>and also, the impressions shared by Dalibor who put his energy and enthusiasm guiding the participants during the whole day:</strong></p>
+<blockquote>
+<p>It was great experience for me being part of another Global Day of Coderetreat and facilitate the local event in Skopje. I am very grateful to Bojan and the rest of the HASELT team for their passion and inspirational energy in organizing and hosting the event. I'm very happy for the attendees too. The ones for who the event is. The ones that chose to spend that Saturday practicing software design with other developers, work in different programming languages, share their knowledge and improve their craft together. Their passion, their positive energy and their enthusiasm. It's great to see how inspirational the event can be for them and what they are going to change on their daily jobs starting Monday.</p>
+</blockquote>
+<p><img src="/codingpipe/img/2016-10-27-global-day-of-coderetreat-2016-haselt-macedonia/5.png" alt="Global Day of Coderetreat 2016 in Skopje, Macedonia"></p>
+<h2 id="what-s-next" tabindex="-1">What's next? <a class="header-anchor" href="#what-s-next">#</a></h2>
+<p>Next, after being part of this very inspirational event, we are encouraged to contribute even more to the local software development community. So, we put ourselves a goal to organize many similar tech events, workshops and regular meet-ups in order to bring the local community even closer, by encouraging discussions, empowering people, sharing experiences and ideas. Stay tuned for more info which is coming, very soon!</p>
+<h2 id="additional-reading" tabindex="-1">Additional Reading <a class="header-anchor" href="#additional-reading">#</a></h2>
+<ul>
+<li><a href="http://dalibornasevic.com/posts/74-notes-from-global-day-of-coderetreat-2016-in-skopje">Dalibor's notes of Global Day of Coderetreat in Skopje</a></li>
+<li><a href="https://leanpub.com/4rulesofsimpledesign/c/gdcr">Book: Understanding the Four Rules of Simple Design by Corey Haines</a></li>
+<li><a href="http://coderetreat.org/">http://coderetreat.org/ </a></li>
+<li><a href="http://globalday.coderetreat.org/">http://globalday.coderetreat.org/</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Conway's Game of Life</a></li>
+</ul>
+<p>Dear reader, thanks for investing your time in reading our collective story, and I hope you'll be inspired enough to join us in the next events, which are coming soon. Oh, and don't forget: always be learning, always be coding.</p>
+<p><strong><a href="https://www.facebook.com/HASELTofficial/photos/?tab=album&amp;album_id=666003166900108">See more pictures here</a>.</strong></p>
+<blockquote>
+<p>This post was originally posted on <a href="http://haselt.com/global-day-of-coderetreat-2016-haselt/">http://haselt.com</a>.</p>
+<p>A special thanks to my colleague <a href="https://www.linkedin.com/in/viktorijanikolovska">Viktorija Nikolovska</a> for her help with this article.</p>
+</blockquote>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/feature-folders-structure-in-asp-net/">ASP.NET MVC5 Feature Folders Structure</a></li><li>Next: <a href="/codingpipe/posts/vs2016-extensions/">Top Visual Studio 2015 Extensions I Use</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/global-day-of-coderetreat-2016-haselt-macedonia/` was built on 2024-07-30T15:26:17.843Z -->
+	</body>
+</html>

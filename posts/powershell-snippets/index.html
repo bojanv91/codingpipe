@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>PowerShell Command Snippets</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>PowerShell Command Snippets</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2023-12-05">Dec 5, 2023</time></li>
+	<li><span> • </span></li>
+	<li><span>4 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/powershell/" class="post-tag">PowerShell</a> • </li>
+		<li><a href="/codingpipe/tags/cheatsheets/" class="post-tag">Cheatsheets</a></li>
+</ul>
+
+<p>Add a Windows user and grant remote desktop access:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token variable">$Password</span> = <span class="token function">Read-Host</span> <span class="token operator">-</span>AsSecureString   
+<span class="token comment">#&lt;enter your new password></span>
+<span class="token function">New-LocalUser</span> <span class="token string">"MyRDPUser"</span> <span class="token operator">-</span>Password <span class="token variable">$Password</span>
+
+<span class="token function">Add-LocalGroupMember</span> <span class="token operator">-</span><span class="token function">Group</span> <span class="token string">"Remote Desktop Users"</span> <span class="token operator">-</span>Member <span class="token string">"MyRDPUser"</span></code></pre>
+<p>Change RDP user password, and set account to never expire:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token variable">$Password</span> = <span class="token function">Read-Host</span> <span class="token operator">-</span>AsSecureString
+<span class="token comment">#&lt;enter your new password></span>
+
+<span class="token variable">$UserAccount</span> = <span class="token function">Get-LocalUser</span> <span class="token operator">-</span>Name <span class="token string">"MyRDPUser"</span>
+<span class="token variable">$UserAccount</span> <span class="token punctuation">|</span> <span class="token function">Set-LocalUser</span> <span class="token operator">-</span>Password <span class="token variable">$Password</span> <span class="token operator">-</span>AccountNeverExpires <span class="token operator">-</span>PasswordNeverExpires 1</code></pre>
+<p>Grant admin rights to a Windows user:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Add-LocalGroupMember</span> <span class="token operator">-</span><span class="token function">Group</span> <span class="token string">"Administrators"</span> <span class="token operator">-</span>Member <span class="token string">"MyNewUser"</span></code></pre>
+<p>Add firewall rules - allow inbound ports:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">New-NetFirewallRule</span> <span class="token operator">-</span>DisplayName <span class="token string">"Port 80"</span> <span class="token operator">-</span>Direction Inbound <span class="token operator">-</span>LocalPort 80 <span class="token operator">-</span>Protocol TCP <span class="token operator">-</span>Action Allow
+
+<span class="token function">New-NetFirewallRule</span> <span class="token operator">-</span>DisplayName <span class="token string">"Port 443"</span> <span class="token operator">-</span>Direction Inbound <span class="token operator">-</span>LocalPort 443 <span class="token operator">-</span>Protocol TCP <span class="token operator">-</span>Action Allow</code></pre>
+<p>Install IIS and dependencies:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Install-WindowsFeature</span> <span class="token operator">-</span>name Web-Server <span class="token operator">-</span>IncludeManagementTools
+<span class="token function">Install-WindowsFeature</span> web-scripting-tools</code></pre>
+<p>Restart an IIS website:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Stop-IISSite</span> <span class="token operator">-</span>Name <span class="token string">"YourWebSite"</span>
+<span class="token function">Start-IISSite</span> <span class="token operator">-</span>Name <span class="token string">"YourWebSite"</span></code></pre>
+<p>Create/manage IIS website binding with AppPool:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token comment"># Create new IIS site</span>
+<span class="token function">New-IISSite</span> <span class="token operator">-</span>Name <span class="token string">"mywebsite"</span> <span class="token operator">-</span>BindingInformation <span class="token string">"*:80:localhost"</span> <span class="token operator">-</span>PhysicalPath <span class="token string">"C:\inetpub\wwwroot\mywebsite"</span>
+
+<span class="token comment"># Add HTTPS binding</span>
+<span class="token function">New-IISSiteBinding</span> <span class="token operator">-</span>Name <span class="token string">"mywebsite"</span> <span class="token operator">-</span>BindingInformation <span class="token string">"*:443:localhost"</span> <span class="token operator">-</span>CertificateThumbPrint <span class="token string">"&lt;YOUR_CERT_THUMBPRINT>"</span> <span class="token operator">-</span>CertStoreLocation <span class="token string">"Cert:\LocalMachine\My"</span> <span class="token operator">-</span>Protocol https <span class="token operator">-</span>SslFlag 1
+
+<span class="token comment"># Create AppPool</span>
+<span class="token function">New-Item</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\AppPools"</span> <span class="token operator">-</span>Name <span class="token string">"mywebsite"</span> <span class="token operator">-</span><span class="token function">Type</span> AppPool
+
+<span class="token comment"># "v2.0", "v4.0" and "" (for no managed code)</span>
+<span class="token function">Set-ItemProperty</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\AppPools\mywebsite"</span> <span class="token operator">-</span>name <span class="token string">"managedRuntimeVersion"</span> <span class="token operator">-</span>value <span class="token string">""</span>
+<span class="token function">Set-ItemProperty</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\AppPools\mywebsite"</span> <span class="token operator">-</span>name <span class="token string">"autoStart"</span> <span class="token operator">-</span>value <span class="token boolean">$true</span>
+<span class="token function">Set-ItemProperty</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\AppPools\mywebsite"</span> <span class="token operator">-</span>name <span class="token string">"processModel"</span> <span class="token operator">-</span>value @<span class="token punctuation">{</span>identitytype=<span class="token string">"ApplicationPoolIdentity"</span><span class="token punctuation">}</span>
+
+<span class="token comment"># Assign the application pool to a website</span>
+<span class="token function">Set-ItemProperty</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\Sites\mywebsite"</span> <span class="token operator">-</span>name <span class="token string">"applicationPool"</span> <span class="token operator">-</span>value <span class="token string">"mywebsite"</span></code></pre>
+<p>Remove app pool:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Remove-Item</span> <span class="token operator">-</span>Path <span class="token string">"IIS:\AppPools\mywebsite"</span> <span class="token operator">-</span>Recurse <span class="token operator">-</span>Force <span class="token operator">-</span>ErrorAction SilentlyContinue</code></pre>
+<p>Grant access to the &quot;/logs&quot; folder for an IIS AppPool:</p>
+<ul>
+<li>This script assumes that the AppPool name has the same name as the Website name. In order for a given ASP.NET website to be able to write logs to the &quot;/logs&quot; folder, the AppPool needs to have access to that folder.</li>
+</ul>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token keyword">function</span> GrantWebsiteFolderPermissions <span class="token punctuation">{</span> 
+    <span class="token keyword">param</span> <span class="token punctuation">(</span><span class="token variable">$websiteName</span><span class="token punctuation">)</span> 
+                  
+    <span class="token variable">$Path</span> = <span class="token string">"C:/inetpub/wwwroot/<span class="token variable">$websiteName</span>/logs"</span>
+    <span class="token variable">$Acl</span> = <span class="token function">Get-Acl</span> <span class="token variable">$Path</span>
+    <span class="token variable">$Ar</span> = <span class="token function">New-Object</span> System<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>AccessControl<span class="token punctuation">.</span>FileSystemAccessRule<span class="token punctuation">(</span><span class="token string">"IIS AppPool\<span class="token variable">$websiteName</span>"</span><span class="token punctuation">,</span> <span class="token string">"FullControl"</span><span class="token punctuation">,</span> <span class="token string">"ContainerInherit,ObjectInherit"</span><span class="token punctuation">,</span> <span class="token string">"None"</span><span class="token punctuation">,</span> <span class="token string">"Allow"</span><span class="token punctuation">)</span>
+    <span class="token variable">$Acl</span><span class="token punctuation">.</span>SetAccessRule<span class="token punctuation">(</span><span class="token variable">$Ar</span><span class="token punctuation">)</span>
+    <span class="token function">Set-Acl</span> <span class="token variable">$Path</span> <span class="token variable">$Acl</span>
+<span class="token punctuation">}</span>
+
+GrantWebsiteFolderPermissions <span class="token operator">-</span>websiteName <span class="token string">"mywebsite"</span></code></pre>
+<p>Install Chocolatey Windows Package Manager:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Set-ExecutionPolicy</span> Bypass <span class="token operator">-</span>Scope <span class="token keyword">Process</span> <span class="token operator">-</span>Force<span class="token punctuation">;</span> <span class="token namespace">[System.Net.ServicePointManager]</span>::SecurityProtocol = <span class="token namespace">[System.Net.ServicePointManager]</span>::SecurityProtocol <span class="token operator">-bor</span> 3072<span class="token punctuation">;</span>
+
+<span class="token function">iex</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">New-Object</span> System<span class="token punctuation">.</span>Net<span class="token punctuation">.</span>WebClient<span class="token punctuation">)</span><span class="token punctuation">.</span>DownloadString<span class="token punctuation">(</span><span class="token string">'https://community.chocolatey.org/install.powershell'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+choco feature enable <span class="token operator">-</span>n=allowGlobalConfirmation</code></pre>
+<p>Create scheduled tasks using Windows Task Scheduler:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token variable">$Action</span> = <span class="token function">New-ScheduledTaskAction</span> <span class="token operator">-</span>Execute <span class="token string">".\runBackupProcedure.bat"</span> <span class="token operator">-</span>WorkingDirectory <span class="token string">"C:\YourStartInPath"</span>
+<span class="token variable">$Triggers</span> = @<span class="token punctuation">(</span>      <span class="token comment"># Add two daily triggers at different times</span>
+    $<span class="token punctuation">(</span><span class="token function">New-ScheduledTaskTrigger</span> <span class="token operator">-</span>Daily <span class="token operator">-</span>At 3PM<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    $<span class="token punctuation">(</span><span class="token function">New-ScheduledTaskTrigger</span> <span class="token operator">-</span>Daily <span class="token operator">-</span>At 6AM<span class="token punctuation">)</span>
+<span class="token punctuation">)</span>
+<span class="token variable">$Settings</span> = <span class="token function">New-ScheduledTaskSettingsSet</span> <span class="token operator">-</span>HistoryEnabled <span class="token boolean">$true</span>
+<span class="token variable">$Principal</span> = <span class="token function">New-ScheduledTaskPrincipal</span> <span class="token operator">-</span>UserId <span class="token string">"NT AUTHORITY\SYSTEM"</span> <span class="token operator">-</span>LogonType ServiceAccount
+
+<span class="token comment"># Register the task</span>
+<span class="token function">Register-ScheduledTask</span> <span class="token operator">-</span>Action <span class="token variable">$Action</span> <span class="token operator">-</span>Trigger <span class="token variable">$Triggers</span> <span class="token operator">-</span>TaskName <span class="token string">"BackupDatabaseToS3"</span> <span class="token operator">-</span>Description <span class="token string">"Runs BackupDatabaseToS3 daily"</span> <span class="token operator">-</span>Settings <span class="token variable">$Settings</span> <span class="token operator">-</span>Principal <span class="token variable">$Principal</span>
+
+<span class="token comment"># Get task info</span>
+<span class="token function">Get-ScheduledTask</span> <span class="token operator">-</span>TaskName <span class="token string">"BackupDatabaseToS3"</span> <span class="token punctuation">|</span> <span class="token function">Get-ScheduledTaskInfo</span></code></pre>
+<pre class="language-batch" tabindex="0"><code class="language-batch"><span class="token comment">:: runBackupProcedure.bat</span>
+<span class="token command"><span class="token keyword">powershell</span>.exe -ExecutionPolicy Bypass -File <span class="token string">".\backupDatabase.ps1"</span></span>
+<span class="token command"><span class="token keyword">powershell</span>.exe -ExecutionPolicy Bypass -File <span class="token string">".\uploadBackupToS3.ps1"</span></span></code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/">Serilog Setup for .NET Core Worker Services</a></li><li>Next: <a href="/codingpipe/posts/what-to-log/">What to Log in Applications?</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/powershell-snippets/` was built on 2024-07-30T15:26:17.847Z -->
+	</body>
+</html>

@@ -2,62 +2,292 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/posts/firstpost/</loc>
-		<lastmod>2018-05-01</lastmod>
+		<loc>https://codingpipe.com/codingpipe/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/</loc>
+		<lastmod>2014-12-12</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/posts/secondpost/</loc>
-		<lastmod>2018-07-04</lastmod>
+		<loc>https://codingpipe.com/codingpipe/posts/getting-started-with-rhino-security-structuremap/</loc>
+		<lastmod>2015-01-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/posts/thirdpost/</loc>
-		<lastmod>2018-08-24</lastmod>
+		<loc>https://codingpipe.com/codingpipe/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/</loc>
+		<lastmod>2015-09-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/posts/fourthpost/</loc>
-		<lastmod>2018-09-30</lastmod>
+		<loc>https://codingpipe.com/codingpipe/posts/feature-folders-structure-in-asp-net/</loc>
+		<lastmod>2016-05-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/global-day-of-coderetreat-2016-haselt-macedonia/</loc>
+		<lastmod>2016-10-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/vs2016-extensions/</loc>
+		<lastmod>2016-12-31</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/snippet-fix-razor-views-compilation/</loc>
+		<lastmod>2017-01-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/visual-studio-2017-notes/</loc>
+		<lastmod>2017-03-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/refactoring-a-feature-envy-code/</loc>
+		<lastmod>2017-07-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/extending-select2-with-adapters/</loc>
+		<lastmod>2017-10-24</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/select-n-plus-1-problem/</loc>
+		<lastmod>2018-06-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</loc>
+		<lastmod>2023-01-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/</loc>
+		<lastmod>2023-01-23</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/retry-failed-http-requests-in-dotnet/</loc>
+		<lastmod>2023-08-08</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/setting-up-postgresql-with-docker-compose/</loc>
+		<lastmod>2023-08-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/custom-appsettings-configuration-in-aspnet-core-integration-tests/</loc>
+		<lastmod>2023-08-10</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/overriding-services-in-aspnet-core-integration-tests/</loc>
+		<lastmod>2023-08-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/exporting-c-objects-to-excel-with-closedxml/</loc>
+		<lastmod>2023-08-12</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/a-step-by-step-example-in-pseudocode-driven-programming/</loc>
+		<lastmod>2023-08-13</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/building-windows-service-applications-in-net-core/</loc>
+		<lastmod>2023-08-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</loc>
+		<lastmod>2023-08-18</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/powershell-snippets/</loc>
+		<lastmod>2023-12-05</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/what-to-log/</loc>
+		<lastmod>2024-01-07</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/problem-solving-guide-for-developers/</loc>
+		<lastmod>2024-02-11</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/aws-cli-cheatsheet/</loc>
+		<lastmod>2024-02-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/chocolatey-cheatsheet/</loc>
+		<lastmod>2024-02-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/npm-nvm-cheatsheet/</loc>
+		<lastmod>2024-02-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/postgresql-cheatsheet/</loc>
+		<lastmod>2024-02-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/rabbitmq-cheatsheet/</loc>
+		<lastmod>2024-02-29</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/posts/ssh-windows-snippets/</loc>
+		<lastmod>2024-03-31</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/about/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/links/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/another-tag/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<loc>https://codingpipe.com/codingpipe/tags/net/</loc>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/number-2/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<loc>https://codingpipe.com/codingpipe/tags/data-access/</loc>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/second-tag/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<loc>https://codingpipe.com/codingpipe/tags/software-design/</loc>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/posts-with-two-tags/</loc>
-		<lastmod>2024-07-29</lastmod>
+		<loc>https://codingpipe.com/codingpipe/tags/asp-net-mvc5/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/architecture/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/meetups/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/tools/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/asp-net-framework/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/frontend/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/javascript/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/postgres/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/docker/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/asp-net-core/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/testing/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/asp-net/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/excel/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/net-worker/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/programming/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/worker/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/logging/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/powershell/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/cheatsheets/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/guides/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/snippets/</loc>
+		<lastmod>2024-07-30</lastmod>
 	</url>
 </urlset>

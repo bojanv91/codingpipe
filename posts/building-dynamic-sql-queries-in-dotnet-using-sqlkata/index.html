@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Dynamic SQL Query Building With SqlKata in .NET Core</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
+		<link rel="manifest" href="/codingpipe/site.webmanifest">
+		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #272822;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #8292a2;
+}
+
+.token.punctuation {
+	color: #f8f8f2;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #f92672;
+}
+
+.token.boolean,
+.token.number {
+	color: #ae81ff;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #a6e22e;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+	color: #f8f8f2;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+	color: #e6db74;
+}
+
+.token.keyword {
+	color: #66d9ef;
+}
+
+.token.regex,
+.token.important {
+	color: #fd971f;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+/*
+ * New diff- syntax
+ */
+
+pre[class*="language-diff-"] {
+	--eleventy-code-padding: 1.25em;
+	padding-left: var(--eleventy-code-padding);
+	padding-right: var(--eleventy-code-padding);
+}
+.token.deleted {
+	background-color: hsl(0, 51%, 37%);
+	color: inherit;
+}
+.token.inserted {
+	background-color: hsl(126, 31%, 39%);
+	color: inherit;
+}
+
+/* Make the + and - characters unselectable for copy/paste */
+.token.prefix.unchanged,
+.token.prefix.inserted,
+.token.prefix.deleted {
+	-webkit-user-select: none;
+	user-select: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.token.prefix.inserted,
+.token.prefix.deleted {
+	width: var(--eleventy-code-padding);
+	background-color: rgba(0,0,0,.2);
+}
+
+/* Optional: full-width background color */
+.token.inserted:not(.prefix),
+.token.deleted:not(.prefix) {
+	display: block;
+	margin-left: calc(-1 * var(--eleventy-code-padding));
+	margin-right: calc(-1 * var(--eleventy-code-padding));
+	text-decoration: none; /* override del, ins, mark defaults */
+	color: inherit; /* override del, ins, mark defaults */
+}
+* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			
+<h1>Dynamic SQL Query Building With SqlKata in .NET Core</h1>
+
+<ul class="post-metadata">
+	<li><time datetime="2023-01-23">Jan 23, 2023</time></li>
+	<li><span> • </span></li>
+	<li><span>6 min read</span></li>
+	<li><span> • </span></li>
+		<li><a href="/codingpipe/tags/net/" class="post-tag">.NET</a> • </li>
+		<li><a href="/codingpipe/tags/data-access/" class="post-tag">Data Access</a></li>
+</ul>
+
+<p>There are two common approaches to building dynamic SQL queries in C# application code. One uses string concatenation and executes the query using libraries such as <a href="https://github.com/DapperLib/Dapper/blob/main/Readme.md">Dapper</a>. The other uses expressions-based query builder libraries such as <a href="https://sqlkata.com/">SqlKata</a>.</p>
+<p>In this post, we'll build a typical search query that can filter by any optional search parameters. Then, it'll return paginated results with a total count. We'll attach parameter-based filter conditions in the &quot;where&quot; clause only when valid values are passed for those parameters. We'll exclude <code>NULL</code> or empty array parameters since those values are invalid for our filter criteria.</p>
+<p>Let's look at the typical implementations written in .NET application code.</p>
+<h2 id="query-building-with-string-concatenation" tabindex="-1">Query building with string concatenation <a class="header-anchor" href="#query-building-with-string-concatenation">#</a></h2>
+<p>In this example, we're building a base query from which we'll build the list and count queries. Finally, we're using Dapper to execute both queries. We use <a href="https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/complex-data-model/_static/diagram.png?view=aspnetcore-7.0">ContosoUniversity</a> database as a referenced database example.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// This is the filter request object that the user passes to the query</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">QueryRequest</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> SearchText <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">?</span></span> DepartmentId <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">?</span></span> InstructorIds <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> SkipCount <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// for offset</span>
+  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> TakeCount <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token comment">// for limit</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token return-type class-name">QueryResponse</span> <span class="token function">QueryCoursesStringConcat</span><span class="token punctuation">(</span><span class="token class-name">QueryRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">IDbConnection</span> dbConnection<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Build the base query that tries to search by all optional parameters if provided,</span>
+  <span class="token comment">// or returns all results. It's used in building the list and count queries bellow.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  query<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">@"
+from Course
+inner join Department on Department.ID = Course.DepartmentID
+left join CourseAssignment on CourseAssignment.CourseID = Course.ID
+left join Instructor on Instructor.ID = CourseAssignment.InstructorID
+left join Enrollment on Enrollment.CourseID = Course.ID
+WHERE 1 = 1
+"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrEmpty</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>SearchText<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">" and (Course.Title ilike @SearchText or Instructor.FullName ilike @SearchText)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">.</span>HasValue<span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">" and Department.ID = @DepartmentID"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">?.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">Append</span><span class="token punctuation">(</span><span class="token string">" and Instructor.ID = any(@InstructorIds)"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Built the list query with pagination on top of the base query.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> listQuery <span class="token operator">=</span> <span class="token string">@"
+select 
+Course.Title as CourseTitle,
+Course.Credits as CourseCredits,
+Department.Name as DepartmentName,
+Instructor.LastName as InstructorName "</span>
+<span class="token operator">+</span> query<span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" OFFSET @SkipCount LIMIT @TakeCount"</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Execute the list query using Dapper</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> items <span class="token operator">=</span> dbConnection<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Query</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ResponseItem<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>listQuery<span class="token punctuation">,</span> <span class="token keyword">new</span>
+  <span class="token punctuation">{</span>
+    SearchText <span class="token operator">=</span> request<span class="token punctuation">.</span>SearchText<span class="token punctuation">,</span>
+    DepartmentID <span class="token operator">=</span> request<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">,</span>
+    InstructorIds <span class="token operator">=</span> request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">,</span>
+    SkipCount <span class="token operator">=</span> request<span class="token punctuation">.</span>SkipCount<span class="token punctuation">,</span>
+    TakeCount <span class="token operator">=</span> request<span class="token punctuation">.</span>TakeCount
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Build the count query.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> countQuery <span class="token operator">=</span> <span class="token string">"select count(*) "</span> <span class="token operator">+</span> query<span class="token punctuation">;</span>
+  <span class="token comment">// Execute the count query using Dapper</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> totalCount <span class="token operator">=</span> dbConnection<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">ExecuteScalar</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span>countQuery<span class="token punctuation">,</span> <span class="token keyword">new</span>
+  <span class="token punctuation">{</span>
+    SearchText <span class="token operator">=</span> request<span class="token punctuation">.</span>SearchText<span class="token punctuation">,</span>
+    DepartmentID <span class="token operator">=</span> request<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">,</span>
+    InstructorIds <span class="token operator">=</span> request<span class="token punctuation">.</span>InstructorIds
+  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">QueryResponse</span>
+  <span class="token punctuation">{</span>
+    Items <span class="token operator">=</span> items<span class="token punctuation">,</span>
+    TotalCount <span class="token operator">=</span> totalCount
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Here are a couple of things we're keeping an eye on while building such queries:</p>
+<ul>
+<li>making sure we're placing whitespaces in the correct places before and after concatenating the strings; it's easy to mess this up if not careful;</li>
+<li>opting in for using the <code>WHERE 1 = 1</code> pattern to which we are attaching parameter-based filter conditions with ease, instead of using the other common alternative option with <code>AND (@Param is NULL or Name = @Param)</code></li>
+<li>making sure we're adding SQL parameters in the SQL query string (e.g.,<code>&quot; and Name = @Param&quot;</code>), and we're not adding the parameter's values into the string with concatenation (not like this: <code>$&quot; and Name = '{request.Name}'&quot;</code>) which opens our code to SQL injection.</li>
+</ul>
+<h2 id="query-building-with-sqlkata" tabindex="-1">Query building with SqlKata <a class="header-anchor" href="#query-building-with-sqlkata">#</a></h2>
+<p>This example builds on top of the string concatenation example - you can view it as a rewritten version of it only by using only <a href="https://sqlkata.com/">SqlKata</a>.</p>
+<p>SqlKata is an expression-based query-building library for C#. I've used it in many projects with great success. Use cases vary, from building ad-hoc dynamic SQL queries for reports and charts, to advanced user-generated reports and dashboard builders.</p>
+<p>Let's look at the SqlKata-version of our search query.</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token return-type class-name">QueryResponse</span> <span class="token function">QueryCoursesSqlKata</span><span class="token punctuation">(</span><span class="token class-name">QueryRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">QueryFactory</span> dbQueryFactory<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token comment">// Build the base query that tries to search by all optional parameters if provided,</span>
+  <span class="token comment">// or returns all results. It's used in building the list and count queries bellow.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> dbQueryFactory<span class="token punctuation">.</span><span class="token function">Query</span><span class="token punctuation">(</span><span class="token string">"Course"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span><span class="token string">"Department"</span><span class="token punctuation">,</span> <span class="token string">"Department.ID"</span><span class="token punctuation">,</span> <span class="token string">"Course.DepartmentID"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">LeftJoin</span><span class="token punctuation">(</span><span class="token string">"CourseAssignment"</span><span class="token punctuation">,</span> <span class="token string">"CourseAssignment.CourseID"</span><span class="token punctuation">,</span> <span class="token string">"Course.ID"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">LeftJoin</span><span class="token punctuation">(</span><span class="token string">"Instructor"</span><span class="token punctuation">,</span> <span class="token string">"Instructor.ID"</span><span class="token punctuation">,</span> <span class="token string">"CourseAssignment.InstructorID"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">LeftJoin</span><span class="token punctuation">(</span><span class="token string">"Enrollment"</span><span class="token punctuation">,</span> <span class="token string">"Enrollment.CourseID"</span><span class="token punctuation">,</span> <span class="token string">"Course.ID"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">IsNullOrEmpty</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>SearchText<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x
+        <span class="token punctuation">.</span><span class="token function">WhereLike</span><span class="token punctuation">(</span><span class="token string">"Course.Title"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span>SearchText<span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">OrWhereLike</span><span class="token punctuation">(</span><span class="token string">"Instructor.FullName"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span>SearchText<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">.</span>HasValue<span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Department.ID"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span>DepartmentId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">?.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+    query<span class="token punctuation">.</span><span class="token function">WhereIn</span><span class="token punctuation">(</span><span class="token string">"Instructor.ID"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Built and execute the list query with pagination on top of the base query.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> items <span class="token operator">=</span> query<span class="token punctuation">.</span><span class="token function">Clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>
+      <span class="token string">"Course.Title as CourseTitle"</span><span class="token punctuation">,</span>
+      <span class="token string">"Course.Credits as CourseCredits"</span><span class="token punctuation">,</span>
+      <span class="token string">"Department.Name as DepartmentName"</span><span class="token punctuation">,</span>
+      <span class="token string">"Instructor.LastName as InstructorName"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">Offset</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>SkipCount<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">Limit</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>TakeCount<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Get</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ResponseItem<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// Build and execute the count query.</span>
+  <span class="token class-name"><span class="token keyword">var</span></span> totalCount <span class="token operator">=</span> query<span class="token punctuation">.</span><span class="token function">Clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Count</span><span class="token generic class-name"><span class="token punctuation">&lt;</span><span class="token keyword">int</span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">QueryResponse</span>
+  <span class="token punctuation">{</span>
+    Items <span class="token operator">=</span> items<span class="token punctuation">,</span>
+    TotalCount <span class="token operator">=</span> totalCount
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>SqlKata's <code>Query</code> instances are mutable. So, we have to remember to use <code>.Clone()</code> before we change a query for usage in many queries built on top of the original query. Just like how we've used it in our example above.</p>
+<h2 id="sqlkata-usage-references" tabindex="-1">SqlKata usage references <a class="header-anchor" href="#sqlkata-usage-references">#</a></h2>
+<p>SqlKata's <a href="https://sqlkata.com/docs">documentation</a> is rich with examples. There is also a <a href="https://sqlkata.com/playground">SqlKata Playground</a> to quickly try out code samples and see their output for multiple database providers.</p>
+<p><strong>Generating a SQL string from a SqlKata query</strong></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"Course"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Published"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Credits"</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token class-name"><span class="token keyword">var</span></span> compiler <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">PostgresCompiler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name"><span class="token keyword">string</span></span> sql <span class="token operator">=</span> compiler<span class="token punctuation">.</span><span class="token function">Compile</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">.</span>Sql<span class="token punctuation">;</span>
+<span class="token comment">// returns: SELECT * FROM "Course" WHERE "Published" = @p0 AND "Credits" = @p1</span></code></pre>
+<p>See the <a href="https://sqlkata.com/docs/#compile-only-example">compiler only examples</a> for more details.</p>
+<p><strong>Using <a href="https://sqlkata.com/docs/select#raw">SelectRaw</a> for accessing Postgres JSONB columns</strong></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"User"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span><span class="token string">"fullname as Fullname"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">SelectRaw</span><span class="token punctuation">(</span><span class="token string">"data->'BillingAddress'->>'City' as BillingCity"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>There are also similar accompanied methods: <code>WhereRaw</code>, <code>FromRaw</code>, etc.</p>
+<p><strong>Nested conditions in the Where clause</strong></p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"User"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Enabled"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>q <span class="token operator">=></span> q<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Role"</span><span class="token punctuation">,</span> <span class="token string">"Manager"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">OrWhere</span><span class="token punctuation">(</span><span class="token string">"Role"</span><span class="token punctuation">,</span> <span class="token string">"Member"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment">// SELECT * FROM "User" </span>
+<span class="token comment">// WHERE "Enabled" = true AND ("Role" = 'Manager' OR "Role" = 'Member')</span></code></pre>
+
+<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/">Typed AppSettings Configuration in .NET Core</a></li><li>Next: <a href="/codingpipe/posts/retry-failed-http-requests-in-dotnet/">HTTP Retry with Flurl and Polly in .NET Core</a></li>
+</ul>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/codingpipe/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/` was built on 2024-07-30T15:26:17.845Z -->
+	</body>
+</html>
