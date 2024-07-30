@@ -172,7 +172,7 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/net/</loc>
+		<loc>https://codingpipe.com/codingpipe/tags/net-framework/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 	
@@ -182,12 +182,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/software-design/</loc>
+		<loc>https://codingpipe.com/codingpipe/tags/code/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/asp-net-mvc5/</loc>
+		<loc>https://codingpipe.com/codingpipe/tags/misc/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 	
@@ -197,27 +197,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/meetups/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/tools/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/asp-net-framework/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/frontend/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/javascript/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/net-core/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 	
@@ -232,37 +217,7 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/asp-net-core/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/testing/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/asp-net/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/excel/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/net-worker/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/programming/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/worker/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 	
@@ -277,17 +232,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/cheatsheets/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/guides/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/snippets/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/aws/</loc>
+		<lastmod>2024-07-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/rabbitmq/</loc>
 		<lastmod>2024-07-30</lastmod>
 	</url>
 </urlset>

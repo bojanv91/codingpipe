@@ -618,7 +618,7 @@ choco feature enable &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>Serilog Setup for .NET Core Worker Services</title>
+		<title>Serilog Setup for .NET Core Worker Service Project</title>
 		<link href="https://codingpipe.com/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/"/>
 		<updated>2023-08-18T00:00:00Z</updated>
 		<id>https://codingpipe.com/codingpipe/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</id>
@@ -900,7 +900,7 @@ Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span cla
 	</entry>
 	
 	<entry>
-		<title>Excel Export with ClosedXML in .NET Core</title>
+		<title>Excel Export with ClosedXML in C# and .NET Core</title>
 		<link href="https://codingpipe.com/codingpipe/posts/exporting-c-objects-to-excel-with-closedxml/"/>
 		<updated>2023-08-12T00:00:00Z</updated>
 		<id>https://codingpipe.com/codingpipe/posts/exporting-c-objects-to-excel-with-closedxml/</id>
