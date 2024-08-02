@@ -153,96 +153,96 @@
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/about/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/links/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/net-framework/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/data-access/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/code/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/misc/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/architecture/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/code/</loc>
+		<lastmod>2024-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/misc/</loc>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/javascript/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/net-core/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/postgres/</loc>
-		<lastmod>2024-07-30</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/docker/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/testing/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/codingpipe/tags/logging/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<loc>https://codingpipe.com/codingpipe/tags/postgres/</loc>
+		<lastmod>2024-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/docker/</loc>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/powershell/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/snippets/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/codingpipe/tags/logging/</loc>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/aws/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/codingpipe/tags/rabbitmq/</loc>
-		<lastmod>2024-07-30</lastmod>
+		<lastmod>2024-08-02</lastmod>
 	</url>
 </urlset>
