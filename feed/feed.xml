@@ -476,55 +476,6 @@ Let&#39;s start by examining the key types of information you should consider lo
 &lt;li&gt;Production environment secrets&lt;/li&gt;
 &lt;li&gt;Customer-specific names and information&lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;Log levels and their appropriate use:&lt;/p&gt;
-&lt;p&gt;DEBUG: Detailed information for debugging
-INFO: General information about application flow
-WARN: Potentially harmful situations
-ERROR: Error events that might still allow the application to continue running
-FATAL: Severe errors that cause the application to abort&lt;/p&gt;
-&lt;p&gt;Essential information to include in log entries:&lt;/p&gt;
-&lt;p&gt;Timestamp (including timezone)
-Log level
-Thread ID or name
-Class or module name
-Method or function name
-Line number in the source code
-User ID or session ID (if applicable)
-Relevant contextual data&lt;/p&gt;
-&lt;p&gt;Structured logging:&lt;/p&gt;
-&lt;p&gt;Using JSON or other machine-readable formats
-Benefits for log parsing and analysis&lt;/p&gt;
-&lt;p&gt;Sensitive data handling:&lt;/p&gt;
-&lt;p&gt;Avoiding logging passwords, credit card numbers, or other sensitive information
-Techniques for masking or obfuscating sensitive data when necessary&lt;/p&gt;
-&lt;p&gt;Performance considerations:&lt;/p&gt;
-&lt;p&gt;Asynchronous logging to minimize impact on application performance
-Log rotation and archiving strategies&lt;/p&gt;
-&lt;p&gt;Contextual logging:&lt;/p&gt;
-&lt;p&gt;Using thread-local storage or similar mechanisms to maintain context across method calls
-Correlation IDs for tracing requests across distributed systems&lt;/p&gt;
-&lt;p&gt;Error logging best practices:&lt;/p&gt;
-&lt;p&gt;Including stack traces
-Logging the full exception details
-Providing context around the error&lt;/p&gt;
-&lt;p&gt;Logging in different environments:&lt;/p&gt;
-&lt;p&gt;Adjusting log levels and verbosity for development, staging, and production&lt;/p&gt;
-&lt;p&gt;Integration with monitoring and alerting systems:&lt;/p&gt;
-&lt;p&gt;Using logs to trigger alerts
-Centralized log management&lt;/p&gt;
-&lt;p&gt;Compliance and legal considerations:&lt;/p&gt;
-&lt;p&gt;Logging for audit trails
-Data retention policies
-GDPR and other regulatory requirements&lt;/p&gt;
-&lt;p&gt;Logging patterns and anti-patterns:&lt;/p&gt;
-&lt;p&gt;Do: Use descriptive log messages
-Don&#39;t: Log in catch blocks without re-throwing the exception
-Do: Use parameterized logging to prevent injection attacks
-Don&#39;t: Overuse logging, which can lead to noise and performance issues&lt;/p&gt;
-&lt;p&gt;Testing logging implementations:&lt;/p&gt;
-&lt;p&gt;Unit tests for log output
-Ensuring logs are useful for debugging in production scenarios&lt;/p&gt;
 </content>
 	</entry>
 	

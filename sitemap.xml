@@ -187,12 +187,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/architecture/</loc>
+		<loc>https://codingpipe.com/tags/misc/</loc>
 		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/misc/</loc>
+		<loc>https://codingpipe.com/tags/architecture/</loc>
 		<lastmod>2024-08-02</lastmod>
 	</url>
 	
@@ -222,11 +222,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2024-08-02</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/powershell/</loc>
 		<lastmod>2024-08-02</lastmod>
 	</url>
@@ -237,12 +232,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/aws/</loc>
+		<loc>https://codingpipe.com/tags/logging/</loc>
 		<lastmod>2024-08-02</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/rabbitmq/</loc>
+		<lastmod>2024-08-02</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/aws/</loc>
 		<lastmod>2024-08-02</lastmod>
 	</url>
 </urlset>

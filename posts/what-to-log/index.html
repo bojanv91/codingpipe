@@ -526,7 +526,7 @@ h1 {
 <ul class="post-metadata">
 	<li><time datetime="2024-01-07">Jan 7, 2024</time></li>
 	<li><span> • </span></li>
-	<li><span>4 min read</span></li>
+	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/logging/" class="post-tag">Logging</a></li>
 </ul>
@@ -625,55 +625,6 @@ Let's start by examining the key types of information you should consider loggin
 <li>Production environment secrets</li>
 <li>Customer-specific names and information</li>
 </ul>
-<hr>
-<p>Log levels and their appropriate use:</p>
-<p>DEBUG: Detailed information for debugging
-INFO: General information about application flow
-WARN: Potentially harmful situations
-ERROR: Error events that might still allow the application to continue running
-FATAL: Severe errors that cause the application to abort</p>
-<p>Essential information to include in log entries:</p>
-<p>Timestamp (including timezone)
-Log level
-Thread ID or name
-Class or module name
-Method or function name
-Line number in the source code
-User ID or session ID (if applicable)
-Relevant contextual data</p>
-<p>Structured logging:</p>
-<p>Using JSON or other machine-readable formats
-Benefits for log parsing and analysis</p>
-<p>Sensitive data handling:</p>
-<p>Avoiding logging passwords, credit card numbers, or other sensitive information
-Techniques for masking or obfuscating sensitive data when necessary</p>
-<p>Performance considerations:</p>
-<p>Asynchronous logging to minimize impact on application performance
-Log rotation and archiving strategies</p>
-<p>Contextual logging:</p>
-<p>Using thread-local storage or similar mechanisms to maintain context across method calls
-Correlation IDs for tracing requests across distributed systems</p>
-<p>Error logging best practices:</p>
-<p>Including stack traces
-Logging the full exception details
-Providing context around the error</p>
-<p>Logging in different environments:</p>
-<p>Adjusting log levels and verbosity for development, staging, and production</p>
-<p>Integration with monitoring and alerting systems:</p>
-<p>Using logs to trigger alerts
-Centralized log management</p>
-<p>Compliance and legal considerations:</p>
-<p>Logging for audit trails
-Data retention policies
-GDPR and other regulatory requirements</p>
-<p>Logging patterns and anti-patterns:</p>
-<p>Do: Use descriptive log messages
-Don't: Log in catch blocks without re-throwing the exception
-Do: Use parameterized logging to prevent injection attacks
-Don't: Overuse logging, which can lead to noise and performance issues</p>
-<p>Testing logging implementations:</p>
-<p>Unit tests for log output
-Ensuring logs are useful for debugging in production scenarios</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/powershell-snippets/">PowerShell Command Snippets</a></li><li>Next: <a href="/posts/problem-solving-guide-for-developers/">Problem-Solving Guide for Developers</a></li>
 </ul>
@@ -682,6 +633,16 @@ Ensuring logs are useful for debugging in production scenarios</p>
 
 		<footer></footer>
 
-		<!-- This page `/posts/what-to-log/` was built on 2024-08-02T11:51:03.248Z -->
+		<!-- This page `/posts/what-to-log/` was built on 2024-08-02T12:54:50.260Z -->
+
+		<!-- Google tag (gtag.js) -->
+		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-E6F7C4Q881');
+		</script>
 	</body>
 </html>
