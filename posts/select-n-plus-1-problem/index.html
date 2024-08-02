@@ -6,12 +6,12 @@
 		<title>Understanding and Solving the Select N+1 Problem</title>
 		<meta name="description" content="Select N+1 is a data-access performance problem. Any code that iterates thru a collection of elements, and executes additional query for each element, has this problem.">
 
-		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
-		<link rel="manifest" href="/codingpipe/site.webmanifest">
-		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
-		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
+		<link rel="manifest" href="/site.webmanifest"></link>
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
 		<meta name="generator" content="Eleventy v2.0.1">
 		
 		<style>/**
@@ -508,13 +508,13 @@ h1 {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<a href="/" class="home-link">CodingPipe.com</a>
 			<nav>
 				<h2 class="visually-hidden">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
-					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
-					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+					<li class="nav-item"><a href="/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -528,13 +528,13 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>4 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/codingpipe/tags/data-access/" class="post-tag">Data Access</a> • </li>
-		<li><a href="/codingpipe/tags/net-core/" class="post-tag">.NET Core</a></li>
+		<li><a href="/tags/data-access/" class="post-tag">Data Access</a> • </li>
+		<li><a href="/tags/net-core/" class="post-tag">.NET Core</a></li>
 </ul>
 
 <p>Select N+1 is a data-access performance problem. Any code that iterates thru a collection of elements, and executes additional query for each element, has this problem. Thought, this behavior is avoidable.</p>
 <p>Let's look at this sample code:</p>
-<p><img src="/codingpipe/img/select-n-plus-1-problem-diagram.jpg" alt="diagram"></p>
+<p><img src="/img/select-n-plus-1-problem-diagram.jpg" alt="diagram"></p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> books <span class="token operator">=</span> <span class="token function">LoadBooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token comment">// 1st query</span>
 <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> book <span class="token keyword">in</span> books<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -633,13 +633,13 @@ h1 {
 <p>Select N+1 is a performance problem that can really slow down your application. The more &quot;N&quot; results the application has, the less performant it will be when this problem is not detected and fixed.</p>
 <p>Here we've seen how to detect such problem and how to fix it. The common approach follows a straightforward practice: <strong>load necessary data before iterating through it.</strong></p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li><li>Next: <a href="/codingpipe/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/">Typed AppSettings Configuration in .NET Core</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li><li>Next: <a href="/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/">Typed AppSettings Configuration in .NET Core</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/codingpipe/posts/select-n-plus-1-problem/` was built on 2024-08-02T11:34:37.833Z -->
+		<!-- This page `/posts/select-n-plus-1-problem/` was built on 2024-08-02T11:51:03.247Z -->
 	</body>
 </html>

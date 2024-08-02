@@ -6,12 +6,12 @@
 		<title>Refactoring Feature Envy Code</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
-		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
-		<link rel="manifest" href="/codingpipe/site.webmanifest">
-		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
-		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
+		<link rel="manifest" href="/site.webmanifest"></link>
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
 		<meta name="generator" content="Eleventy v2.0.1">
 		
 		<style>/**
@@ -508,13 +508,13 @@ h1 {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<a href="/" class="home-link">CodingPipe.com</a>
 			<nav>
 				<h2 class="visually-hidden">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
-					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
-					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+					<li class="nav-item"><a href="/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -528,7 +528,7 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>7 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/codingpipe/tags/code/" class="post-tag">Code</a></li>
+		<li><a href="/tags/code/" class="post-tag">Code</a></li>
 </ul>
 
 <p>In a design review meeting a colleague asked: &quot;Why sometimes we directly manipulate dependent objects fields, and sometimes we put the manipulation logic behind methods in those objects? What are pros/cons in both approaches?&quot;<!--excerpt--> This was a great question, because it opened a productive discussion. Checking the <a href="https://blog.codinghorror.com/code-smells/">code smells taxonomy</a>, and analyzing the code under review deeper, we identified it belongs to the feature envy code smells category. And this is how we refactored it.<!--excerpt--></p>
@@ -724,13 +724,13 @@ order<span class="token punctuation">.</span><span class="token function">Pay</s
 </ul>
 <p><strong>Rule of thumb:</strong> Where ever you see a method uses fields of another class extensively to perform some action, consider moving the action's logic into <em>that</em> class itself.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/visual-studio-2017-notes/">Visual Studio 2017 Tips</a></li><li>Next: <a href="/codingpipe/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/visual-studio-2017-notes/">Visual Studio 2017 Tips</a></li><li>Next: <a href="/posts/extending-select2-with-adapters/">Extending Select2 with Adapters</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/codingpipe/posts/refactoring-a-feature-envy-code/` was built on 2024-08-02T11:34:37.833Z -->
+		<!-- This page `/posts/refactoring-a-feature-envy-code/` was built on 2024-08-02T11:51:03.247Z -->
 	</body>
 </html>

@@ -6,12 +6,12 @@
 		<title>Rhino Security and StructureMap Integration Guide</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
-		<link rel="apple-touch-icon" sizes="180x180" href="/codingpipe/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/codingpipe/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/codingpipe/favicon-16x16.png">
-		<link rel="manifest" href="/codingpipe/site.webmanifest">
-		<link rel="alternate" href="/codingpipe/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
-		<link rel="alternate" href="/codingpipe/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
+		<link rel="manifest" href="/site.webmanifest"></link>
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
 		<meta name="generator" content="Eleventy v2.0.1">
 		
 		<style>/**
@@ -508,13 +508,13 @@ h1 {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/codingpipe/" class="home-link">CodingPipe.com</a>
+			<a href="/" class="home-link">CodingPipe.com</a>
 			<nav>
 				<h2 class="visually-hidden">Top level navigation menu</h2>
 				<ul class="nav">
-					<li class="nav-item"><a href="/codingpipe/links/">Favorite Links</a></li>
-					<li class="nav-item"><a href="/codingpipe/tags/">Tags</a></li>
-					<li class="nav-item"><a href="/codingpipe/about/">About</a></li>
+					<li class="nav-item"><a href="/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
 				</ul>
 			</nav>
 		</header>
@@ -528,7 +528,7 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>8 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/codingpipe/tags/net-framework/" class="post-tag">.NET Framework</a></li>
+		<li><a href="/tags/net-framework/" class="post-tag">.NET Framework</a></li>
 </ul>
 
 <p>In this posting I will show you how to configure Rhino Security infrastructure to work with StructureMap IoC container and provide to you database schema (for MSSQL and <a href="http://bojanv91.github.io/2014/12/database-development-guidance/">FluentMigrator</a>) that you will need in order Rhino Security to get working. I've struggled some time before I got everything working, so here are my results. :) <!--excerpt--></p>
@@ -548,7 +548,7 @@ h1 {
 <li>Preparing the database schema</li>
 <li>Usage DEMO (code samples <a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap">https://github.com/bojanv91/RhinoSecurityWithStructureMap</a>)</li>
 </ul>
-<p><img src="/codingpipe/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-01.png" alt="Getting started with Rhino Security and StructureMap"></p>
+<p><img src="/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-01.png" alt="Getting started with Rhino Security and StructureMap"></p>
 <h2 id="installing-nuget-packages" tabindex="-1">Installing NuGet packages <a class="header-anchor" href="#installing-nuget-packages">#</a></h2>
 <pre><code>Install-Package Rhino.Security			
 Install-Package NHibernate
@@ -685,7 +685,7 @@ CommonServiceLocator provides abstraction over IoC containers and service locato
 <li><a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.sql.sql">SQL dump</a></li>
 <li><a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.cs">Fluent Migrator schema</a> (<a href="http://bojanv91.github.io/2014/12/database-development-guidance/">blogpost about how to use Fluent Migrator</a>)</li>
 </ul>
-<p><img src="/codingpipe/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-02.png" alt="Rhino database schema"></p>
+<p><img src="/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-02.png" alt="Rhino database schema"></p>
 <h2 id="usage-demo" tabindex="-1">Usage DEMO <a class="header-anchor" href="#usage-demo">#</a></h2>
 <p>The full code sample can be found in following github repository: <a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap">https://github.com/bojanv91/RhinoSecurityWithStructureMap</a>. Here I provide excerpt code snippets from the actual test code.</p>
 <p>Setting up user groups, operations and permissions:</p>
@@ -766,13 +766,13 @@ CommonServiceLocator provides abstraction over IoC containers and service locato
 </code></pre>
 <p>Happy coding folks! Having questions or concerns? Shoot me a tweet -&gt; @bojanv91</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/codingpipe/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/">.NET Database Development with FluentMigrator (2014 Edition)</a></li><li>Next: <a href="/codingpipe/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/">Business Rules Refactoring Using the Specification Pattern</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/">.NET Database Development with FluentMigrator (2014 Edition)</a></li><li>Next: <a href="/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/">Business Rules Refactoring Using the Specification Pattern</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/codingpipe/posts/getting-started-with-rhino-security-structuremap/` was built on 2024-08-02T11:34:37.831Z -->
+		<!-- This page `/posts/getting-started-with-rhino-security-structuremap/` was built on 2024-08-02T11:51:03.246Z -->
 	</body>
 </html>
