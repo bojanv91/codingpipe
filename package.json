@@ -3,7 +3,7 @@
   "version": "8.0.0",
   "scripts": {
     "build": "npx @11ty/eleventy",
-    "build-ghpages": "npx @11ty/eleventy --pathprefix=/codingpipe/",
+    "build-ghpages": "npx @11ty/eleventy --pathprefix 'codingpipe'",
     "start": "npx @11ty/eleventy --serve",
     "debug": "DEBUG=* npx @11ty/eleventy",
     "debugstart": "DEBUG=Eleventy* npx @11ty/eleventy --serve --quiet"
