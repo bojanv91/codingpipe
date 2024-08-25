@@ -357,6 +357,11 @@ h1 {
 <ul class="postlist">
 
 	<li class="postlist-item">
+		<a href="/posts/validating-problemdetails-in-aspnetcore-integration-tests/" class="postlist-link">Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests</a>
+		<time class="postlist-date" datetime="2024-08-10">Aug 10, 2024</time>
+	</li>
+
+	<li class="postlist-item">
 		<a href="/posts/ssh-windows-snippets/" class="postlist-link">SSH Command Snippets (Windows)</a>
 		<time class="postlist-date" datetime="2024-03-31">Mar 31, 2024</time>
 	</li>
@@ -514,16 +519,20 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/` was built on 2024-08-02T12:54:50.260Z -->
+		<!-- This page `/` was built on 2024-08-25T09:57:50.166Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
 		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
+			if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    			console.log('Running on localhost, skipping Google Analytics.');
+			} else {
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
 
-			gtag('config', 'G-E6F7C4Q881');
+				gtag('config', 'G-E6F7C4Q881');
+			}
 		</script>
 	</body>
 </html>

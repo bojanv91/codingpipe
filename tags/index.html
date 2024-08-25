@@ -403,6 +403,9 @@ Tags:
 	
 	<a href="/tags/rabbitmq/" class="post-tag">RabbitMQ, </a>
 
+	
+	<a href="/tags/problemdetails/" class="post-tag">ProblemDetails, </a>
+
 
 
 	
@@ -537,6 +540,11 @@ Tags:
 	<h3><a href="/tags/net-core/" class="post-tag">.NET Core</a></h3>
 	
 	<ul class="postlist">
+
+	<li class="postlist-item">
+		<a href="/posts/validating-problemdetails-in-aspnetcore-integration-tests/" class="postlist-link">Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests</a>
+		<time class="postlist-date" datetime="2024-08-10">Aug 10, 2024</time>
+	</li>
 
 	<li class="postlist-item">
 		<a href="/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/" class="postlist-link">Serilog Setup for .NET Core Worker Service Project</a>
@@ -735,6 +743,19 @@ Tags:
 </ul>
 
 
+	
+	<h3><a href="/tags/problemdetails/" class="post-tag">ProblemDetails</a></h3>
+	
+	<ul class="postlist">
+
+	<li class="postlist-item">
+		<a href="/posts/validating-problemdetails-in-aspnetcore-integration-tests/" class="postlist-link">Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests</a>
+		<time class="postlist-date" datetime="2024-08-10">Aug 10, 2024</time>
+	</li>
+
+</ul>
+
+
 
 
 
@@ -742,16 +763,20 @@ Tags:
 
 		<footer></footer>
 
-		<!-- This page `/tags/` was built on 2024-08-02T12:54:50.264Z -->
+		<!-- This page `/tags/` was built on 2024-08-25T09:57:50.166Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
 		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
+			if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    			console.log('Running on localhost, skipping Google Analytics.');
+			} else {
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
 
-			gtag('config', 'G-E6F7C4Q881');
+				gtag('config', 'G-E6F7C4Q881');
+			}
 		</script>
 	</body>
 </html>
