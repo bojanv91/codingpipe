@@ -103,6 +103,11 @@ module.exports = function(eleventyConfig) {
 			level: [1,2,3,4],
 			slugify: eleventyConfig.getFilter("slugify")
 		});
+
+		//mdLib.use(require)
+		//markdown-it-github-alerts
+		//markdown-it-footnote
+		//https://rknight.me/blog/adding-githubstyle-markdown-alerts-to-eleventy/
 	});
 
 	eleventyConfig.addShortcode("currentBuildDate", () => {
