@@ -544,7 +544,6 @@ h1 {
 <h2 id="backup-command" tabindex="-1">Backup command <a class="header-anchor" href="#backup-command">#</a></h2>
 <pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_dump <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>no-acl <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname mydb <span class="token operator">--</span>file <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
 <h2 id="restore-command" tabindex="-1">Restore command <a class="header-anchor" href="#restore-command">#</a></h2>
-<pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_restore <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>single-transaction <span class="token operator">--</span>dbname mydb <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
 <pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token comment"># Step 1: Create the database if it doesn't exist</span>
 psql <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname postgres <span class="token operator">-</span>c <span class="token string">"CREATE DATABASE mydb WITH OWNER postgres ENCODING 'UTF8';"</span>
 
@@ -595,7 +594,7 @@ psql <span class="token operator">--</span>command <span class="token string">"C
 
 		<footer></footer>
 
-		<!-- This page `/posts/postgresql-cheatsheet/` was built on 2024-09-09T10:12:59.097Z -->
+		<!-- This page `/posts/postgresql-cheatsheet/` was built on 2024-09-09T10:16:52.607Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>

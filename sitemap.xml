@@ -187,17 +187,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/architecture/</loc>
-		<lastmod>2024-09-09</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/code/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/misc/</loc>
+		<lastmod>2024-09-09</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/architecture/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
 	
@@ -227,11 +227,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2024-09-09</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/powershell/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
@@ -242,17 +237,22 @@
 	</url>
 	
 	<url>
+		<loc>https://codingpipe.com/tags/logging/</loc>
+		<lastmod>2024-09-09</lastmod>
+	</url>
+	
+	<url>
 		<loc>https://codingpipe.com/tags/aws/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/rabbitmq/</loc>
+		<loc>https://codingpipe.com/tags/problemdetails/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/problemdetails/</loc>
+		<loc>https://codingpipe.com/tags/rabbitmq/</loc>
 		<lastmod>2024-09-09</lastmod>
 	</url>
 </urlset>
