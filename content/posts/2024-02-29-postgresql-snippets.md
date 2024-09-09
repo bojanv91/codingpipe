@@ -31,10 +31,6 @@ pg_dump --format custom --no-owner --no-privileges --no-acl --host localhost --p
 ## Restore command
 
 ```powershell
-pg_restore --format custom --no-owner --no-privileges --single-transaction --dbname mydb "C:/backups/mydb.backup"
-```
-
-```powershell
 # Step 1: Create the database if it doesn't exist
 psql --host localhost --port 5432 --username "postgres" --dbname postgres -c "CREATE DATABASE mydb WITH OWNER postgres ENCODING 'UTF8';"
 
