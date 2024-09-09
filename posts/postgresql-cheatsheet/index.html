@@ -541,12 +541,21 @@ h1 {
 
 <span class="token comment"># So now, you won't need to add this part in the commands:</span>
 <span class="token comment"># --host localhost --port 5432 --username "postgres"</span></code></pre>
+<h2 id="backup-command" tabindex="-1">Backup command <a class="header-anchor" href="#backup-command">#</a></h2>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_dump <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>no-acl <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname mydb <span class="token operator">--</span>file <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
+<h2 id="restore-command" tabindex="-1">Restore command <a class="header-anchor" href="#restore-command">#</a></h2>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_restore <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>single-transaction <span class="token operator">--</span>dbname mydb <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token comment"># Step 1: Create the database if it doesn't exist</span>
+psql <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname postgres <span class="token operator">-</span>c <span class="token string">"CREATE DATABASE mydb WITH OWNER postgres ENCODING 'UTF8';"</span>
+
+<span class="token comment"># Step 2: Drop the public schema in the target database</span>
+psql <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname mydb <span class="token operator">-</span>c <span class="token string">"DROP SCHEMA IF EXISTS public CASCADE;"</span>
+
+<span class="token comment"># Step 3: Restore the backup file</span>
+pg_restore <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>no-acl <span class="token operator">--</span>clean <span class="token operator">--</span><span class="token keyword">if</span><span class="token operator">-</span>exists <span class="token operator">--</span><span class="token function">exit-on</span><span class="token operator">-</span>error <span class="token operator">--</span>single-transaction <span class="token operator">--</span>host localhost <span class="token operator">--</span>port 5432 <span class="token operator">--</span>username <span class="token string">"postgres"</span> <span class="token operator">--</span>dbname mydb <span class="token string">"D:/backups/mydb-2024-09-01-1150.backup"</span></code></pre>
+<h2 id="other" tabindex="-1">Other <a class="header-anchor" href="#other">#</a></h2>
 <p>List all databases</p>
 <pre class="language-powershell" tabindex="0"><code class="language-powershell">psql <span class="token operator">--</span>command \l</code></pre>
-<p>Create backup (database dump):</p>
-<pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_dump <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>dbname mydb <span class="token operator">--</span>file <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
-<p>Restore backup:</p>
-<pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_restore <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>single-transaction <span class="token operator">--</span>dbname mydb <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
 <p>Restore backup only in a specific schema:</p>
 <pre class="language-powershell" tabindex="0"><code class="language-powershell">pg_restore <span class="token operator">--</span>schema <span class="token string">"schema_name_1"</span> <span class="token operator">--</span>format custom <span class="token operator">--</span>no-owner <span class="token operator">--</span>no-privileges <span class="token operator">--</span>single-transaction <span class="token operator">--</span>dbname mydb <span class="token string">"C:/backups/mydb.backup"</span></code></pre>
 <p>Create user:</p>
@@ -573,10 +582,10 @@ psql <span class="token operator">--</span>command <span class="token string">"C
 <span class="token punctuation">}</span></code></pre>
 <h2 id="additional-references" tabindex="-1">Additional References <a class="header-anchor" href="#additional-references">#</a></h2>
 <ul>
-<li>https://wiki.postgresql.org/wiki/Operations_cheat_sheet</li>
-<li>https://www.commandprompt.com/education/postgresql-basic-psql-commands/</li>
-<li>https://www.postgresqltutorial.com/postgresql-cheat-sheet/</li>
-<li>https://severalnines.com/blog/performance-cheat-sheet-postgresql</li>
+<li><a href="https://wiki.postgresql.org/wiki/Operations_cheat_sheet">https://wiki.postgresql.org/wiki/Operations_cheat_sheet</a></li>
+<li><a href="https://www.commandprompt.com/education/postgresql-basic-psql-commands/">https://www.commandprompt.com/education/postgresql-basic-psql-commands/</a></li>
+<li><a href="https://www.postgresqltutorial.com/postgresql-cheat-sheet/">https://www.postgresqltutorial.com/postgresql-cheat-sheet/</a></li>
+<li><a href="https://severalnines.com/blog/performance-cheat-sheet-postgresql">https://severalnines.com/blog/performance-cheat-sheet-postgresql</a></li>
 </ul>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/npm-nvm-cheatsheet/">NPM and NVM Command Snippets</a></li><li>Next: <a href="/posts/rabbitmq-cheatsheet/">RabbitMQ Command Snippets</a></li>
@@ -586,7 +595,7 @@ psql <span class="token operator">--</span>command <span class="token string">"C
 
 		<footer></footer>
 
-		<!-- This page `/posts/postgresql-cheatsheet/` was built on 2024-08-25T09:57:50.166Z -->
+		<!-- This page `/posts/postgresql-cheatsheet/` was built on 2024-09-09T10:12:59.097Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
