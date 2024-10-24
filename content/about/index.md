@@ -8,7 +8,7 @@ eleventyNavigation:
 
 I am Bojan Veljanovski - a computer programmer, software engineer, tech leader, and ultra runner.
 
-For accumulated 15 years, I have worked on the design, implementation, and delivery of medium and large-scale systems for organizations in various sectors, mainly in transportation, property & hospitality, healthcare & wellness, and access control security. I've built cloud and web software solutions for startups and SMEs. I've been a CTO for 8 years for a software development consulting company, leading the engineering and technology organization of 40 people.
+For an accumulated 15 years of experience, I have worked on the design, implementation, and delivery of medium and large-scale systems for organizations in various sectors, mainly in transportation, property & hospitality, healthcare & wellness, and access control security. I've built cloud and web software solutions for startups and SMEs. I've been a CTO for 8 years for a software development consulting company, leading the engineering and technology organization of 40 people.
 
 Soon, I'm starting as an engineering management consultant, focusing on technical leadership, system architecture, development process, and R&D team management.
 
