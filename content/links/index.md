@@ -6,9 +6,9 @@ eleventyNavigation:
 ---
 # Favorite Links
 
-A list of link I find myself repeatedly referring to.
+A list of links I find myself repeatedly referring to.
 
-## **General stuff**
+## General stuff
 
 - [Ten Tips for Young Programmers - hintjens.com](http://hintjens.com/blog:101)
 - [Ten Habits of a Good Programmer - hintjens.com](http://hintjens.com/blog:98)
@@ -20,16 +20,16 @@ A list of link I find myself repeatedly referring to.
 - [Programming principles](https://en.wikipedia.org/wiki/Category:Programming_principles)
 - [Code Smells - codinghorror.com](https://blog.codinghorror.com/code-smells/)
 
-## **On software design & architecture**
+## On software design & architecture
 
-General:
+**General:**
 
 - <https://12factor.net/>
 - <https://arc42.org/>
 - <https://c4model.com/>
 - <https://owasp.org/www-project-top-ten/>
 
-Patterns catalog:
+**Patterns catalog:**
 
 - <https://refactoring.com/catalog/>
 - <https://martinfowler.com/eaaCatalog/>
@@ -37,27 +37,32 @@ Patterns catalog:
 - <https://www.infoq.com/minibooks/domain-driven-design-quickly/>
 - <https://github.com/donnemartin/system-design-primer?tab=readme-ov-file>
 
-Reference architectures:
+**Reference architectures:**
 
 - <https://learn.microsoft.com/en-us/azure/architecture/>
 - <https://aws.amazon.com/architecture>
 
-Articles:
+**Articles:**
 
 - [How to Design Perfect (Software) Products - hintjens.com](http://hintjens.com/blog:19)
-- [Hammock Driven Development - Rich Hickey (2010)](https://www.youtube.com/watch?v=f84n5oFoZBc)
 - <https://martinfowler.com/articles/designDead.html>
 - <https://martinfowler.com/bliki/BeckDesignRules.html>
 - <https://blog.jbrains.ca/permalink/the-four-elements-of-simple-design>
 - <https://www.sealights.io/blog/its-time-to-rethink-technical-debt-management/>
 
-## **On git**
+**Videos:**
+
+- [Hammock Driven Development - Rich Hickey (2010)](https://www.youtube.com/watch?v=f84n5oFoZBc)
+- [Simple Made Easy - Rich Hickey (2011)](https://www.youtube.com/watch?v=SxdOUGdseq4)
+- [One wierd trick for making perfect software - Pieter Hintjens(2014)](https://www.youtube.com/watch?v=xFVDNTXIC_Y)
+
+## On git
 
 - <https://ohshitgit.com/>
 - <https://trunkbaseddevelopment.com/>
 - <https://martinfowler.com/articles/branching-patterns.html>
 
-## **On code reviews**
+## On code reviews
 
 - <https://mtlynch.io/code-review-love/>
 - <https://mtlynch.io/human-code-reviews-1/>
@@ -65,26 +70,21 @@ Articles:
 - <https://chelseatroy.com/2019/12/13/async-collaboration-1-submitting-pull-requests/>
 - <https://chelseatroy.com/2019/12/18/reviewing-pull-requests/>
 
-## **On auth**
+## Blogs I like
 
-- <https://openid.net/developers/how-connect-works/>
-- <https://oauth.net/>
-
-## **Blogs I like**
-
-- <https://jvns.ca/>
-- <https://lethain.com/>
-- <https://mtlynch.io/>
-- <https://www.hillelwayne.com/post/>
 - <http://hintjens.com/>
-- <https://katemats.com/blog>
+- <https://lethain.com/>
+- <https://jvns.ca/>
+- <https://mtlynch.io/>
 - <https://martinfowler.com/>
 - <https://blog.ploeh.dk/>
 - <https://staffeng.com/>
+- <https://www.hillelwayne.com/post/>
+- <https://katemats.com/blog>
 - <https://newsletter.pragmaticengineer.com/>
 - <https://www.architecture-weekly.com/>
 
-## **Books I like**
+## Books I like
 
 **Shelf 1:**
 
@@ -92,21 +92,21 @@ Articles:
 - The Pragmatic Programmer: your journey to mastery, 2nd Edition
 - The Missing README: a guide for the new software engineer
 - Code That Fits in Your Head: Heuristics for Software Engineering
-- Software Mistakes and Tradeoffs
+- Software Mistakes and Tradeoffs: How to Make Good Programming Decisions
 
 **Shelf 2:**
 
 - Fundamentals of Software Architecture
-- Head First Design Patterns
-- Refactoring: Improving the Design of Existing Code
 - Domain Driven Design Quickly
 - Implementing Domain-Driven Design
+- Head First Design Patterns
+- Refactoring: Improving the Design of Existing Code
 
 **Shelf 3:**
 
-- Mythical Man-Month, The Essays on Software Engineering
 - Extreme Programming Explained: Embrace Change, 2nd Edition
 - Scrum and XP from the Trenches
+- Mythical Man-Month, The Essays on Software Engineering
 - Peopleware: Productive Projects and Teams
 - The Manager's Path: A Guide for Tech Leaders Navigating Growth and Change
 
