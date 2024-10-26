@@ -6,9 +6,10 @@ eleventyNavigation:
 ---
 # About
 
-I am Bojan Veljanovski - a software engineer with 15+ years of experience building software and leading teams. As CTO, I led a 40-person engineering organization delivering web and cloud solutions across multiple sectors, mainly in travel, healthcare, property, and security.
-I focus on simplifying complex systems, combining technical depth with leadership experience - whether that's modernizing legacy code, building cloud solutions, or helping teams work better together.
+I'm a software engineer, architect, and technical leader with over 15 years of experience building software and leading teams in various industries. Starting as a freelance developer, I progressed through technical and leadership roles, including the CTO position.
 
-This is my blog where I write mostly self-notes on software development topics.
+My expertise spans the .NET ecosystem, modern JavaScript frameworks, DevOps, and cloud platforms like Azure and AWS. I have deep experience in domain-driven design, CQRS, distributed systems architecture, and agile development. I've delivered pragmatic technical solutions for complex business problems, combining technical depth with leadership experience - whether that's modernizing legacy code, building solutions from scratch, or helping teams work better together.
 
-Also, I am an ultra runner, with PRs: 148kms in 24 hours, 16 Backyard loops, 3:22 marathon, and 1:28 half.
+Currently, I work as an engineering management consultant, focusing on technical leadership, system architecture, and R&D team management.
+
+When not working with tech, I usually train for ultra-running events. My running PRs are: 148kms in 24 hours, 16 Backyard loops, 3:22 marathon, and 1:28 half.
