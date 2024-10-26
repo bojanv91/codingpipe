@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Bojan Veljanovski&#39;s RESUME</title>
+		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
+		<link rel="manifest" href="/site.webmanifest"></link>
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<meta name="generator" content="Eleventy v2.0.1">
+		
+		<style>* { box-sizing: border-box; }
+/* Defaults */
+:root {
+	--font-family: -apple-system, system-ui, sans-serif;
+	--font-family-monospace: Consolas, Menlo, Monaco, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Courier New, Courier, monospace;
+}
+
+/* Theme colors */
+:root {
+	--color-gray-20: #e0e0e0;
+	--color-gray-50: #C0C0C0;
+	--color-gray-90: #333;
+	--background-color: #fff;
+	--text-color: var(--color-gray-90);
+	--text-color-link: #082840;
+	--text-color-link-active: #5f2b48;
+	--text-color-link-visited: #17050F;
+	--syntax-tab-size: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-gray-20: #e0e0e0;
+		--color-gray-50: #C0C0C0;
+		--color-gray-90: #dad8d8;
+		/* --text-color is assigned to --color-gray-_ above */
+		--text-color-link: #1493fb;
+		--text-color-link-active: #6969f7;
+		--text-color-link-visited: #a6a6f8;
+		--background-color: #15202b;
+	}
+}
+
+
+/* Global stylesheet */
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0 auto;
+	font-family: var(--font-family);
+	color: var(--text-color);
+	background-color: var(--background-color);
+}
+
+html {
+	overflow-y: scroll;
+}
+
+body {
+	max-width: 45em;
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+}
+
+p:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	line-height: 1.5;
+}
+
+li {
+	line-height: 1.5;
+}
+
+a[href] {
+	color: var(--text-color-link);
+}
+
+	a[href]:visited {
+		color: var(--text-color-link-visited);
+	}
+
+	a[href]:hover,
+	a[href]:active {
+		color: var(--text-color-link-active);
+	}
+
+main {
+	padding: 1rem;
+}
+
+	main :first-child {
+		margin-top: 0;
+	}
+
+header {
+	border-bottom: 1px dashed var(--color-gray-20);
+}
+
+	header:after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+.links-nextprev {
+	list-style: none;
+	border-top: 1px dashed var(--color-gray-20);
+	padding: 1em 0;
+}
+
+table {
+	margin: 1em 0;
+}
+
+	table td,
+	table th {
+		padding-right: 1em;
+	}
+
+pre,
+code {
+	font-family: var(--font-family-monospace);
+}
+
+	pre:not([class*="language-"]) {
+		margin: .5em 0;
+		line-height: 1.375; /* 22px /16 */
+		-moz-tab-size: var(--syntax-tab-size);
+		-o-tab-size: var(--syntax-tab-size);
+		tab-size: var(--syntax-tab-size);
+		-webkit-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+		direction: ltr;
+		text-align: left;
+		white-space: pre;
+		word-spacing: normal;
+		word-break: normal;
+	}
+
+code {
+	word-break: break-all;
+}
+
+/* Header */
+header {
+	display: flex;
+	gap: 1em .5em;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 1em;
+}
+
+.home-link {
+	font-size: 1em; /* 16px /16 */
+	font-weight: 700;
+	margin-right: 2em;
+}
+
+	.home-link:link:not(:hover) {
+		text-decoration: none;
+	}
+
+/* Nav */
+.nav {
+	display: flex;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.nav-item {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+	.nav-item a[href]:not(:hover) {
+		text-decoration: none;
+	}
+
+.nav a[href][aria-current="page"] {
+	text-decoration: underline;
+}
+
+/* Posts list */
+.postlist {
+	/*list-style: none;*/
+	padding: 0;
+	/*padding-left: 1.5rem;*/
+}
+
+.postlist-item {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	/*counter-increment: start-from -1;*/
+	margin-bottom: 1em;
+}
+
+	.postlist-item:before {
+		/*display: inline-block;
+	pointer-events: none;
+	content: "" counter(start-from, decimal-leading-zero) ". ";
+		line-height: 100%;
+		text-align: right;
+		margin-left: -1.5rem;*/
+	}
+
+	.postlist-date,
+	.postlist-item:before {
+		font-size: 0.8125em; /* 13px /16 */
+		color: var(--color-gray-90);
+	}
+
+.postlist-date {
+	word-spacing: -0.5px;
+	margin-left: auto; /* Push date to the most right position */
+	color: var(--color-gray-50);
+}
+
+.postlist-link {
+	text-decoration: none; /* don't underline the links here */
+	font-size: 1em; /*1.1875em;*/ /* 19px /16 */
+	font-weight: 400; /* 700 */
+	/*flex-basis: calc(100% - 1.5rem);
+	padding-left: .25em;
+	padding-right: .5em;
+	text-underline-position: from-font;
+	text-underline-offset: 0;
+	text-decoration-thickness: 1px;*/
+}
+
+	.postlist-link:focus,
+	.postlist-link:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item-active .postlist-link {
+	font-weight: bold;
+}
+
+/* Tags */
+.post-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	/*text-transform: capitalize;*/
+	/*font-style: italic;*/
+	text-decoration: none;
+}
+
+	.post-tag:focus,
+	.post-tag:hover {
+		text-decoration: underline;
+	}
+
+.postlist-item > .post-tag {
+	align-self: center;
+}
+
+/* Tags list */
+.post-metadata {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: .5em;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	color: var(--color-gray-50);
+}
+
+	.post-metadata time {
+		/*margin-right: 1em;*/
+	}
+
+	.post-metadata .post-tag {
+		color: inherit;
+	}
+
+/* Direct Links / Markdown Headers */
+.header-anchor {
+	text-decoration: none;
+	font-style: normal;
+	font-size: 1em;
+	margin-left: .1em;
+}
+
+a[href].header-anchor,
+a[href].header-anchor:visited {
+	color: transparent;
+}
+
+	a[href].header-anchor:focus,
+	a[href].header-anchor:hover {
+		text-decoration: underline;
+	}
+
+	a[href].header-anchor:focus,
+	:hover > a[href].header-anchor {
+		color: #aaa;
+	}
+
+h2 + .header-anchor {
+	font-size: 1.5em;
+}
+
+/*
+		***************
+		Custom
+		***************
+*/
+
+h1 {
+	margin-bottom: 0;
+}</style>
+	</head>
+	<body>
+		<a href="#skip" class="visually-hidden">Skip to main content</a>
+
+		<header>
+			<a href="/" class="home-link">CodingPipe.com</a>
+			<nav>
+				<h2 class="visually-hidden">Top level navigation menu</h2>
+				<ul class="nav">
+					<li class="nav-item"><a href="/links/">Favorite Links</a></li>
+					<li class="nav-item"><a href="/tags/">Tags</a></li>
+					<li class="nav-item"><a href="/about/">About</a></li>
+				</ul>
+			</nav>
+		</header>
+
+		<main id="skip">
+			<h2 id="bojan-veljanovski-s-resume" tabindex="-1">Bojan Veljanovski's RESUME <a class="header-anchor" href="#bojan-veljanovski-s-resume">#</a></h2>
+<p>I'm a software engineer, architect, and technical leader with over 15 years of experience building software and leading teams in various industries. Starting as a freelance developer, I progressed through technical and leadership roles, including the CTO position.</p>
+<p>My expertise spans the .NET ecosystem, modern JavaScript frameworks, DevOps, and cloud platforms like Azure and AWS. I have deep experience in domain-driven design, CQRS, distributed systems architecture, and agile development. I've delivered maintainable technical solutions for valuable business problems, combining technical depth with leadership experience - whether that's modernizing legacy code, building solutions from scratch, or helping teams work better together.</p>
+<p>Currently, I work as an engineering management consultant, focusing on technical leadership, system architecture, and R&amp;D team management. When not working with tech, I usually train for ultra-running events.</p>
+<h2 id="professional-experience" tabindex="-1">Professional Experience <a class="header-anchor" href="#professional-experience">#</a></h2>
+<h3 id="chief-technology-officer" tabindex="-1"><ins>Chief Technology Officer</ins> <a class="header-anchor" href="#chief-technology-officer">#</a></h3>
+<p><strong>HASELT</strong>, Skopje, North Macedonia<br />
+<strong>Jun 2022 - Nov 2024 | 2yrs 5mos</strong></p>
+<p>Led a 40-person engineering organization, driving technical innovation and organizational maturity. Key achievements include:</p>
+<ul>
+<li>Directed technical architecture and solution design across multiple client projects.</li>
+<li>Provided architectural guidance and technical consulting to key clients.</li>
+<li>Conducted pre-sales technical evaluations and solution architecture designs.</li>
+<li>Supported service delivery and sales operations with technical advisory.</li>
+<li>Developed new engineering career framework resulting in 7 technical leadership promotions.</li>
+<li>Maintained engineering standards and best practices documentation.</li>
+<li>Managed internal IT infrastructure and supervised production systems.</li>
+</ul>
+<h3 id="interim-ceo" tabindex="-1"><ins>Interim CEO</ins> <a class="header-anchor" href="#interim-ceo">#</a></h3>
+<p><strong>HASELT</strong>, Skopje, North Macedonia<br />
+<strong>Nov 2019 - May 2022 | 2yrs 7mos</strong></p>
+<p>Stepped in during critical leadership transition to lead 50+ person software development company. Key achievements include:</p>
+<ul>
+<li>Stabilized company finances and preserved core team during transition.</li>
+<li>Maintained business continuity and operations during global pandemic.</li>
+<li>Secured new client contracts across advertising, loyalty programs, hospitality, and GIS domains.</li>
+<li>Successfully managed leadership handover to incoming CEO before returning to CTO role, while maintaining business operations.</li>
+</ul>
+<h3 id="chief-technology-officer-1" tabindex="-1"><ins>Chief Technology Officer </ins> <a class="header-anchor" href="#chief-technology-officer-1">#</a></h3>
+<p><strong>HASELT</strong>, Skopje, North Macedonia<br />
+<strong>Jul 2015 - Oct 2019 | 4yrs 3mos</strong></p>
+<p>Established technical excellence and scaled engineering organization. Key contributions:</p>
+<ul>
+<li>Grew engineering team from 15 to 30+ engineers, conducting 200+ interviews.</li>
+<li>Architected and delivered cloud and web solutions in various sectors, mainly in travel and transport, healthcare and wellness, property and hospitality, HR, and access control security.</li>
+<li>Directed technical architecture and solution design across multiple client projects.</li>
+<li>Standardized engineering practices across all teams and projects.</li>
+<li>Conducted 150+ pre-sales technical evaluations and solution architecture designs.</li>
+<li>Led the project management team for six months in 2015 to improve processes and collaboration with development teams.</li>
+<li>Created career development framework with defined leadership paths.</li>
+<li>Established and ran entry-level engineering programs and internships.</li>
+</ul>
+<p><strong>Notable solutions delivered:</strong></p>
+<p><em>Major solutions:</em></p>
+<ul>
+<li>Multi-tenant cloud-based access control platform for property security management.</li>
+<li>High-volume loyalty rewards processing platform handling 100K+ daily transactions for German market.</li>
+<li>Public records research platform with 30+ API integrations and data enrichment workflows.</li>
+</ul>
+<p><em>Medium solutions:</em></p>
+<ul>
+<li>Recruitment matchmaking platform facilitating job seeker and employer matching.</li>
+<li>Custom identity and portfolio management system (IAM) for GIS applications.</li>
+<li>Peer-to-peer items rental marketplace platform for Swiss market.</li>
+<li>Workforce management solution for time tracking and contractor management.</li>
+</ul>
+<p><em>Specialized solutions:</em></p>
+<ul>
+<li>Industrial electric circuit testing software using National Instruments DAQ and Testbed hardware.</li>
+<li>Manufacturing QR code label printer application.</li>
+</ul>
+<p><strong>Tech stack:</strong></p>
+<ul>
+<li><strong>Backend</strong>: C##, ASP.NET Core, and .NET ecosystem</li>
+<li><strong>Frontend</strong>: HTML/CSS/JavaScript, TypeScript, Angular, Aurelia, Knockout.js, jQuery</li>
+<li><strong>Mobile:</strong> Android native, iOS native, Xamarin, Cordova</li>
+<li><strong>Desktop:</strong> WPF, WinForms</li>
+<li><strong>Data</strong>: PostgreSQL, SQL Server, MongoDB, RabbitMQ</li>
+<li><strong>DevOps</strong>: Azure, AWS, GitLab, TeamCity, Octopus Deploy, Docker</li>
+<li><strong>Techniques</strong>: DDD, CQRS, Vertical Slice Architecture, Extreme Programming, Scrum, Kanban, C4model, Arc42, ADRs, Design Docs, CI/CD, trunk-based development, pair programming, architecture spikes, automated testing.</li>
+</ul>
+<h3 id="senior-software-engineer-software-architect" tabindex="-1"><ins>Senior Software Engineer | Software Architect</ins> <a class="header-anchor" href="#senior-software-engineer-software-architect">#</a></h3>
+<p><strong>HASELT</strong>, Skopje, North Macedonia<br />
+<strong>Mar 2013 - Jun 2015 | 2yrs 3mos</strong></p>
+<p>First hire, progressed to senior/architect role while helping the team grow to 15 engineers. Key contributions:</p>
+<ul>
+<li>Designed and developed cloud and web solutions for startups, and established SMEs.</li>
+<li>Worked as both, individual contributor and tech lead.</li>
+<li>Established core engineering practices within internal teams.</li>
+<li>Provided architectural guidance and technical consulting to internal teams and key clients.</li>
+<li>Oversaw software architecture for all client projects.</li>
+<li>Contributed to all pre-sales activities with technical evaluations and solution architecture designs.</li>
+<li>Managed infrastructure across Azure, AWS, and on-premise environments.</li>
+<li>Built starter project templates for ASP.NET and JavaScript projects.</li>
+<li>Led technical mentorship and onboarding programs.</li>
+</ul>
+<p><strong>Notable solutions delivered:</strong></p>
+<p><em>Major solutions:</em></p>
+<ul>
+<li>Multi-tenant SaaS car rental and fleet management system for Baltic market.</li>
+<li>Resource management module for Estonia's national bus management and ticketing platform.</li>
+<li>B2B travel agency platform with integrated real-time B2C booking for Balkan region.</li>
+<li>Nordic dental practice management system (architectural advisory).</li>
+<li>Estonian taxi dispatch and fleet management system (architectural and development advisory).</li>
+</ul>
+<p><em>Medium solutions:</em></p>
+<ul>
+<li>Social media-integrated lead generation platform for Irish startup.</li>
+<li>Farm health monitoring platform for South African market.</li>
+</ul>
+<h3 id="software-developer" tabindex="-1"><ins>Software Developer</ins> <a class="header-anchor" href="#software-developer">#</a></h3>
+<p><strong>Freelance/Independent</strong><br />
+<strong>Jun 2010 - Feb 2013 | 2yrs 8mos</strong></p>
+<p>Delivered end-to-end web software solutions while managing direct client relationships:</p>
+<ul>
+<li>Architected and developed comprehensive hotel booking system with real-time reservations; and run production DevOps.</li>
+<li>Co-developed multitenant faculty management system.</li>
+<li>Developed custom CMS for a Turkish hotel resorts chain.</li>
+<li>Created specialized Analytical Hierarchy Process software for multi-criteria decision-making.</li>
+<li>Inherited and maintained an existing personal health assistant web application for Dutch market.</li>
+</ul>
+<p>Tech stack:</p>
+<ul>
+<li><strong>Backend</strong>: C##, ASP.NET WebForms, MVC, WCF, Nhibernate, Silverlight</li>
+<li><strong>Frontend</strong>: HTML/CSS/JavaScript, Knockout.js, jQuery</li>
+<li><strong>Data</strong>: SQL Server</li>
+<li><strong>Infrastructure:</strong> Windows Server hosting</li>
+<li><strong>Techniques</strong>: SDLC process, MVVM, MVC, clean code</li>
+</ul>
+<h2 id="core-competencies" tabindex="-1">Core Competencies <a class="header-anchor" href="#core-competencies">#</a></h2>
+<p><strong>Software development competencies:</strong></p>
+<ul>
+<li>Full-stack software development from concept to production</li>
+<li>System architecture and solution design</li>
+<li>Legacy system modernization</li>
+<li>Multi-tenant cloud architectures</li>
+<li>Distributed systems design</li>
+<li>API development and integration</li>
+<li>Hardware-to-cloud integrations</li>
+<li>Real-time and batch processing systems</li>
+</ul>
+<p><strong>Technical leadership competencies:</strong></p>
+<ul>
+<li>Engineering team management and talent development</li>
+<li>Technical strategy and roadmap development</li>
+<li>Engineering practice standardization</li>
+<li>Pre-sales consulting and solution architecture</li>
+<li>Project scoping and resource planning</li>
+</ul>
+<p><strong>Technology stack:</strong></p>
+<ul>
+<li>Languages &amp; Frameworks
+<ul>
+<li>C##, .NET Core, ASP.NET Core</li>
+<li>TypeScript/JavaScript, Angular, Vue/Nuxt</li>
+</ul>
+</li>
+<li>Infrastructure &amp; Data
+<ul>
+<li>Azure, AWS, Docker</li>
+<li>PostgreSQL, SQL Server, MongoDB</li>
+<li>RabbitMQ, ServiceBus</li>
+</ul>
+</li>
+</ul>
+<p><strong>Engineering practices:</strong></p>
+<ul>
+<li>Domain Driven Design, REST, CQRS, messaging, distributed systems</li>
+<li>Extreme Programming and agile methodologies</li>
+<li>CI/CD, DevOps, pair programming, test automation, rapid prototyping</li>
+<li>Architecture documentation (C4, Arc42, ADRs, Design Docs)</li>
+</ul>
+<p><strong>Domains I've worked in:</strong></p>
+<ul>
+<li>Travel and transport</li>
+<li>Access control and security</li>
+<li>Property and hospitality</li>
+<li>Business process automation</li>
+<li>Booking and reservation</li>
+<li>Healthcare and wellness</li>
+<li>Connected hardware and IoT</li>
+<li>GIS</li>
+</ul>
+<h2 id="education" tabindex="-1"><strong>Education</strong> <a class="header-anchor" href="#education">#</a></h2>
+<h3 id="faculty-of-computer-science-and-engineering" tabindex="-1"><ins>Faculty of Computer Science and Engineering</ins> <a class="header-anchor" href="#faculty-of-computer-science-and-engineering">#</a></h3>
+<ul>
+<li>Study program: Software Engineering and Information Technologies</li>
+<li>Sep 2009 – Jan 2012 (paused/not finished)</li>
+<li>Skopje, North Macedonia</li>
+</ul>
+<h3 id="seavus-education-and-development-center" tabindex="-1"><ins>Seavus Education and Development Center</ins> <a class="header-anchor" href="#seavus-education-and-development-center">#</a></h3>
+<ul>
+<li>Study program: Web Development and Cloud Engineering</li>
+<li>Oct 2012 - Sep 2013</li>
+<li>Skopje, North Macedonia</li>
+</ul>
+<h3 id="electro-technical-high-school-gjorgji-naumov" tabindex="-1"><ins>Electro-technical High School &quot;Gjorgji Naumov&quot;</ins> <a class="header-anchor" href="#electro-technical-high-school-gjorgji-naumov">#</a></h3>
+<ul>
+<li>Study program: Computer Technology and Automation</li>
+<li>Sep 2005 - Jun 2009</li>
+<li>Bitola, North Macedonia</li>
+<li>Additional achievements:
+<ul>
+<li>Won four 1st place awards in national computer programming and IT research competitions.</li>
+<li>Developed school-wide automated bell system, later adopted by the school.</li>
+<li>Created library management application as a research project.</li>
+</ul>
+</li>
+</ul>
+<h2 id="other" tabindex="-1">Other <a class="header-anchor" href="#other">#</a></h2>
+<ul>
+<li>Was a Microsoft Student Partner (2012-2013), organizing student tech events and hackathons, leading a student tech club, delivering presentations on Microsoft web technologies, and participating in the Microsoft Innovate for Good program in Brussels (2013).</li>
+<li>Did several tech talks at local meetups and conferences:
+<ul>
+<li>&quot;Real-world software design practices when developing ASP.NET web systems&quot; - Code Camp (November 2014, Skopje)</li>
+<li>&quot;Single Page Applications with AngularJS, ASP.NET WebAPI and MongoDB&quot; -  Informatijada (October 2014, Ohrid)</li>
+<li>&quot;Introducing Web Components and Project Polymer&quot; - MK.NET monthly meetup (June 2014, Skopje)</li>
+<li>&quot;AngularJS + NancyFx + MongoDB = The best trio for ultimate SPA&quot; - Code Camp (December 2013, Skopje)</li>
+<li>&quot;Real-time communication using SignalR &amp; ASP.NET MVC4&quot; - MK.NET monthly meetup (December 2012, Skopje)</li>
+<li>&quot;A new perspective on building Web Applications&quot; - Guest Lecturer at Faculty of Computer Science and Engineering, Skopje (December 2012, Skopje)</li>
+<li>&quot;Desktop App from the Cloud in the Browser&quot; - Code Camp (November 2012, Skopje)</li>
+<li>&quot;Building Single Page Applications using ASP.NET MVC &amp; Knockout JS&quot; - Microsoft Vizija (October 2012, Skopje)</li>
+<li>&quot;From Idea to Store&quot; - Guest Lecturer at Faculty of Computer Science and Engineering (October 2012, Skopje)</li>
+<li>&quot;ASP.NET MVC &amp; Razor Fundamentals&quot; - Guest Speaker at FON Tech Club (March 2012, Skopje)</li>
+<li>&quot;ASP.NET MVC &amp; Razor Fundamentals&quot; - Speaker at FINKI Tech Club (March 2012, Skopje)</li>
+</ul>
+</li>
+<li>I write code on personal side-projects.</li>
+<li>I blog on <a href="https://codingpipe.com/">https://codingpipe.com/</a> when inspiration hits.</li>
+</ul>
+<h2 id="hobbies" tabindex="-1">Hobbies <a class="header-anchor" href="#hobbies">#</a></h2>
+<p>I am an ultra-runner, with following PRs:</p>
+<ul>
+<li>148kms in 24 hours (June 2024, Sri Chinmoy 6-12-14 race, Skopje)</li>
+<li>16 loops in Backyard ultra (October 2024, Punk's Backyard ultra, Negorci)</li>
+<li>1:28 in the half-marathon (October 2024, WizzAir Skopje Marathon, Skopje)</li>
+<li>3:22 in the marathon (March 2024, Sri Chinmoy Marathon, Skopje)</li>
+</ul>
+<p>My goal is to run sub 3h marathon, 24 loops in Backyard ultra, above 200km in a 24h race, and one day finish UTMB and Spartathlon.</p>
+<hr>
+<p>You can reach me on <a href="https://www.linkedin.com/in/bojanv91/">linkedin</a>, or via email (my linkedin username at gmail dot com).</p>
+
+		</main>
+
+		<footer></footer>
+
+		<!-- This page `/resume/` was built on 2024-10-26T19:11:32.174Z -->
+
+		<!-- Google tag (gtag.js) -->
+		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
+		<script>
+			if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    			console.log('Running on localhost, skipping Google Analytics.');
+			} else {
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				gtag('config', 'G-E6F7C4Q881');
+			}
+		</script>
+	</body>
+</html>
