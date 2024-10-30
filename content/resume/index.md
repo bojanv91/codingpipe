@@ -101,10 +101,10 @@ First hire, progressed to senior/architect role while helping the team grow to 1
 - Established core engineering practices within internal teams.
 - Provided architectural guidance and technical consulting to internal teams and key clients.
 - Oversaw software architecture for all client projects.
+- Onboarded and mentored all newly-hired software engineers.
 - Contributed to all pre-sales activities with technical evaluations and solution architecture designs.
 - Managed infrastructure across Azure, AWS, and on-premise environments.
 - Built starter project templates for ASP.NET and JavaScript projects.
-- Led technical mentorship and onboarding programs.
 
 **Notable solutions delivered:**
 
