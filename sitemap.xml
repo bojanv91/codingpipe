@@ -177,17 +177,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/code/</loc>
-		<lastmod>2024-10-30</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/net-framework/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/data-access/</loc>
+		<lastmod>2024-10-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/code/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
@@ -202,17 +202,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net-core/</loc>
-		<lastmod>2024-10-30</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/javascript/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/testing/</loc>
+		<loc>https://codingpipe.com/tags/net-core/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
@@ -223,6 +218,11 @@
 	
 	<url>
 		<loc>https://codingpipe.com/tags/docker/</loc>
+		<lastmod>2024-10-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/testing/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
