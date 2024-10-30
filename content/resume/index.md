@@ -81,7 +81,7 @@ _Specialized solutions:_
 
 **Tech stack:**
 
-- **Backend**: C##, ASP.NET Core, and .NET ecosystem
+- **Backend**: C#, ASP.NET Core, and .NET ecosystem
 - **Frontend**: HTML/CSS/JavaScript, TypeScript, Angular, Aurelia, Knockout.js, jQuery
 - **Mobile:** Android native, iOS native, Xamarin, Cordova
 - **Desktop:** WPF, WinForms
@@ -166,7 +166,7 @@ Tech stack:
 **Technology stack:**
 
 - Languages & Frameworks
-  - C##, .NET Core, ASP.NET Core
+  - C#, .NET Core, ASP.NET Core
   - TypeScript/JavaScript, Angular, Vue/Nuxt
 - Infrastructure & Data
   - Azure, AWS, Docker
