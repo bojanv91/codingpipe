@@ -4,12 +4,66 @@
 	<subtitle>I am writing self-notes that might be useful for other people as well on software development and programming in general.</subtitle>
 	<link href="https://codingpipe.com/feed/feed.xml" rel="self"/>
 	<link href="https://codingpipe.com/"/>
-	<updated>2024-08-10T00:00:00Z</updated>
+	<updated>2024-10-30T00:00:00Z</updated>
 	<id>https://codingpipe.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
 		<email>bojanv91+blog@gmail.com</email>
 	</author>
+	
+	<entry>
+		<title>Use Enums Over Booleans for Status Fields</title>
+		<link href="https://codingpipe.com/posts/use-enums-over-booleans/"/>
+		<updated>2024-10-30T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/use-enums-over-booleans/</id>
+		<content type="html">&lt;p&gt;In business applications, we often need to track the state of entities - users, orders, payments, etc. While boolean flags might seem simple, they often lead to maintenance headaches. Here&#39;s why you should consider using enums instead.&lt;/p&gt;
+&lt;h2 id=&quot;1-the-meaning-of-false-is-not-always-clear&quot; tabindex=&quot;-1&quot;&gt;1: The meaning of false is not always clear &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The meaning of false is not always clear when using Booleans for status fields.&lt;/p&gt;
+&lt;p&gt;Let&#39;s see this example:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsActive &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;What does it mean when IsActive is false? Does that mean the user has been banned? Or is the email not yet verified?
+In most such situations, choosing Enum is a much better choice. Enums are more descriptive and flexible.&lt;/p&gt;
+&lt;p&gt;Let&#39;s refactor:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserStatus&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  Active&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  PendingVerification
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ 
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;UserStatus&lt;/span&gt; Status &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now you know that the user can be in active or pending verification state. This approach makes the meaning of the user&#39;s states obvious.&lt;/p&gt;
+&lt;h2 id=&quot;2-expanding-with-a-third-option-is-a-very-challenging-refactor&quot; tabindex=&quot;-1&quot;&gt;2: Expanding with a third option is a very challenging refactor &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Adding a third state like “Banned,” using Booleans can get problematic. Let&#39;s see this example:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsActive &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// from the original example&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsBanned &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// newly added state for handling banned users&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This approach creates four possible combinations, but only two are valid. Managing these relationships can become complicated very quickly. Can an active user be banned? What happens then - what field takes precedence?&lt;/p&gt;
+&lt;p&gt;Additionally, what about existing data? We need to change the DB schema and migrate a lot of data to the new schema, which may create downtime or technical hurdles, especially at scale.&lt;/p&gt;
+&lt;p&gt;With Enums, adding a new state is simple:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserStatus&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  Active&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  PendingVerification&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  Banned  &lt;span class=&quot;token comment&quot;&gt;// new state&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;rules-of-thumb&quot; tabindex=&quot;-1&quot;&gt;Rules of thumb &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here are some rules of thumb that I use:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Start with an enum if there’s any chance you’ll need more than two states in the future.&lt;/li&gt;
+&lt;li&gt;Use boolean flags only for clear yes/no scenarios that are unlikely to change.&lt;/li&gt;
+&lt;li&gt;Before adding a boolean flag, ask yourself: “Could this need more states down the road?”&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Using enums over booleans early for potentially expandable status fields ensures easier maintenance and clearer code in the long run. I won&#39;t consider it as over-engineering.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests</title>
