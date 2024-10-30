@@ -196,8 +196,11 @@ Tech stack:
 ### <ins>Faculty of Computer Science and Engineering</ins>
 
 - Study program: Software Engineering and Information Technologies
-- Sep 2009 – Jan 2012 (paused/not finished)
+- Sep 2009 (not-finished: paused in Jan 2012 to focus on work)
 - Skopje, North Macedonia
+- Additional activities:
+  - Was a member of IAESTE.
+  - Was a Microsoft Student Partner (2012-2013), organizing student tech events and hackathons, leading a student tech club, delivering presentations on Microsoft web technologies, and participating in the Microsoft Innovate for Good program in Brussels (2013).
 
 ### <ins>Seavus Education and Development Center</ins>
 
@@ -210,14 +213,17 @@ Tech stack:
 - Study program: Computer Technology and Automation
 - Sep 2005 - Jun 2009
 - Bitola, North Macedonia
-- Additional achievements:
+- Additional contributions:
   - Won four 1st place awards in national computer programming and IT research competitions.
-  - Developed school-wide automated bell system, later adopted by the school.
-  - Created library management application as a research project.
+  - Designed and developed an automated, all-in-one School Bell system with scheduled audio/video presentations and playing music between classes, which the school adopted.
+  - Created a library management application as a research project.
+  - Participated in the robotics competition "RoboMac 2009 - Skopje" in the Mini sumo category.
+  - Demonstrated a Lego Mindstorm robot, its sensors, and its programming functionalities in class.
+  - Developed a PLC pneumatic robotic arm that removes stuck objects on a track (using Ladder Logic and Siemens Step 7).
 
 ## Other
 
-- Was a Microsoft Student Partner (2012-2013), organizing student tech events and hackathons, leading a student tech club, delivering presentations on Microsoft web technologies, and participating in the Microsoft Innovate for Good program in Brussels (2013).
+- I blog on [https://codingpipe.com/](https://codingpipe.com/) when inspiration hits.
 - Did several tech talks at local meetups and conferences:
   - "Real-world software design practices when developing ASP.NET web systems" - Code Camp (November 2014, Skopje)
   - "Single Page Applications with AngularJS, ASP.NET WebAPI and MongoDB" -  Informatijada (October 2014, Ohrid)
@@ -230,8 +236,6 @@ Tech stack:
   - "From Idea to Store" - Guest Lecturer at Faculty of Computer Science and Engineering (October 2012, Skopje)
   - "ASP.NET MVC & Razor Fundamentals" - Guest Speaker at FON Tech Club (March 2012, Skopje)
   - "ASP.NET MVC & Razor Fundamentals" - Speaker at FINKI Tech Club (March 2012, Skopje)
-- I write code on personal side-projects.
-- I blog on [https://codingpipe.com/](https://codingpipe.com/) when inspiration hits.
 
 ## Hobbies
 
