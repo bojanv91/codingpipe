@@ -4,7 +4,7 @@
 
 - Node v20 (LTS)
 
-For example using NVM:
+For example, using NVM:
 
 ```
 nvm use 20.16.0
