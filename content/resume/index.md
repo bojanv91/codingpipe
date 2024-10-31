@@ -114,7 +114,6 @@ _Major solutions:_
 - Resource management module for Estonia's national bus management and ticketing platform.
 - B2B travel agency platform with integrated real-time B2C booking for Balkan region.
 - Nordic dental practice management system (architectural advisory).
-- Estonian taxi dispatch and fleet management system (architectural and development advisory).
 
 _Medium solutions:_
 
