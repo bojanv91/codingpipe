@@ -8,13 +8,17 @@ eleventyExcludeFromCollections: true
 
 My name is Bojan Veljanovski. I am a software engineer, architect, and technical leader with 15+ years of experience building software and leading teams across various industries. My expertise spans the .NET ecosystem, modern JavaScript frameworks, DevOps practices, and cloud platforms like Azure and AWS, with deep experience in domain-driven design, distributed systems architecture, and agile development.
 
-I started programming in 2003, creating quiz games and utility apps for fun in VB6. My professional journey began in 2010 as an independent developer, building .NET web-based systems for various clients. In 2013, I joined a software development company as their first software engineer, quickly progressing to tech lead and architect. By 2015, I had become CTO, leading a team of about 40 engineers until 2024. 
+I started programming in 2003, creating quiz games and utility apps for fun in VB6. My professional journey began in 2010 as an independent developer, building .NET web-based systems for various clients. In 2013, I joined a software development company as their first software engineer, quickly progressing to tech lead and architect. By 2015, I had become CTO, leading a team of about 40 engineers until 2024.
 
-Throughout these roles, I've delivered maintainable technical solutions while building high-performing engineering teams - whether modernizing legacy systems, building solutions from scratch, or helping teams work better together. Currently, I'm focusing on R&D management consultancy, helping organizations improve their engineering practices and system architecture. 
+Throughout these roles, I've delivered maintainable technical solutions while building high-performing engineering teams - whether modernizing legacy systems, building solutions from scratch, or helping teams work better together. Currently, I'm focusing on R&D management consultancy, helping organizations improve their engineering practices and system architecture.
 
 In my free time when kids go to sleep, I write code on personal ideas, write on this blog, or train for ultra-running events.
 
 ## Professional Experience
+
+### R&D Manager | Software Architect | Software Consultant
+
+**Nov 2024 - Current**
 
 ### <ins>Chief Technology Officer</ins>
 
@@ -51,7 +55,7 @@ Stepped in during critical leadership transition to lead 50+ person software dev
 Established technical excellence and scaled engineering organization. Key contributions:
 
 - Grew engineering team from 15 to 30+ engineers, conducting 200+ interviews.
-- Architected and delivered cloud and web solutions in various sectors, mainly in travel and transport, healthcare and wellness, property and hospitality, HR, and access control security.
+- Architected, developed, and delivered cloud and web solutions in various sectors, mainly in travel and transport, healthcare and wellness, property and hospitality, HR, and access control security.
 - Directed technical architecture and solution design across multiple client projects.
 - Standardized engineering practices across all teams and projects.
 - Conducted 150+ pre-sales technical evaluations and solution architecture designs.
@@ -67,7 +71,7 @@ _Major solutions:_
 - High-volume loyalty rewards processing platform handling 100K+ daily transactions for German market.
 - Public records research platform with 30+ API integrations and data enrichment workflows.
 
-_Medium solutions:_
+_Mid-sized solutions:_
 
 - Recruitment matchmaking platform facilitating job seeker and employer matching.
 - Custom identity and portfolio management system (IAM) for GIS applications.
@@ -96,7 +100,7 @@ _Specialized solutions:_
 
 First hire, progressed to senior/architect role while helping the team grow to 15 engineers. Key contributions:
 
-- Designed and developed cloud and web solutions for startups, and established SMEs.
+- Designed, developed, released, and maintained cloud and web solutions for startups, and established SMEs.
 - Worked as both, individual contributor and tech lead.
 - Established core engineering practices within internal teams.
 - Provided architectural guidance and technical consulting to internal teams and key clients.
@@ -115,7 +119,7 @@ _Major solutions:_
 - B2B travel agency platform with integrated real-time B2C booking for Balkan region.
 - Nordic dental practice management system (architectural advisory).
 
-_Medium solutions:_
+_Mid-sized solutions:_
 
 - Social media-integrated lead generation platform for Irish startup.
 - Farm health monitoring platform for South African market.
@@ -146,21 +150,20 @@ Tech stack:
 **Software development competencies:**
 
 - Full-stack software development from concept to production
-- System architecture and solution design
-- Legacy system modernization
+- Legacy systems modernization
 - Multi-tenant cloud architectures
 - Distributed systems design
 - API development and integration
 - Hardware-to-cloud integrations
 - Real-time and batch processing systems
+- Database design and data modeling
 
 **Technical leadership competencies:**
 
 - Engineering team management and talent development
-- Technical strategy and roadmap development
 - Engineering practice standardization
-- Pre-sales consulting and solution architecture
-- Project scoping and resource planning
+- Pre-sales solution architecture
+- Project scoping, technical strategy, and roadmap planning
 
 **Technology stack:**
 
@@ -179,7 +182,7 @@ Tech stack:
 - CI/CD, DevOps, pair programming, test automation, rapid prototyping
 - Architecture documentation (C4, Arc42, ADRs, Design Docs)
 
-**Domains I've worked in:**
+**Domains I've worked in the most:**
 
 - Travel and transport
 - Access control and security
@@ -222,7 +225,7 @@ Tech stack:
 
 ## Other
 
-- I blog on [https://codingpipe.com/](https://codingpipe.com/) when inspiration hits.
+- I blog on [https://codingpipe.com/](https://codingpipe.com/) when time allows.
 - Did several tech talks at local meetups and conferences:
   - "Real-world software design practices when developing ASP.NET web systems" - Code Camp (November 2014, Skopje)
   - "Single Page Applications with AngularJS, ASP.NET WebAPI and MongoDB" -  Informatijada (October 2014, Ohrid)
@@ -238,7 +241,7 @@ Tech stack:
 
 ## Hobbies
 
-I am an ultra-runner, with following PRs:
+I run ultra-marathons as a hobby, with following PRs:
 
 - 148kms in 24 hours (June 2024, Sri Chinmoy 6-12-14 race, Skopje)
 - 16 loops in Backyard ultra (October 2024, Punk's Backyard ultra, Negorci)

@@ -19,6 +19,8 @@ A list of links I find myself repeatedly referring to.
 - [The Manager's Handbook](https://themanagershandbook.com/)
 - [Programming principles](https://en.wikipedia.org/wiki/Category:Programming_principles)
 - [Code Smells - codinghorror.com](https://blog.codinghorror.com/code-smells/)
+- [How to Design Perfect (Software) Products - hintjens.com](http://hintjens.com/blog:19)
+- [First Principles: The Building Blocks of True Knowledge - fs.blog](https://fs.blog/first-principles/)
 
 ## On software design & architecture
 
@@ -44,7 +46,6 @@ A list of links I find myself repeatedly referring to.
 
 **Articles:**
 
-- [How to Design Perfect (Software) Products - hintjens.com](http://hintjens.com/blog:19)
 - <https://martinfowler.com/articles/designDead.html>
 - <https://martinfowler.com/bliki/BeckDesignRules.html>
 - <https://blog.jbrains.ca/permalink/the-four-elements-of-simple-design>
