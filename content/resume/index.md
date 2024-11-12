@@ -18,7 +18,7 @@ In my free time when kids go to sleep, I write code on personal ideas, write on 
 
 ### R&D Manager | Software Architect | Software Consultant
 
-**Nov 2024 - Current**
+**Dec 2024 - Current**
 
 ### <ins>Chief Technology Officer</ins>
 
