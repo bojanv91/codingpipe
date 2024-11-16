@@ -207,12 +207,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/javascript/</loc>
+		<loc>https://codingpipe.com/tags/net-core/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net-core/</loc>
+		<loc>https://codingpipe.com/tags/javascript/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 	
@@ -232,17 +232,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2024-11-16</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/powershell/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/snippets/</loc>
+		<lastmod>2024-11-16</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/logging/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 	
@@ -257,12 +257,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/problemdetails/</loc>
+		<loc>https://codingpipe.com/tags/programming/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/programming/</loc>
+		<loc>https://codingpipe.com/tags/problemdetails/</loc>
 		<lastmod>2024-11-16</lastmod>
 	</url>
 </urlset>
