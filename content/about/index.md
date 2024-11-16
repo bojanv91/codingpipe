@@ -13,4 +13,4 @@ Before, I was the CTO at a software development company for 8 years, growing and
 
 ---
 
-My full professional background is detailed in [my resume page](/bojan-veljanovski-resume/).
+My full professional background is detailed on [my resume page](/bojan-veljanovski-resume/).

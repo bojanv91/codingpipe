@@ -149,16 +149,16 @@ Tech stack:
 - .NET, C#, Azure, AWS, Postgres, RabbitMQ, TypeScript/JavaScript, HTML, CSS, etc.
 - Domain Driven Design, REST, CQRS, Agile, DevOps, etc.
 
-**Domains I've worked in the most:**
+## Industry Experience
 
-- Travel and transport
-- Access control and security
-- Property and hospitality
-- Business process automation
-- Booking and reservation
-- Healthcare and wellness
-- Connected hardware and IoT
-- GIS
+- Travel & Transportation
+- Security & Access Control Systems
+- Property Management & Hospitality
+- Business Process Automation
+- Booking & Reservation Systems
+- Healthcare & Wellness
+- IoT & Connected Devices
+- Geographic Information Systems (GIS)
 
 ## **Education**
 
