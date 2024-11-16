@@ -32,12 +32,12 @@ Managed a 40-person engineering organization, driving technical innovation and o
 **HASELT**, Skopje, North Macedonia<br />
 **Nov 2019 - May 2022 | 2yrs 7mos**
 
-Stepped in during critical leadership transition to lead 50+ person software development company. Key achievements include:
+Stepped in during a critical leadership transition to lead a 50+ person software development company. Key achievements include:
 
-- Stabilized company finances and preserved core team during transition.
-- Maintained business continuity and operations during global pandemic.
+- Stabilized company finances and preserved the core team during the transition.
+- Maintained business continuity and operations during the global pandemic.
 - Secured new client contracts across advertising, loyalty programs, hospitality, and GIS domains.
-- Successfully managed leadership handover to incoming CEO before returning to CTO role, while maintaining business operations.
+- Successfully managed leadership handover to incoming CEO before returning to CTO role while maintaining business operations.
 
 ### <ins>Chief Technology Officer </ins>
 
@@ -52,7 +52,7 @@ Established technical excellence and scaled the engineering organization. Key co
 - Standardized engineering practices across all teams and projects.
 - Conducted 150+ pre-sales technical evaluations and solution architecture designs.
 - Led the project management team for six months in 2015 to improve processes and collaboration with development teams.
-- Created career development framework with defined leadership paths.
+- Created a career development framework with defined leadership paths.
 - Established and ran entry-level engineering programs and internships.
 
 **Notable solutions delivered:**
@@ -92,8 +92,8 @@ _Specialized solutions:_
 
 First hire, progressed to senior/architect role while helping the team grow to 15 engineers. Key contributions:
 
-- Designed, developed, released, and maintained cloud and web solutions for startups, and established SMEs.
-- Worked as both, individual contributor and tech lead.
+- Designed, developed, released, and maintained cloud and web solutions for startups and established SMEs.
+- Worked as both an individual contributor and tech lead.
 - Established core engineering practices within internal teams.
 - Provided architectural guidance and technical consulting to internal teams and key clients.
 - Oversaw software architecture for all client projects.
@@ -106,9 +106,9 @@ First hire, progressed to senior/architect role while helping the team grow to 1
 
 _Major solutions:_
 
-- Multi-tenant SaaS car rental and fleet management system for Baltic market.
+- Multi-tenant SaaS car rental and fleet management system for the Baltic market.
 - Resource management module for Estonia's national bus management and ticketing platform.
-- B2B travel agency platform with integrated real-time B2C booking for Balkan region.
+- B2B travel agency platform with integrated real-time B2C booking for the Balkan region.
 - Nordic dental practice management system (architectural advisory).
 
 _Mid-sized solutions:_
