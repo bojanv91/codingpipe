@@ -17,7 +17,7 @@ Before, I was the CTO at a software development company for 8 years, growing and
 **HASELT**, Skopje, North Macedonia<br />
 **Jun 2022 - Nov 2024 | 2yrs 5mos**
 
-Led a 40-person engineering organization, driving technical innovation and organizational maturity. Key achievements include:
+Managed a 40-person engineering organization, driving technical innovation and organizational maturity. Key contributions include:
 
 - Directed technical architecture and solution design across multiple client projects.
 - Provided architectural guidance and technical consulting to key clients.
@@ -44,9 +44,9 @@ Stepped in during critical leadership transition to lead 50+ person software dev
 **HASELT**, Skopje, North Macedonia<br />
 **Jul 2015 - Oct 2019 | 4yrs 3mos**
 
-Established technical excellence and scaled engineering organization. Key contributions:
+Established technical excellence and scaled the engineering organization. Key contributions include:
 
-- Grew engineering team from 15 to 30+ engineers, conducting 200+ interviews.
+- Grew engineering team from 15 to 30+ engineers, conducting 200+ interviews in the process.
 - Architected, developed, and delivered cloud and web solutions in various sectors, mainly in travel and transport, healthcare and wellness, property and hospitality, HR, and access control security.
 - Directed technical architecture and solution design across multiple client projects.
 - Standardized engineering practices across all teams and projects.
