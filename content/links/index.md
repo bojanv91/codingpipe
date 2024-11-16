@@ -1,10 +1,11 @@
 ---
 layout: layouts/base.njk
+title: Favorite Links
 eleventyNavigation:
   key: Favorite Links
   order: 2
 ---
-# Favorite Links
+## Favorite Links
 
 A list of links I find myself repeatedly referring to.
 

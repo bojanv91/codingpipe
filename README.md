@@ -43,6 +43,8 @@ Build and host on a local development server (hot-reload is automatically turned
 npm run start
 ```
 
+The project will start at <http://localhost:8080/>.
+
 Generate a production-ready build to the `_site` folder:
 
 ```

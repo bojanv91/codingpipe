@@ -1,18 +1,14 @@
 ---
 layout: layouts/base.njk
 title: "Bojan Veljanovski's RESUME"
-permalink: "/resume/"
+permalink: "/bojan-veljanovski-resume/"
 eleventyExcludeFromCollections: true
 ---
 ## Bojan Veljanovski's RESUME
 
-My name is Bojan Veljanovski. I am a software engineer, architect, and technical leader with 15+ years of experience building software and leading teams across various industries. My expertise spans the .NET ecosystem, modern JavaScript frameworks, DevOps practices, and cloud platforms like Azure and AWS, with deep experience in domain-driven design, distributed systems architecture, and agile development.
+My name is Bojan Veljanovski. I'm a software engineer and architect with 15+ years of professional experience. Currently, I work as a software consultant and R&D manager for an IT consulting company. I'm focusing on leading engineering teams, architecting new products and solutions, modernizing legacy systems, and improving development processes.
 
-I started programming in 2003, creating quiz games and utility apps for fun in VB6. My professional journey began in 2010 as an independent developer, building .NET web-based systems for various clients. In 2013, I joined a software development company as their first software engineer, quickly progressing to tech lead and architect. By 2015, I had become CTO, leading a team of about 40 engineers until 2024.
-
-Throughout these roles, I've delivered maintainable technical solutions while building high-performing engineering teams - whether modernizing legacy systems, building solutions from scratch, or helping teams work better together. Currently, I'm focusing on R&D management consultancy, helping organizations improve their engineering practices and system architecture.
-
-In my free time when kids go to sleep, I write code on personal ideas, write on this blog, or train for ultra-running events.
+Before, I was the CTO at a software development company for 8 years, growing and leading a 40-person engineering organization, delivering software solutions in various industries. Previously, I worked as their first software engineer and later architect/tech lead for 4+ years, building distributed systems using .NET, web, and cloud technologies. I've also been an independent developer, building .NET apps for multiple clients. I started my programming journey in 2003, creating personal apps in VB6 while learning to code.
 
 ## Professional Experience
 
@@ -143,40 +139,15 @@ Tech stack:
 
 ## Core Competencies
 
-**Software development competencies:**
-
-- Full-stack software development from concept to production
-- Legacy systems modernization
-- Multi-tenant cloud architectures
-- Distributed systems design
-- API development and integration
-- Hardware-to-cloud integrations
-- Real-time and batch processing systems
-- Database design and data modeling
-
-**Technical leadership competencies:**
-
-- Engineering team management and talent development
-- Engineering practice standardization
-- Pre-sales solution architecture
-- Project scoping, technical strategy, and roadmap planning
-
-**Technology stack:**
-
-- Languages & Frameworks
-  - C#, .NET Core, ASP.NET Core
-  - TypeScript/JavaScript, Angular, Vue/Nuxt
-- Infrastructure & Data
-  - Azure, AWS, Docker
-  - PostgreSQL, SQL Server, MongoDB
-  - RabbitMQ, ServiceBus
-
-**Engineering practices:**
-
-- Domain Driven Design, REST, CQRS, messaging, distributed systems
-- Extreme Programming and agile methodologies
-- CI/CD, DevOps, pair programming, test automation, rapid prototyping
-- Architecture documentation (C4, Arc42, ADRs, Design Docs)
+- Engineering Management
+- Solution Architecture
+- Database Design
+- Legacy System Modernization
+- Distributed Systems
+- Cloud Technologies
+- API and Web Development
+- .NET, C#, Azure, AWS, Postgres, RabbitMQ, TypeScript/JavaScript, HTML, CSS, etc.
+- Domain Driven Design, REST, CQRS, Agile, DevOps, etc.
 
 **Domains I've worked in the most:**
 
