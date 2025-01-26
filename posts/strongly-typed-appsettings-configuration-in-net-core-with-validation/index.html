@@ -3,15 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Typed AppSettings Configuration in .NET Core</title>
+		<title>How to Implement Strongly Typed Configuration in .NET Core</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"></link>
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"></link>
 		<link rel="manifest" href="/site.webmanifest"></link>
-		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
-		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
+		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="BojanVeljanovski.com">
+		<link rel="alternate" href="/feed/feed.json" type="application/json" title="BojanVeljanovski.com">
 		<meta name="generator" content="Eleventy v2.0.1">
 		
 		<style>/**
@@ -508,7 +508,7 @@ h1 {
 		<a href="#skip" class="visually-hidden">Skip to main content</a>
 
 		<header>
-			<a href="/" class="home-link">CodingPipe.com</a>
+			<a href="/" class="home-link">BojanVeljanovski.com</a>
 			<nav>
 				<h2 class="visually-hidden">Top level navigation menu</h2>
 				<ul class="nav">
@@ -521,159 +521,74 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Typed AppSettings Configuration in .NET Core</h1>
+<h1>How to Implement Strongly Typed Configuration in .NET Core</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-01-08">Jan 8, 2023</time></li>
 	<li><span> • </span></li>
-	<li><span>4 min read</span></li>
+	<li><span>1 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/net-core/" class="post-tag">.NET Core</a></li>
 </ul>
 
-<p>The default way to access .NET app configuration is by using the <code>IConfiguration</code> object.</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Service</span>
+<p>Create a strongly typed configuration class for <strong>appsettings.json</strong> using <strong>required</strong> and <strong>init</strong> properties:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
 <span class="token punctuation">{</span>
-  <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IConfiguration</span> _config<span class="token punctuation">;</span>
-  <span class="token keyword">public</span> <span class="token function">Service</span><span class="token punctuation">(</span><span class="token class-name">IConfiguration</span> config<span class="token punctuation">)</span> <span class="token operator">=></span> _config <span class="token operator">=</span> config<span class="token punctuation">;</span>
-  
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _config<span class="token punctuation">[</span><span class="token string">"ConnectionString"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token comment">// ...</span>
+    <span class="token keyword">public</span> required <span class="token return-type class-name">ConnectionStringsConfig</span> ConnectionStrings <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> required <span class="token return-type class-name">LoggingConfig</span> Logging <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConnectionStringsConfig</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> DefaultConnection <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoggingConfig</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> LogLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Match your <strong>appsettings.json</strong> structure:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token punctuation">{</span>
+  <span class="token string">"ConnectionStrings"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"DefaultConnection"</span><span class="token punctuation">:</span> <span class="token string">"Server=myserver;Database=mydb;"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string">"Logging"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"LogLevel"</span><span class="token punctuation">:</span> <span class="token string">"Information"</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>This approach can be error-prone in larger codebases because it uses magic-string keys. Common issues are:</p>
+<p>Register in <strong>Program.cs</strong>:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Use in services:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">;</span>
+    
+    <span class="token keyword">public</span> <span class="token function">MyService</span><span class="token punctuation">(</span><span class="token class-name">IOptions<span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span> options<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        _appSettings <span class="token operator">=</span> options<span class="token punctuation">.</span>Value<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Use in Blazor SSR Razor file:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">@inject IOptions<span class="token operator">&lt;</span>AppSettings<span class="token operator">></span> Options
+
+<span class="token operator">&lt;</span>p<span class="token operator">></span><span class="token class-name">Logging</span> level<span class="token punctuation">:</span> @Options<span class="token punctuation">.</span>Value<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span>LogLevel<span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span></code></pre>
+<h2 id="benefits-of-this-approach" tabindex="-1">Benefits of This Approach <a class="header-anchor" href="#benefits-of-this-approach">#</a></h2>
+<p>This implementation provides several advantages over traditional string-based configuration access:</p>
 <ul>
-<li>incorrect casing of the key names (e.g. <code>connectionString</code> instead of <code>ConnectionString</code>)</li>
-<li>typos in the key names (e.g. <code>ConectiongString</code>)</li>
-<li>no intellisense in the IDE for ease of access</li>
-<li>you must check the config JSON structure whenever you want to use a configuration</li>
+<li>Compile-time type checking prevents configuration key typos</li>
+<li>IntelliSense support improves developer productivity</li>
+<li>The <strong>required</strong> modifier ensures all necessary configuration values are provided</li>
+<li><strong>Init</strong>-only properties prevent accidental configuration modifications</li>
 </ul>
-<h2 id="introducing-the-strongly-typed-configuration-class-appsettings" tabindex="-1">Introducing the strongly typed configuration class &quot;AppSettings&quot; <a class="header-anchor" href="#introducing-the-strongly-typed-configuration-class-appsettings">#</a></h2>
-<p>To solve this, create a strongly-typed class that will serve as a model for your app configuration:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> ConnectionString <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> AppName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> AppVersion <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>Then, configure it on app startup:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> appSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">AppSettings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-configuration<span class="token punctuation">.</span><span class="token function">Bind</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// copy IConfiguration key-value pairs to appSettings</span>
-services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// register it in the DI</span></code></pre>
-<p>And finally use it in your app code:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Service</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">;</span>
-  <span class="token keyword">public</span> <span class="token function">Service</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> appSettings<span class="token punctuation">)</span> <span class="token operator">=></span> _appSettings <span class="token operator">=</span> appSettings<span class="token punctuation">;</span>
-  
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>ConnectionString<span class="token punctuation">;</span>
-    <span class="token comment">// ...</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h2 id="accessing-nested-configurations" tabindex="-1">Accessing nested configurations <a class="header-anchor" href="#accessing-nested-configurations">#</a></h2>
-<p>Let's say your configuration JSON contains the following structure:</p>
-<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"Smtp"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"Host"</span><span class="token operator">:</span> <span class="token string">"..."</span><span class="token punctuation">,</span>
-    <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token string">"..."</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>You can access the nested configurations through <code>IConfiguration</code> like this:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// IConfiguration _config = ...</span>
-<span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _config<span class="token punctuation">[</span><span class="token string">"Smtp:Host"</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
-<p>To make this work in your strongly-typed access approach, change the <code>AppSettings</code> class into this:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name">SmtpSection</span> Smtp <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">SmtpSection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token comment">// ...</span>
 
-  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SmtpSection</span>
-  <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Host <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Port <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>And then use it like this in your app code:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// AppSettings _appSettings = ...</span>
-<span class="token class-name"><span class="token keyword">var</span></span> configValue <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>Smtp<span class="token punctuation">.</span>Host<span class="token punctuation">;</span></code></pre>
-<h2 id="validating-strongly-typed-configuration" tabindex="-1">Validating strongly typed configuration <a class="header-anchor" href="#validating-strongly-typed-configuration">#</a></h2>
-<p>Call the <code>appSettings.Validate()</code> method early in the app startup. It will trigger self validation, throwing an exception on errors.</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> appSettings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">AppSettings</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-configuration<span class="token punctuation">.</span><span class="token function">Bind</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span>
-appSettings<span class="token punctuation">.</span><span class="token function">Validate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// NEW: add this here</span>
-services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>appSettings<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Here is a generic implementation to detect missing configurations.
-NOTE: tweak, extend, and change it as per your configuration validation needs.</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
-<span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Property1 <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Property2 <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-  <span class="token comment">// ...</span>
-  
-  <span class="token comment">/// &lt;summary></span>
-  <span class="token comment">/// Ensures all configuration properties have a value that is not null and not empty.</span>
-  <span class="token comment">/// It does not validate if the format of each property value is correct. </span>
-  <span class="token comment">/// &lt;/summary></span>
-  <span class="token comment">/// &lt;exception cref="InvalidOperationException">&lt;/exception></span>
-  <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Validate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token class-name"><span class="token keyword">var</span></span> missingProperties <span class="token operator">=</span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>missingProperties<span class="token punctuation">.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
-      <span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">string</span></span> msg <span class="token operator">=</span> <span class="token string">"AppSettings - missing configs:"</span><span class="token punctuation">;</span>
-      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">InvalidOperationException</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">msg</span><span class="token punctuation">}</span></span><span class="token string"> </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp"><span class="token keyword">string</span><span class="token punctuation">.</span><span class="token function">Join</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">,</span> missingProperties<span class="token punctuation">)</span></span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-  
-  <span class="token comment">/// &lt;summary></span>
-  <span class="token comment">/// Find any missing configuration values with recursion.</span>
-  <span class="token comment">/// &lt;/summary></span>
-  <span class="token comment">/// &lt;param name="obj">&lt;/param></span>
-  <span class="token comment">/// &lt;returns>&lt;/returns></span>
-  <span class="token keyword">private</span> <span class="token return-type class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span></span> obj<span class="token punctuation">)</span>
-  <span class="token punctuation">{</span>
-    <span class="token class-name"><span class="token keyword">var</span></span> missingProperties <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">List<span class="token punctuation">&lt;</span><span class="token keyword">string</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  
-    <span class="token class-name"><span class="token keyword">var</span></span> props <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">GetType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">GetProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> prop <span class="token keyword">in</span> props<span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
-      <span class="token class-name"><span class="token keyword">var</span></span> <span class="token keyword">value</span> <span class="token operator">=</span> prop<span class="token punctuation">.</span><span class="token function">GetValue</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">value</span> <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">||</span> <span class="token keyword">value</span><span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">""</span><span class="token punctuation">)</span>
-      <span class="token punctuation">{</span>
-        missingProperties<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span>prop<span class="token punctuation">.</span>Name<span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-      <span class="token keyword">else</span>
-      <span class="token punctuation">{</span>
-        <span class="token comment">// If the property value is a complex object, then check it's</span>
-        <span class="token comment">// nested properties. </span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">value</span> <span class="token keyword">is</span> <span class="token class-name"><span class="token keyword">object</span></span> <span class="token keyword">and</span> <span class="token keyword">not</span> <span class="token punctuation">(</span><span class="token keyword">string</span> <span class="token keyword">or</span> IEnumerable<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token punctuation">{</span>
-          <span class="token class-name"><span class="token keyword">var</span></span> nestedMissingProperties <span class="token operator">=</span> <span class="token function">DoValidate</span><span class="token punctuation">(</span><span class="token keyword">value</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-          <span class="token keyword">foreach</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> missingProperty <span class="token keyword">in</span> nestedMissingProperties<span class="token punctuation">)</span>
-          <span class="token punctuation">{</span>
-            missingProperties<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">prop<span class="token punctuation">.</span>Name</span><span class="token punctuation">}</span></span><span class="token string">.</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">missingProperty</span><span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  
-    <span class="token keyword">return</span> missingProperties<span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-
-<ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">Understanding and Solving the Select N+1 Problem</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL Query Building With SqlKata in .NET Core</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">What is the Select N+1 Problem and How to Solve it?</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL Query Building With SqlKata in .NET Core</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2024-12-13T09:37:53.866Z -->
+		<!-- This page `/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2025-01-26T23:25:56.585Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
