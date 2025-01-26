@@ -1,5 +1,5 @@
 ---
-title: "Business Rules Refactoring Using the Specification Pattern"
+title: "How to Refactor Business Rules Using the Specification Pattern"
 date: 2015-09-29
 dateUpdated: Last Modified
 permalink: /posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/

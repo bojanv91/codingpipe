@@ -1,5 +1,5 @@
 ---
-title: "Refactoring Feature Envy Code"
+title: "How to refactor Feature Envy Code"
 date: 2017-07-29
 dateUpdated: Last Modified
 permalink: /posts/refactoring-a-feature-envy-code/

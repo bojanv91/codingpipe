@@ -1,5 +1,5 @@
 ---
-title: "Extending Select2 with Adapters"
+title: "How to Extend Select2 with Adapters"
 description: How to extend Select2 appearance and behavior using its adapters and decorators feature
 date: 2017-10-24
 permalink: /posts/extending-select2-with-adapters/
