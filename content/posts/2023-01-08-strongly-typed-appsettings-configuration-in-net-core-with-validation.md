@@ -1,10 +1,10 @@
 ---
-title: "How to Implement Strongly Typed Configuration in .NET Core"
+title: "AppSettings: Typed Configuration in .NET Core using the Options Pattern"
 date: 2023-01-08
 dateUpdated: Last Modified
 permalink: /posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/
 tags:
-  - .NET Core
+  - ASP.NET Core
 layout: layouts/post.njk
 ---
 
@@ -45,28 +45,26 @@ Register in **Program.cs**:
 
 ```csharp
 builder.Services.Configure<AppSettings>(builder.Configuration);
+builder.Services.AddSingleton(x => x.GetRequiredService<IOptions<AppSettings>>().Value);
 ```
 
 Use in services:
 
 ```csharp
-public class MyService
+public class MyService(AppSettings _appSettings)
 {
-    private readonly AppSettings _appSettings;
-    
-    public MyService(IOptions<AppSettings> options)
-    {
-        _appSettings = options.Value;
-    }
+    public void DoWork()
+		{
+				var connectionString = _appSettings.ConnectionStrings.DefaultConnection;
+				// ...
+		}
 }
 ```
 
 Use in Blazor SSR Razor file:
 
 ```csharp
-@inject IOptions<AppSettings> Options
-
-<p>Logging level: @Options.Value.Logging.LogLevel</p>
+@inject AppSettings appSettings
 ```
 
 ## Benefits of This Approach

@@ -1,5 +1,5 @@
 ---
-title: "Dynamic SQL Query Building With SqlKata in .NET Core"
+title: "Dynamic SQL Query Building in .NET Core using SqlKata"
 date: 2023-01-23
 dateUpdated: Last Modified
 permalink: /posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/

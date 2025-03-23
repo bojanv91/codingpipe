@@ -1,5 +1,5 @@
 ---
-title: "Excel Export with ClosedXML in C# and .NET Core"
+title: "How to Export to Excel in C#/.NET Core using ClosedXML"
 date: 2023-08-12
 dateUpdated: Last Modified
 permalink: /posts/exporting-c-objects-to-excel-with-closedxml/

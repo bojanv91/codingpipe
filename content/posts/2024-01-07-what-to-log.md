@@ -1,5 +1,5 @@
 ---
-title: "What to Log in Applications?"
+title: "What to Log in Apps"
 date: 2024-01-07
 dateUpdated: Last Modified
 permalink: /posts/what-to-log/

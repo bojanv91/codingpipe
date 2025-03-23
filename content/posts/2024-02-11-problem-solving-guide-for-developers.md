@@ -4,7 +4,7 @@ date: 2024-02-11
 dateUpdated: Last Modified
 permalink: /posts/problem-solving-guide-for-developers/
 tags: 
-  - Misc
+  - Programming
 layout: layouts/post.njk
 ---
 The most common mistake developers make when solving problems is immediately starting with writing code for a solution that is not properly thought out for a problem that is not clearly understood.

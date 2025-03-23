@@ -4,10 +4,13 @@ date: 2023-08-18
 dateUpdated: Last Modified
 permalink: /posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/
 tags:
-  - .NET Core
+  - ASP.NET Core
   - Logging
+	- Serilog
 layout: layouts/post.njk
 ---
+
+*NOTE from year 2025*: This post is from 2023, and it may contain outdated information. Please verify the information provided here.
 
 In this post, we'll add and configure the *Serilog* logger to a Windows Service app. This post assumes you've already [built a Windows Service app project](/building-windows-service-applications-in-net-core) and made sure your current app directory path is fixed as described in the referenced post.
 

@@ -1,5 +1,5 @@
 ---
-title: "What is the Select N+1 Problem and How to Solve it?"
+title: "Select N+1 Data Access Performance Problem"
 description: Select N+1 is a data-access performance problem. Any code that iterates thru a collection of elements, and executes additional query for each element, has this problem.
 date: 2018-06-10
 permalink: /posts/select-n-plus-1-problem/
