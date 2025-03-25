@@ -4,9 +4,9 @@ date: 2025-03-23
 dateUpdated: Last Modified
 permalink: /posts/serilog-correlationid-background-task/
 tags:
-	- ASP.NET Core
-	- Serilog
-	- Logging
+  - ASP.NET Core
+  - Serilog
+  - Logging
 layout: layouts/post.njk
 ---
 
