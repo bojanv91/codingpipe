@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>How to Implement Strongly Typed Configuration in .NET Core</title>
+		<title>AppSettings: Typed Configuration in .NET Core using the Options Pattern</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -521,14 +521,14 @@ h1 {
 
 		<main id="skip">
 			
-<h1>How to Implement Strongly Typed Configuration in .NET Core</h1>
+<h1>AppSettings: Typed Configuration in .NET Core using the Options Pattern</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-01-08">Jan 8, 2023</time></li>
 	<li><span> • </span></li>
 	<li><span>1 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-core/" class="post-tag">.NET Core</a></li>
+		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a></li>
 </ul>
 
 <p>Create a strongly typed configuration class for <strong>appsettings.json</strong> using <strong>required</strong> and <strong>init</strong> properties:</p>
@@ -557,21 +557,19 @@ h1 {
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>Register in <strong>Program.cs</strong>:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IOptions<span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>Use in services:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">;</span>
-    
-    <span class="token keyword">public</span> <span class="token function">MyService</span><span class="token punctuation">(</span><span class="token class-name">IOptions<span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span> options<span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
-        _appSettings <span class="token operator">=</span> options<span class="token punctuation">.</span>Value<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token punctuation">{</span>
+				<span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>ConnectionStrings<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">;</span>
+				<span class="token comment">// ...</span>
+		<span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>Use in Blazor SSR Razor file:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">@inject IOptions<span class="token operator">&lt;</span>AppSettings<span class="token operator">></span> Options
-
-<span class="token operator">&lt;</span>p<span class="token operator">></span><span class="token class-name">Logging</span> level<span class="token punctuation">:</span> @Options<span class="token punctuation">.</span>Value<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span>LogLevel<span class="token operator">&lt;</span><span class="token operator">/</span>p<span class="token operator">></span></code></pre>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">@inject AppSettings appSettings</code></pre>
 <h2 id="benefits-of-this-approach" tabindex="-1">Benefits of This Approach <a class="header-anchor" href="#benefits-of-this-approach">#</a></h2>
 <p>This implementation provides several advantages over traditional string-based configuration access:</p>
 <ul>
@@ -581,14 +579,14 @@ h1 {
 <li><strong>Init</strong>-only properties prevent accidental configuration modifications</li>
 </ul>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">What is the Select N+1 Problem and How to Solve it?</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL Query Building With SqlKata in .NET Core</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">Select N+1 Data Access Performance Problem</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL Query Building in .NET Core using SqlKata</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2025-01-26T23:25:56.585Z -->
+		<!-- This page `/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2025-03-25T17:37:48.703Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>

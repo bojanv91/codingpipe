@@ -4,12 +4,121 @@
 	<subtitle>I am writing self-notes that might be useful for other people as well on software development and programming in general.</subtitle>
 	<link href="https://bojanveljanovski.com/feed/feed.xml" rel="self"/>
 	<link href="https://bojanveljanovski.com/"/>
-	<updated>2024-10-30T00:00:00Z</updated>
+	<updated>2025-03-23T00:00:00Z</updated>
 	<id>https://bojanveljanovski.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
 		<email>bojanv91+blog@gmail.com</email>
 	</author>
+	
+	<entry>
+		<title>Correlation IDs with Serilog in ASP.NET Core Background Tasks</title>
+		<link href="https://bojanveljanovski.com/posts/serilog-correlationid-background-task/"/>
+		<updated>2025-03-23T00:00:00Z</updated>
+		<id>https://bojanveljanovski.com/posts/serilog-correlationid-background-task/</id>
+		<content type="html">&lt;p&gt;Background tasks in ASP.NET Core applications run independently of the HTTP pipeline, which means they don&#39;t have access to the HTTP request X-Correlation-Id header that&#39;s typically used for correlating logs in web applications. As a result, the correlation ID for background tasks is always null by default. To solve this problem, we should create a unique correlation ID for each background task execution cycle, allowing us to correlate all logs from a single execution run.&lt;/p&gt;
+&lt;h2 id=&quot;setting-up-the-logger-extension&quot; tabindex=&quot;-1&quot;&gt;Setting Up the Logger Extension &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/serilog-correlationid-background-task/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LoggerExtensions&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
+		&lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
+		&lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;/summary&gt;&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;param name=&quot;baseLogger&quot;&gt;The base logger instance.&amp;lt;/param&gt;&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;returns&gt;A new logger instance with a correlation ID.&amp;lt;/returns&gt;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;ILogger&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CorrelationId&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Guid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NewGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ToString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;using-correlation-ids-in-background-services&quot; tabindex=&quot;-1&quot;&gt;Using Correlation IDs in Background Services &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/serilog-correlationid-background-task/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here&#39;s a minimal example of implementing correlation IDs in a background service:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyBackgroundTask&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;BackgroundService&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; _serviceLogger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;MyBackgroundTask&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ExecuteAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;CancellationToken&lt;/span&gt; stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Background service started&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IsCancellationRequested&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// Create a contextual logger from the base logger with a unique&lt;/span&gt;
+						&lt;span class=&quot;token comment&quot;&gt;// correlation ID for this execution cycle&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting background task cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+            &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;token comment&quot;&gt;// Perform the actual work with the correlation ID attached to all logs&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWorkAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;logger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+                logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Completed background task cycle successfully&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Exception&lt;/span&gt; ex&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;token comment&quot;&gt;// All exception logs will include the same correlation ID&lt;/span&gt;
+                logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ex&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Error executing background task&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;TimeSpan&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;FromMinutes&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+        _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Warning&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Background service is stopping&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWorkAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; logger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// This method simulates the work being done by the background task&lt;/span&gt;
+        logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting to process items&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        &lt;span class=&quot;token comment&quot;&gt;// Simulate some processing time&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Processed 5 items successfully&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        &lt;span class=&quot;token comment&quot;&gt;// More processing&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Debug&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Finalizing processing cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;configuring-serilog-in-program-cs&quot; tabindex=&quot;-1&quot;&gt;Configuring Serilog in Program.cs &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/serilog-correlationid-background-task/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Ensure Serilog is configured to include correlation IDs:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UseSerilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; 
+    configuration
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ReadFrom&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Enrich&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithCorrelationId&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WriteTo&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token named-parameter punctuation&quot;&gt;outputTemplate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; 
+            &lt;span class=&quot;token string&quot;&gt;&quot;[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj} {Properties:j}{NewLine}{Exception}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;example-log-output&quot; tabindex=&quot;-1&quot;&gt;Example Log Output &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/serilog-correlationid-background-task/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here&#39;s an example of what the logs might look like in your console:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;HTTP Request Logs (with correlation ID from HTTP header):&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 HTTP GET /api/products responded 200 in 45.6ms
+[10:15:22 DBG] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Retrieved 10 products from database
+[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Request completed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;Background Task Logs (with generated correlation ID):&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[10:20:00 INF] Background service started
+[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting background task cycle
+[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting to process items
+[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Processed 5 items successfully
+[10:20:00 DBG] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Finalizing processing cycle
+[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Completed background task cycle successfully
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note how each execution of the background task gets its own correlation ID that&#39;s different from HTTP request correlation IDs, but all logs from the same background task execution cycle share the same ID.&lt;/p&gt;
+&lt;h2 id=&quot;nuget-dependencies&quot; tabindex=&quot;-1&quot;&gt;NuGet Dependencies &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/serilog-correlationid-background-task/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;For a complete setup, you&#39;ll need to install the following NuGet packages:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.AspNetCore&lt;/strong&gt; - For core Serilog integration with ASP.NET Core&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Enrichers.CorrelationId&lt;/strong&gt; - For the &lt;code&gt;.Enrich.WithCorrelationId()&lt;/code&gt; extension&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Console&lt;/strong&gt; - For console output (if that&#39;s where you&#39;re sending logs)&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Use Enums Over Booleans for Status Fields</title>
@@ -612,7 +721,7 @@ aws configure &lt;span class=&quot;token function&quot;&gt;set&lt;/span&gt; aws_
 	</entry>
 	
 	<entry>
-		<title>What to Log in Applications?</title>
+		<title>What to Log in Apps</title>
 		<link href="https://bojanveljanovski.com/posts/what-to-log/"/>
 		<updated>2024-01-07T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/what-to-log/</id>
@@ -807,7 +916,8 @@ choco feature enable &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;
 		<link href="https://bojanveljanovski.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/"/>
 		<updated>2023-08-18T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</id>
-		<content type="html">&lt;p&gt;In this post, we&#39;ll add and configure the &lt;em&gt;Serilog&lt;/em&gt; logger to a Windows Service app. This post assumes you&#39;ve already &lt;a href=&quot;https://bojanveljanovski.com/building-windows-service-applications-in-net-core&quot;&gt;built a Windows Service app project&lt;/a&gt; and made sure your current app directory path is fixed as described in the referenced post.&lt;/p&gt;
+		<content type="html">&lt;p&gt;&lt;em&gt;NOTE from year 2025&lt;/em&gt;: This post is from 2023, and it may contain outdated information. Please verify the information provided here.&lt;/p&gt;
+&lt;p&gt;In this post, we&#39;ll add and configure the &lt;em&gt;Serilog&lt;/em&gt; logger to a Windows Service app. This post assumes you&#39;ve already &lt;a href=&quot;https://bojanveljanovski.com/building-windows-service-applications-in-net-core&quot;&gt;built a Windows Service app project&lt;/a&gt; and made sure your current app directory path is fixed as described in the referenced post.&lt;/p&gt;
 &lt;h2 id=&quot;add-and-configure-serilog&quot; tabindex=&quot;-1&quot;&gt;Add and configure &lt;em&gt;Serilog&lt;/em&gt; &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;First,&lt;/strong&gt; we need to install the following &lt;em&gt;Serilog&lt;/em&gt; NuGet packages into our app:&lt;/p&gt;
 &lt;ul&gt;
@@ -1085,7 +1195,7 @@ Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span cla
 	</entry>
 	
 	<entry>
-		<title>Excel Export with ClosedXML in C# and .NET Core</title>
+		<title>How to Export to Excel in C#/.NET Core using ClosedXML</title>
 		<link href="https://bojanveljanovski.com/posts/exporting-c-objects-to-excel-with-closedxml/"/>
 		<updated>2023-08-12T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/exporting-c-objects-to-excel-with-closedxml/</id>
@@ -1318,7 +1428,7 @@ Some failures go away if you just re-run the requests, and sometimes you&#39;ll 
 	</entry>
 	
 	<entry>
-		<title>Dynamic SQL Query Building With SqlKata in .NET Core</title>
+		<title>Dynamic SQL Query Building in .NET Core using SqlKata</title>
 		<link href="https://bojanveljanovski.com/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/"/>
 		<updated>2023-01-23T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/</id>
@@ -1469,7 +1579,7 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>How to Implement Strongly Typed Configuration in .NET Core</title>
+		<title>AppSettings: Typed Configuration in .NET Core using the Options Pattern</title>
 		<link href="https://bojanveljanovski.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/"/>
 		<updated>2023-01-08T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</id>
@@ -1499,21 +1609,19 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Register in &lt;strong&gt;Program.cs&lt;/strong&gt;:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddSingleton&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetRequiredService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IOptions&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Value&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Use in services:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyService&lt;/span&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    
-    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;IOptions&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; options&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        _appSettings &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; options&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Value&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWork&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+				&lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Use in Blazor SSR Razor file:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;@inject IOptions&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; Options
-
-&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;p&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Logging&lt;/span&gt; level&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; @Options&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Value&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Logging&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;LogLevel&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;p&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;@inject AppSettings appSettings&lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;benefits-of-this-approach&quot; tabindex=&quot;-1&quot;&gt;Benefits of This Approach &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;This implementation provides several advantages over traditional string-based configuration access:&lt;/p&gt;
 &lt;ul&gt;
@@ -1526,7 +1634,7 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>What is the Select N+1 Problem and How to Solve it?</title>
+		<title>Select N+1 Data Access Performance Problem</title>
 		<link href="https://bojanveljanovski.com/posts/select-n-plus-1-problem/"/>
 		<updated>2018-06-10T00:00:00Z</updated>
 		<id>https://bojanveljanovski.com/posts/select-n-plus-1-problem/</id>
