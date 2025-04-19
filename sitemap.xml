@@ -168,111 +168,121 @@
 	
 	<url>
 		<loc>https://bojanveljanovski.com/about/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/links/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/net-framework/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/data-access/</loc>
-		<lastmod>2025-03-25</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://bojanveljanovski.com/tags/architecture/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/code/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/tags/architecture/</loc>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/misc/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/javascript/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/net-core/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/asp-net-core/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/postgres/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/docker/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/testing/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/programming/</loc>
-		<lastmod>2025-03-25</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://bojanveljanovski.com/tags/powershell/</loc>
-		<lastmod>2025-03-25</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://bojanveljanovski.com/tags/snippets/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/logging/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/serilog/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/tags/powershell/</loc>
+		<lastmod>2025-04-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/tags/snippets/</loc>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/aws/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://bojanveljanovski.com/tags/problemdetails/</loc>
-		<lastmod>2025-03-25</lastmod>
+		<lastmod>2025-04-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/tags/patterns/</loc>
+		<lastmod>2025-04-19</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/posts/transformation-pipelines-solving-complex-data-processing-loops/</loc>
+		<lastmod>2025-04-20</lastmod>
 	</url>
 </urlset>
