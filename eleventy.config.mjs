@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import markdownItAnchor from "markdown-it-anchor";
+import markdownItContainer from "markdown-it-container";
 
 import pluginRss from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
@@ -108,10 +109,20 @@ export default function(eleventyConfig) {
 			slugify: eleventyConfig.getFilter("slugify")
 		});
 
-		//mdLib.use(require)
-		//markdown-it-github-alerts
-		//markdown-it-footnote
-		//https://rknight.me/blog/adding-githubstyle-markdown-alerts-to-eleventy/
+		mdLib.use(markdownItContainer, "note", {
+			validate: function(params) {
+				return params.trim() === "note";
+			},
+			render: function (tokens, idx) {
+				if (tokens[idx].nesting === 1) {
+					// opening tag
+					return '<div class="custom-note-container note">';
+				} else {
+					// closing tag
+					return '</div>';
+				}
+			}
+		});
 	});
 
 	eleventyConfig.addShortcode("currentBuildDate", () => {

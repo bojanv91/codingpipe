@@ -195,9 +195,9 @@ Creating intermediate data structures improves code clarity, which is often wort
 
 This approach leverages several established patterns:
 
-- **Pipes and Filters**: Connected processing steps with data flowing between them
-- **Single Responsibility Principle**: Each step has one reason to change
-- **Map-Reduce**: Map raw data to workable form, transform it, reduce to output
+- **Pipes and Filters.** Connected processing steps with data flowing between them
+- **Single Responsibility Principle.** Each step has one reason to change
+- **Map-Reduce.** Map raw data to workable form, transform it, reduce to output
 
 Unlike distributed implementations of these patterns, our approach applies them at method level for everyday code.
 
