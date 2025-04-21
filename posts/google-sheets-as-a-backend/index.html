@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>How to Export to Excel in C#/.NET Core using ClosedXML</title>
+		<title>Using Google Sheets API as a Backend</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -527,59 +527,103 @@ h1 {
 
 		<main id="skip">
 			
-<h1>How to Export to Excel in C#/.NET Core using ClosedXML</h1>
+<h1>Using Google Sheets API as a Backend</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-08-12">Aug 12, 2023</time></li>
+	<li><time datetime="2025-04-22">Apr 22, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>4 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-core/" class="post-tag">.NET Core</a></li>
+		<li><a href="/tags/programming/" class="post-tag">Programming</a></li>
 </ul>
 
-<p>Used library: ClosedXML (<a href="https://docs.closedxml.io">docs site</a>; <a href="https://github.com/ClosedXML/ClosedXML">github</a>)</p>
-<p>The simplest way to export any objects IEnumerable to Excel is by using ClosedXML's <code>IXLTable.InsertTable&lt;T&gt;(IEnumerable&lt;T&gt; data)</code> method.</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token class-name">IEnumerable<span class="token punctuation">&lt;</span>AuthorDto<span class="token punctuation">></span></span> items <span class="token operator">=</span> <span class="token function">GetAuthors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>Many business tools start as spreadsheets with calculations made by finance teams. When more people need to use these tools, companies often rebuild them as custom apps. This works well for many long-term projects.</p>
+<p>But sometimes another approach works better - especially when you need to deliver quickly and let business experts keep managing formulas. This article shows how to use Google Sheets as a calculation engine behind a web app, adding another useful tool to your development options.</p>
+<h2 id="why-consider-google-sheets-as-a-backend" tabindex="-1">Why Consider Google Sheets as a Backend? <a class="header-anchor" href="#why-consider-google-sheets-as-a-backend">#</a></h2>
+<p>This approach offers key benefits:</p>
+<ol>
+<li><strong>Use existing formulas</strong>. No need to rewrite spreadsheet calculations in code</li>
+<li><strong>Keep business users in control</strong>. Let experts update formulas using familiar tools</li>
+<li><strong>Launch faster</strong>. Skip the time needed to recode all formulas</li>
+<li><strong>Easy formula updates</strong>. Business users can change calculations without developers</li>
+<li><strong>Simplify development</strong>. Avoid converting complex Excel logic to code</li>
+</ol>
+<h2 id="how-it-works" tabindex="-1">How It Works <a class="header-anchor" href="#how-it-works">#</a></h2>
+<p>The solution has four main components:</p>
+<ol>
+<li><strong>Template Spreadsheet</strong>. Contains all calculations and reporting layouts</li>
+<li><strong>Web Interface</strong>. Provides user inputs and displays results</li>
+<li><strong>Integration Service</strong>. Communicates with the Google Sheets API to:
+<ul>
+<li>Create template copies for each user session</li>
+<li>Update cells with user data</li>
+<li>Retrieve calculated results</li>
+<li>Generate reports/PDFs</li>
+<li>Clean up temporary spreadsheets</li>
+</ul>
+</li>
+<li><strong>Security Layer</strong>. Handles authentication and permissions</li>
+</ol>
+<h2 id="ideal-use-cases" tabindex="-1">Ideal Use Cases <a class="header-anchor" href="#ideal-use-cases">#</a></h2>
+<p>This approach works particularly well for:</p>
+<ul>
+<li><strong>Financial modeling</strong>. When calculations frequently change based on business conditions</li>
+<li><strong>Pricing engines</strong>. With complex discount structures and approval rules</li>
+<li><strong>Reporting systems</strong>. Where business users need to control calculation methodology</li>
+<li><strong>Risk assessment tools</strong>. With formulas maintained by domain experts</li>
+</ul>
+<h2 id="real-world-example-sales-quoting-tool" tabindex="-1">Real-World Example: Sales Quoting Tool <a class="header-anchor" href="#real-world-example-sales-quoting-tool">#</a></h2>
+<p>I implemented this approach to build a sales quoting tool for a client. The client's organization had already developed complex pricing calculations across 10 different interconnected spreadsheets. These spreadsheets contained years of business expertise and were regularly maintained by the client's finance team.</p>
+<p>The client needed to make these calculations available to their sales agents sooner rather than later, while still allowing their stakeholders to maintain and update the various formulas in the way they knew best - using spreadsheets.</p>
+<p>While a traditional development approach would have eventually delivered a robust solution, we faced some practical considerations:</p>
+<ul>
+<li>The complex calculations would take significant time to translate into code and validate</li>
+<li>The client's stakeholders needed to maintain the ability to quickly adjust pricing formulas</li>
+<li>The client's sales team needed access to this functionality on the web within a tight timeframe</li>
+</ul>
+<p>Our solution used the existing spreadsheet logic while addressing the multi-user needs:</p>
+<ol>
+<li>We kept the client's existing spreadsheets with all pricing formulas intact</li>
+<li>We built an integration layer using the Google Sheets API</li>
+<li>We created a simple web interface for the client's sales agents to login, input deal parameters, and get a quoting report</li>
+</ol>
+<p>The resulting workflow provided the best of both worlds:</p>
+<ul>
+<li>The client's sales agents enter customer requirements via the web interface</li>
+<li>The web API passes this data to a copy of the template spreadsheet (using Google Sheets API)</li>
+<li>The spreadsheet performs all complex pricing calculations automatically</li>
+<li>The system retrieves the calculated results and generates a PDF quote</li>
+<li>The sales agent receives a URL to access the final quote</li>
+</ul>
+<p>Most importantly, the client's finance team could continue to refine pricing rules directly in the template spreadsheet, with changes immediately available to all users. This preserved their autonomy while giving sales agents a streamlined application experience.</p>
+<p>This approach allowed the client to get a working solution much faster than rewiring all the formulas, with the added benefit of keeping calculation maintenance in the hands of their business experts.</p>
+<h2 id="when-this-approach-makes-sense" tabindex="-1">When This Approach Makes Sense <a class="header-anchor" href="#when-this-approach-makes-sense">#</a></h2>
+<p>This approach is particularly valuable when:</p>
+<ul>
+<li>You have complex calculations already built and validated in spreadsheets</li>
+<li>Clients need their business stakeholders to maintain direct control over calculation rules</li>
+<li>The spreadsheet logic spans multiple interconnected calculations</li>
+<li>Business logic evolves frequently based on market conditions</li>
+<li>The traditional change request -&gt; development -&gt; testing -&gt; deployment cycle creates unacceptable delays for the business/sales teams</li>
+</ul>
+<p>Key considerations:</p>
+<ul>
+<li>Google imposes API rate limits</li>
+<li>Each API call adds latency</li>
+<li>Best for moderate user volumes</li>
+<li>Proper template permissions must be set</li>
+</ul>
+<h2 id="conclusion" tabindex="-1">Conclusion <a class="header-anchor" href="#conclusion">#</a></h2>
+<p>The Google Sheets API approach keeps calculations in spreadsheets where business experts can update them directly, while providing end users with a professional application interface. This method cuts development time, enables quicker changes, and works particularly well for projects where rebuilding complex Excel logic in code would create delays.</p>
 
-<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> wb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">XLWorkbook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> ws <span class="token operator">=</span> wb<span class="token punctuation">.</span><span class="token function">AddWorksheet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Inserts the collection to Excel as a table with a header row.</span>
-ws<span class="token punctuation">.</span><span class="token function">Cell</span><span class="token punctuation">(</span><span class="token string">"A1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">InsertTable</span><span class="token punctuation">(</span>items<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Adjust column size to contents.</span>
-ws<span class="token punctuation">.</span><span class="token function">Columns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AdjustToContents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Save to local file system.</span>
-<span class="token class-name"><span class="token keyword">var</span></span> filename <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Export - </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>UtcNow</span><span class="token format-string"><span class="token punctuation">:</span>yyyyMMddHHmmss</span><span class="token punctuation">}</span></span><span class="token string">.xlsx"</span></span><span class="token punctuation">;</span>
-wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>In ASP.NET you can use the following code to return a downloadable Excel file:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token comment">// &lt;-- the above code --></span>
-<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> stream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MemoryStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> content <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> contentType <span class="token operator">=</span> <span class="token string">"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> <span class="token function">File</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> contentType<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>The <code>AuthorDto</code> can be any C# class object. Here is this example's class:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AuthorDto</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> FirstName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> LastName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> ContactEmail <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>And here is the generated Excel table:</p>
-<p><img src="/img/2023-08-12-exporting-to-excel-with-closedxml-in-dotnet/img01-excel-file-sample-table.png" alt=""></p>
-<p>For further table customization check the <a href="https://docs.closedxml.io/en/latest/features/tables.html">tables feature</a> in the official docs.</p>
-
-<ul class="links-nextprev"><li>Previous: <a href="/posts/overriding-services-in-aspnet-core-integration-tests/">Mocking Services in ASP.NET Core Tests with ConfigureTestServices()</a></li><li>Next: <a href="/posts/a-step-by-step-example-in-pseudocode-driven-programming/">Pseudocode-Driven Programming: Step-by-Step Example</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/power-of-prototyping/">The Power of Prototyping in Unfamiliar Codebases</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/exporting-c-objects-to-excel-with-closedxml/` was built on 2025-04-21T21:16:59.621Z -->
+		<!-- This page `/posts/google-sheets-as-a-backend/` was built on 2025-04-21T21:16:59.624Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>

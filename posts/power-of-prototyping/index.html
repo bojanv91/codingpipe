@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>How to Export to Excel in C#/.NET Core using ClosedXML</title>
+		<title>The Power of Prototyping in Unfamiliar Codebases</title>
 		<meta name="description" content="I am writing self-notes that might be useful for other people as well on software development and programming in general.">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -527,59 +527,79 @@ h1 {
 
 		<main id="skip">
 			
-<h1>How to Export to Excel in C#/.NET Core using ClosedXML</h1>
+<h1>The Power of Prototyping in Unfamiliar Codebases</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-08-12">Aug 12, 2023</time></li>
+	<li><time datetime="2025-04-21">Apr 21, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>3 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-core/" class="post-tag">.NET Core</a></li>
+		<li><a href="/tags/programming/" class="post-tag">Programming</a> • </li>
+		<li><a href="/tags/techniques/" class="post-tag">Techniques</a></li>
 </ul>
 
-<p>Used library: ClosedXML (<a href="https://docs.closedxml.io">docs site</a>; <a href="https://github.com/ClosedXML/ClosedXML">github</a>)</p>
-<p>The simplest way to export any objects IEnumerable to Excel is by using ClosedXML's <code>IXLTable.InsertTable&lt;T&gt;(IEnumerable&lt;T&gt; data)</code> method.</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token class-name">IEnumerable<span class="token punctuation">&lt;</span>AuthorDto<span class="token punctuation">></span></span> items <span class="token operator">=</span> <span class="token function">GetAuthors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> wb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">XLWorkbook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> ws <span class="token operator">=</span> wb<span class="token punctuation">.</span><span class="token function">AddWorksheet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Inserts the collection to Excel as a table with a header row.</span>
-ws<span class="token punctuation">.</span><span class="token function">Cell</span><span class="token punctuation">(</span><span class="token string">"A1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">InsertTable</span><span class="token punctuation">(</span>items<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Adjust column size to contents.</span>
-ws<span class="token punctuation">.</span><span class="token function">Columns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AdjustToContents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// Save to local file system.</span>
-<span class="token class-name"><span class="token keyword">var</span></span> filename <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Export - </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>UtcNow</span><span class="token format-string"><span class="token punctuation">:</span>yyyyMMddHHmmss</span><span class="token punctuation">}</span></span><span class="token string">.xlsx"</span></span><span class="token punctuation">;</span>
-wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>In ASP.NET you can use the following code to return a downloadable Excel file:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token comment">// &lt;-- the above code --></span>
-<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> stream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MemoryStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> content <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> contentType <span class="token operator">=</span> <span class="token string">"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> <span class="token function">File</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> contentType<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>The <code>AuthorDto</code> can be any C# class object. Here is this example's class:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AuthorDto</span>
+<p>When working with unfamiliar or complex codebase, building a quick prototype in a separate project can save you time and reduce risks before making any production code changes. With modern AI tools, you can create prototypes in hours instead of days.</p>
+<h2 id="why-build-a-prototype" tabindex="-1">Why Build a Prototype? <a class="header-anchor" href="#why-build-a-prototype">#</a></h2>
+<p>A prototype gives you a safe space to try ideas without breaking existing code. Benefits include:</p>
+<ul>
+<li><strong>Better understanding.</strong> Working with a solution in isolation helps you understand the problem fully</li>
+<li><strong>Lower risk.</strong> Find technical limitations and issues early, before touching production code</li>
+<li><strong>More accurate planning.</strong> Give better time estimates based on prototype results and new learning</li>
+<li><strong>Clearer communication.</strong> Show stakeholders something concrete instead of just explaining ideas</li>
+</ul>
+<h2 id="how-to-create-effective-prototypes" tabindex="-1">How to Create Effective Prototypes <a class="header-anchor" href="#how-to-create-effective-prototypes">#</a></h2>
+<p>Create a dedicated prototype project structure:</p>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">YourSolution/
+└── Prototypes/
+    ├── NewIntegration.Tests/
+    ├── EmailApiTrial/
+    ├── UIPlayground/
+    ├── RefactoringProposal02/
+    └── PerformanceBenchmarks/</code></pre>
+<p>Keep your prototypes:</p>
+<ul>
+<li>Minimal (test only what you need to understand)</li>
+<li>Disposable (don't worry about code quality or architecture)</li>
+<li>Self-contained (avoid dependencies on production code)</li>
+<li>Documented (capture what you learned)</li>
+</ul>
+<p>After prototyping, bring the <strong>concepts</strong> you learned to production code, not the prototype code itself.</p>
+<h2 id="no-need-to-ask-permission" tabindex="-1">No Need to Ask Permission <a class="header-anchor" href="#no-need-to-ask-permission">#</a></h2>
+<p>You don't need special approval to create a prototype, just like you don't need permission to write tests, refactor code, or document systems.</p>
+<p>A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast delivery, a quick prototype actually saves time, not wastes it.</p>
+<h2 id="make-it-a-regular-practice" tabindex="-1">Make It a Regular Practice <a class="header-anchor" href="#make-it-a-regular-practice">#</a></h2>
+<p>The most effective developers have prototyping as a regular part of their toolkit.</p>
+<p>When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.</p>
+<h2 id="example-testing-a-new-sdk" tabindex="-1">Example: Testing a New SDK <a class="header-anchor" href="#example-testing-a-new-sdk">#</a></h2>
+<p>One of the use cases for prototyping is when integrating a new SDK or library:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Don't do this first:</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SdkWrapper</span>
 <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> FirstName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> LastName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> ContactEmail <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">NewSdk</span> _sdk<span class="token punctuation">;</span>
+    <span class="token comment">// Creating abstractions for an SDK you don't understand yet</span>
 <span class="token punctuation">}</span></code></pre>
-<p>And here is the generated Excel table:</p>
-<p><img src="/img/2023-08-12-exporting-to-excel-with-closedxml-in-dotnet/img01-excel-file-sample-table.png" alt=""></p>
-<p>For further table customization check the <a href="https://docs.closedxml.io/en/latest/features/tables.html">tables feature</a> in the official docs.</p>
+<p>Instead:</p>
+<ol>
+<li>Create a prototype project</li>
+<li>Use AI to generate scaffolding (e.g. prompt: &quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&quot;)</li>
+<li>Try different SDK features directly</li>
+<li>Test error cases and limits</li>
+<li>Understand how the SDK works</li>
+<li><em>Then</em> design your production integration based on what you learned</li>
+</ol>
+<p>This lets you experiment freely before committing to a design in your production codebase.</p>
+<h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
+<p>Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don't wait for permission—prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.</p>
+<p>This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/overriding-services-in-aspnet-core-integration-tests/">Mocking Services in ASP.NET Core Tests with ConfigureTestServices()</a></li><li>Next: <a href="/posts/a-step-by-step-example-in-pseudocode-driven-programming/">Pseudocode-Driven Programming: Step-by-Step Example</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/transformation-pipelines-solving-complex-data-processing-loops/">Transformation Pipelines: Solving Complex Data Processing Loops</a></li><li>Next: <a href="/posts/google-sheets-as-a-backend/">Using Google Sheets API as a Backend</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/exporting-c-objects-to-excel-with-closedxml/` was built on 2025-04-21T21:16:59.621Z -->
+		<!-- This page `/posts/power-of-prototyping/` was built on 2025-04-21T21:16:59.624Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>

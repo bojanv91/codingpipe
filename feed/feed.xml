@@ -4,12 +4,159 @@
 	<subtitle>I am writing self-notes that might be useful for other people as well on software development and programming in general.</subtitle>
 	<link href="https://bojanveljanovski.com/feed/feed.xml" rel="self"/>
 	<link href="https://bojanveljanovski.com/"/>
-	<updated>2025-04-20T00:00:00Z</updated>
+	<updated>2025-04-22T00:00:00Z</updated>
 	<id>https://bojanveljanovski.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
 		<email>bojanv91+blog@gmail.com</email>
 	</author>
+	
+	<entry>
+		<title>Using Google Sheets API as a Backend</title>
+		<link href="https://bojanveljanovski.com/posts/google-sheets-as-a-backend/"/>
+		<updated>2025-04-22T00:00:00Z</updated>
+		<id>https://bojanveljanovski.com/posts/google-sheets-as-a-backend/</id>
+		<content type="html">&lt;p&gt;Many business tools start as spreadsheets with calculations made by finance teams. When more people need to use these tools, companies often rebuild them as custom apps. This works well for many long-term projects.&lt;/p&gt;
+&lt;p&gt;But sometimes another approach works better - especially when you need to deliver quickly and let business experts keep managing formulas. This article shows how to use Google Sheets as a calculation engine behind a web app, adding another useful tool to your development options.&lt;/p&gt;
+&lt;h2 id=&quot;why-consider-google-sheets-as-a-backend&quot; tabindex=&quot;-1&quot;&gt;Why Consider Google Sheets as a Backend? &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#why-consider-google-sheets-as-a-backend&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This approach offers key benefits:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Use existing formulas&lt;/strong&gt;. No need to rewrite spreadsheet calculations in code&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Keep business users in control&lt;/strong&gt;. Let experts update formulas using familiar tools&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Launch faster&lt;/strong&gt;. Skip the time needed to recode all formulas&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Easy formula updates&lt;/strong&gt;. Business users can change calculations without developers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Simplify development&lt;/strong&gt;. Avoid converting complex Excel logic to code&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;how-it-works&quot; tabindex=&quot;-1&quot;&gt;How It Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#how-it-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The solution has four main components:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Template Spreadsheet&lt;/strong&gt;. Contains all calculations and reporting layouts&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Web Interface&lt;/strong&gt;. Provides user inputs and displays results&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integration Service&lt;/strong&gt;. Communicates with the Google Sheets API to:
+&lt;ul&gt;
+&lt;li&gt;Create template copies for each user session&lt;/li&gt;
+&lt;li&gt;Update cells with user data&lt;/li&gt;
+&lt;li&gt;Retrieve calculated results&lt;/li&gt;
+&lt;li&gt;Generate reports/PDFs&lt;/li&gt;
+&lt;li&gt;Clean up temporary spreadsheets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Security Layer&lt;/strong&gt;. Handles authentication and permissions&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;ideal-use-cases&quot; tabindex=&quot;-1&quot;&gt;Ideal Use Cases &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#ideal-use-cases&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This approach works particularly well for:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Financial modeling&lt;/strong&gt;. When calculations frequently change based on business conditions&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pricing engines&lt;/strong&gt;. With complex discount structures and approval rules&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reporting systems&lt;/strong&gt;. Where business users need to control calculation methodology&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Risk assessment tools&lt;/strong&gt;. With formulas maintained by domain experts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;real-world-example-sales-quoting-tool&quot; tabindex=&quot;-1&quot;&gt;Real-World Example: Sales Quoting Tool &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#real-world-example-sales-quoting-tool&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I implemented this approach to build a sales quoting tool for a client. The client&#39;s organization had already developed complex pricing calculations across 10 different interconnected spreadsheets. These spreadsheets contained years of business expertise and were regularly maintained by the client&#39;s finance team.&lt;/p&gt;
+&lt;p&gt;The client needed to make these calculations available to their sales agents sooner rather than later, while still allowing their stakeholders to maintain and update the various formulas in the way they knew best - using spreadsheets.&lt;/p&gt;
+&lt;p&gt;While a traditional development approach would have eventually delivered a robust solution, we faced some practical considerations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The complex calculations would take significant time to translate into code and validate&lt;/li&gt;
+&lt;li&gt;The client&#39;s stakeholders needed to maintain the ability to quickly adjust pricing formulas&lt;/li&gt;
+&lt;li&gt;The client&#39;s sales team needed access to this functionality on the web within a tight timeframe&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Our solution used the existing spreadsheet logic while addressing the multi-user needs:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;We kept the client&#39;s existing spreadsheets with all pricing formulas intact&lt;/li&gt;
+&lt;li&gt;We built an integration layer using the Google Sheets API&lt;/li&gt;
+&lt;li&gt;We created a simple web interface for the client&#39;s sales agents to login, input deal parameters, and get a quoting report&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The resulting workflow provided the best of both worlds:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The client&#39;s sales agents enter customer requirements via the web interface&lt;/li&gt;
+&lt;li&gt;The web API passes this data to a copy of the template spreadsheet (using Google Sheets API)&lt;/li&gt;
+&lt;li&gt;The spreadsheet performs all complex pricing calculations automatically&lt;/li&gt;
+&lt;li&gt;The system retrieves the calculated results and generates a PDF quote&lt;/li&gt;
+&lt;li&gt;The sales agent receives a URL to access the final quote&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Most importantly, the client&#39;s finance team could continue to refine pricing rules directly in the template spreadsheet, with changes immediately available to all users. This preserved their autonomy while giving sales agents a streamlined application experience.&lt;/p&gt;
+&lt;p&gt;This approach allowed the client to get a working solution much faster than rewiring all the formulas, with the added benefit of keeping calculation maintenance in the hands of their business experts.&lt;/p&gt;
+&lt;h2 id=&quot;when-this-approach-makes-sense&quot; tabindex=&quot;-1&quot;&gt;When This Approach Makes Sense &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#when-this-approach-makes-sense&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This approach is particularly valuable when:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You have complex calculations already built and validated in spreadsheets&lt;/li&gt;
+&lt;li&gt;Clients need their business stakeholders to maintain direct control over calculation rules&lt;/li&gt;
+&lt;li&gt;The spreadsheet logic spans multiple interconnected calculations&lt;/li&gt;
+&lt;li&gt;Business logic evolves frequently based on market conditions&lt;/li&gt;
+&lt;li&gt;The traditional change request -&amp;gt; development -&amp;gt; testing -&amp;gt; deployment cycle creates unacceptable delays for the business/sales teams&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Key considerations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Google imposes API rate limits&lt;/li&gt;
+&lt;li&gt;Each API call adds latency&lt;/li&gt;
+&lt;li&gt;Best for moderate user volumes&lt;/li&gt;
+&lt;li&gt;Proper template permissions must be set&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;conclusion&quot; tabindex=&quot;-1&quot;&gt;Conclusion &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/google-sheets-as-a-backend/#conclusion&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The Google Sheets API approach keeps calculations in spreadsheets where business experts can update them directly, while providing end users with a professional application interface. This method cuts development time, enables quicker changes, and works particularly well for projects where rebuilding complex Excel logic in code would create delays.&lt;/p&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>The Power of Prototyping in Unfamiliar Codebases</title>
+		<link href="https://bojanveljanovski.com/posts/power-of-prototyping/"/>
+		<updated>2025-04-21T00:00:00Z</updated>
+		<id>https://bojanveljanovski.com/posts/power-of-prototyping/</id>
+		<content type="html">&lt;p&gt;When working with unfamiliar or complex codebase, building a quick prototype in a separate project can save you time and reduce risks before making any production code changes. With modern AI tools, you can create prototypes in hours instead of days.&lt;/p&gt;
+&lt;h2 id=&quot;why-build-a-prototype&quot; tabindex=&quot;-1&quot;&gt;Why Build a Prototype? &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#why-build-a-prototype&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;A prototype gives you a safe space to try ideas without breaking existing code. Benefits include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Better understanding.&lt;/strong&gt; Working with a solution in isolation helps you understand the problem fully&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lower risk.&lt;/strong&gt; Find technical limitations and issues early, before touching production code&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;More accurate planning.&lt;/strong&gt; Give better time estimates based on prototype results and new learning&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Clearer communication.&lt;/strong&gt; Show stakeholders something concrete instead of just explaining ideas&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;how-to-create-effective-prototypes&quot; tabindex=&quot;-1&quot;&gt;How to Create Effective Prototypes &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#how-to-create-effective-prototypes&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Create a dedicated prototype project structure:&lt;/p&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;YourSolution/
+└── Prototypes/
+    ├── NewIntegration.Tests/
+    ├── EmailApiTrial/
+    ├── UIPlayground/
+    ├── RefactoringProposal02/
+    └── PerformanceBenchmarks/&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Keep your prototypes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Minimal (test only what you need to understand)&lt;/li&gt;
+&lt;li&gt;Disposable (don&#39;t worry about code quality or architecture)&lt;/li&gt;
+&lt;li&gt;Self-contained (avoid dependencies on production code)&lt;/li&gt;
+&lt;li&gt;Documented (capture what you learned)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After prototyping, bring the &lt;strong&gt;concepts&lt;/strong&gt; you learned to production code, not the prototype code itself.&lt;/p&gt;
+&lt;h2 id=&quot;no-need-to-ask-permission&quot; tabindex=&quot;-1&quot;&gt;No Need to Ask Permission &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#no-need-to-ask-permission&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You don&#39;t need special approval to create a prototype, just like you don&#39;t need permission to write tests, refactor code, or document systems.&lt;/p&gt;
+&lt;p&gt;A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast delivery, a quick prototype actually saves time, not wastes it.&lt;/p&gt;
+&lt;h2 id=&quot;make-it-a-regular-practice&quot; tabindex=&quot;-1&quot;&gt;Make It a Regular Practice &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#make-it-a-regular-practice&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The most effective developers have prototyping as a regular part of their toolkit.&lt;/p&gt;
+&lt;p&gt;When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.&lt;/p&gt;
+&lt;h2 id=&quot;example-testing-a-new-sdk&quot; tabindex=&quot;-1&quot;&gt;Example: Testing a New SDK &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#example-testing-a-new-sdk&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;One of the use cases for prototyping is when integrating a new SDK or library:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Don&#39;t do this first:&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SdkWrapper&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NewSdk&lt;/span&gt; _sdk&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Creating abstractions for an SDK you don&#39;t understand yet&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Instead:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Create a prototype project&lt;/li&gt;
+&lt;li&gt;Use AI to generate scaffolding (e.g. prompt: &amp;quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&amp;quot;)&lt;/li&gt;
+&lt;li&gt;Try different SDK features directly&lt;/li&gt;
+&lt;li&gt;Test error cases and limits&lt;/li&gt;
+&lt;li&gt;Understand how the SDK works&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Then&lt;/em&gt; design your production integration based on what you learned&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This lets you experiment freely before committing to a design in your production codebase.&lt;/p&gt;
+&lt;h2 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/power-of-prototyping/#summary&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don&#39;t wait for permission—prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.&lt;/p&gt;
+&lt;p&gt;This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Transformation Pipelines: Solving Complex Data Processing Loops</title>
@@ -180,9 +327,9 @@
 &lt;h2 id=&quot;related-patterns-and-principles&quot; tabindex=&quot;-1&quot;&gt;Related Patterns and Principles &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/transformation-pipelines-solving-complex-data-processing-loops/#related-patterns-and-principles&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;This approach leverages several established patterns:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Pipes and Filters&lt;/strong&gt;: Connected processing steps with data flowing between them&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Single Responsibility Principle&lt;/strong&gt;: Each step has one reason to change&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Map-Reduce&lt;/strong&gt;: Map raw data to workable form, transform it, reduce to output&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pipes and Filters.&lt;/strong&gt; Connected processing steps with data flowing between them&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Single Responsibility Principle.&lt;/strong&gt; Each step has one reason to change&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Map-Reduce.&lt;/strong&gt; Map raw data to workable form, transform it, reduce to output&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Unlike distributed implementations of these patterns, our approach applies them at method level for everyday code.&lt;/p&gt;
 &lt;h2 id=&quot;conclusion&quot; tabindex=&quot;-1&quot;&gt;Conclusion &lt;a class=&quot;header-anchor&quot; href=&quot;https://bojanveljanovski.com/posts/transformation-pipelines-solving-complex-data-processing-loops/#conclusion&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
