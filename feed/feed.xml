@@ -4,12 +4,62 @@
 	<subtitle>I am writing self-notes that might be useful for other people as well on software development and programming in general.</subtitle>
 	<link href="https://bojanveljanovski.com/feed/feed.xml" rel="self"/>
 	<link href="https://bojanveljanovski.com/"/>
-	<updated>2025-04-22T00:00:00Z</updated>
+	<updated>2025-04-23T00:00:00Z</updated>
 	<id>https://bojanveljanovski.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
 		<email>bojanv91+blog@gmail.com</email>
 	</author>
+	
+	<entry>
+		<title>When I Realized Our System Was an ETL Pipeline</title>
+		<link href="https://bojanveljanovski.com/posts/system-as-etl-pipeline/"/>
+		<updated>2025-04-23T00:00:00Z</updated>
+		<id>https://bojanveljanovski.com/posts/system-as-etl-pipeline/</id>
+		<content type="html">&lt;p&gt;I recently realized that two different systems I&#39;ve worked on are actually doing the same thing - they&#39;re both ETL (Extract, Transform, Load) pipelines.&lt;/p&gt;
+&lt;p&gt;For years, I worked on a security system where edge controllers collect data from card readers and door locks. These controllers do three main things:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Extract data from different hardware types&lt;/li&gt;
+&lt;li&gt;Transform the data from many formats into one standard format&lt;/li&gt;
+&lt;li&gt;Load the data to cloud servers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I always saw this as just a system with syncing capability. I never thought of that part of the system as ETL.&lt;/p&gt;
+&lt;p&gt;Recently, I was working on a wearable device project with these parts:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Mobile apps connect to wearables using Bluetooth&lt;/li&gt;
+&lt;li&gt;The apps process raw device data from various manufacturers that we need to support&lt;/li&gt;
+&lt;li&gt;The apps send the processed data to our servers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I was struggling with some design problems in the wearable project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.&lt;/p&gt;
+&lt;p&gt;Using what I learned from the security project, I could then see:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The mobile app is the transformation engine, just like the edge controller was&lt;/li&gt;
+&lt;li&gt;Local storage is mainly for making transfers reliable, not for offline use&lt;/li&gt;
+&lt;li&gt;The rules for transforming/mapping data formats are the most valuable part&lt;/li&gt;
+&lt;li&gt;The data mainly flows one way (device → app → server)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;By applying these ETL concepts from the security system to our wearable project, we are able to focus on improving each part separately: getting better data from devices, creating better rules for transforming/mapping data, and sending data to servers more efficiently.&lt;/p&gt;
+&lt;p&gt;This ETL view also clarifies other parts of the system:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Reporting is simpler from the destination&lt;/strong&gt;: We don&#39;t need complex reporting capabilities on devices or in the mobile app. Reports are much easier to create from the already processed and aggregated data in the backend.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Separating ETL from configuration&lt;/strong&gt;: Both systems do have some data flowing from cloud servers down to devices (like settings and configurations), but this is a separate concern from the ETL process. Keeping these separate makes both easier to manage.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Optimization opportunities&lt;/strong&gt;: Seeing this as ETL opens up many ways to improve the pipeline:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Batching data before sending&lt;/li&gt;
+&lt;li&gt;Cleaning up glitches or unnecessary data points&lt;/li&gt;
+&lt;li&gt;Removing duplicate data entries&lt;/li&gt;
+&lt;li&gt;Compressing data for efficient transfer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Sometimes the best solutions come from seeing the patterns across different projects.&lt;/p&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>Using Google Sheets API as a Backend</title>

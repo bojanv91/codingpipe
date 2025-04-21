@@ -300,4 +300,9 @@
 		<loc>https://bojanveljanovski.com/posts/google-sheets-as-a-backend/</loc>
 		<lastmod>2025-04-22</lastmod>
 	</url>
+	
+	<url>
+		<loc>https://bojanveljanovski.com/posts/system-as-etl-pipeline/</loc>
+		<lastmod>2025-04-23</lastmod>
+	</url>
 </urlset>
