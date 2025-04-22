@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Pseudocode-Driven Programming: Step-by-Step Example</title>
+		<title>What Makes Code Unmaintainable?</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,78 +526,94 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Pseudocode-Driven Programming: Step-by-Step Example</h1>
+<h1>What Makes Code Unmaintainable?</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-08-13">Aug 13, 2023</time></li>
+	<li><time datetime="2025-04-24">Apr 24, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>2 min read</span></li>
+	<li><span>5 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/programming/" class="post-tag">Programming</a></li>
 </ul>
 
-<p>Pseudocode is a plain language text that describes the steps of a computer program.</p>
-<p>Let's look at the following example. We have a program that takes user's input, parses it, then generates a QR code image from the parsed input, and finally it saves the image to the filesystem.</p>
-<p>Here is the first iteration of the pseudocode for it:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// read user's input value</span>
-<span class="token comment">// parse the input</span>
-<span class="token comment">// generate QR code image from the parsed input</span>
-<span class="token comment">// save the image to filesystem</span>
-<span class="token comment">// print the image filepath so the user can know where to look for the image</span></code></pre>
-<p>Here is the final iteration of the pseudocode:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// input = read user's input value</span>
-<span class="token comment">// parsedValue = parseInput(input)</span>
-<span class="token comment">// image = generateQrCodeImage(parsedValue)</span>
-<span class="token comment">// saveImage(image, filepath)</span>
-<span class="token comment">// print(filepath) </span></code></pre>
-<p>Most of the time this is the very first step I take before I start writing computer code. I breakdown the problem into smaller chunks to get better sense of it. Then I write the solution down using pseudocode.
-Note that the above pseudocode was written and rewritten a couple of times until I was satisfied with the program's workflow and the naming.</p>
-<p>From here I start writing actual code like this:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// input = read user's input value</span>
-Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span><span class="token string">"Please enter an input value:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> input <span class="token operator">=</span> Console<span class="token punctuation">.</span><span class="token function">ReadLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// parsedValue = parseInput(input)</span>
-<span class="token class-name"><span class="token keyword">var</span></span> parsedInput <span class="token operator">=</span> <span class="token function">ParseInput</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// image = generateQrCodeImage(parsedValue)</span>
-<span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> image <span class="token operator">=</span> <span class="token function">GenerateQrCodeImage</span><span class="token punctuation">(</span>parsedInput<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// saveImage(image, filepath)</span>
-<span class="token class-name"><span class="token keyword">var</span></span> imageFilepath <span class="token operator">=</span> <span class="token function">SaveImage</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token string">"C:\\qrcode-images"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token comment">// print(filepath) </span>
-Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>imageFilepath<span class="token punctuation">)</span></code></pre>
-<p>Then, I can remove the comments:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span><span class="token string">"Please enter an input value:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> input <span class="token operator">=</span> Console<span class="token punctuation">.</span><span class="token function">ReadLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token class-name"><span class="token keyword">var</span></span> parsedInput <span class="token operator">=</span> <span class="token function">ParseInput</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> image <span class="token operator">=</span> <span class="token function">GenerateQrCodeImage</span><span class="token punctuation">(</span>parsedInput<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token class-name"><span class="token keyword">var</span></span> imageFilepath <span class="token operator">=</span> <span class="token function">SaveImage</span><span class="token punctuation">(</span>image<span class="token punctuation">,</span> <span class="token string">"C:\\qrcode-images"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Console<span class="token punctuation">.</span><span class="token function">WriteLine</span><span class="token punctuation">(</span>imageFilepath<span class="token punctuation">)</span></code></pre>
-<p>Also, I can write some tests for the parser like this:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">Assert<span class="token punctuation">.</span><span class="token function">Equal</span><span class="token punctuation">(</span><span class="token string">"mode=a;value=787878;"</span><span class="token punctuation">,</span> <span class="token function">ParseInput</span><span class="token punctuation">(</span><span class="token string">"a.2222787878"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Assert<span class="token punctuation">.</span><span class="token function">Equal</span><span class="token punctuation">(</span><span class="token string">"mode=d;value=112233;"</span><span class="token punctuation">,</span> <span class="token function">ParseInput</span><span class="token punctuation">(</span><span class="token string">"d asdf112233"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Assert<span class="token punctuation">.</span><span class="token function">ThrowsException</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">ParseInput</span><span class="token punctuation">(</span><span class="token string">"qwex"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Finally, I can implement the remaining methods using the same approach. Sometimes the implementation is straightforward, sometimes is not. The important thing is to unblock yourself, don't rush to write actual &quot;final&quot; code, make a good design/flow/structure in pseudocode, then implement stuff.</p>
-<p>Rules of thumb:</p>
+<p><em><strong>From the archives. Originally written in 2016, edited in 2025.</strong></em></p>
+<p>Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.</p>
+<p>Before judging any code, we need to understand what problem it solves and which trade-offs were considered. However, certain patterns consistently make code harder to maintain:</p>
+<h2 id="8-factors-that-make-code-unmaintainable" tabindex="-1">8 Factors That Make Code Unmaintainable <a class="header-anchor" href="#8-factors-that-make-code-unmaintainable">#</a></h2>
+<h3 id="1-excessive-coupling" tabindex="-1">1. Excessive Coupling <a class="header-anchor" href="#1-excessive-coupling">#</a></h3>
+<p>Code coupled with many dependencies creates a chain reaction of changes. Modifying one class requires changes in other dependent classes, which triggers more changes elsewhere. This &quot;dependency hell&quot; is why simple changes often take days instead of minutes.</p>
+<p>I've seen teams spend entire sprints making what should have been a simple configuration change, as it required updates across dozens of tightly coupled components.</p>
+<p>Excessive coupling means you can't change anything without changing everything, turning maintenance into a nightmare.</p>
+<h3 id="2-solving-imaginary-future-problems" tabindex="-1">2. Solving Imaginary Future Problems <a class="header-anchor" href="#2-solving-imaginary-future-problems">#</a></h3>
+<p>Code that tries to solve future or speculative problems that haven't happened yet quickly becomes unmaintainable. We often don't know what tomorrow's problems will be, yet many developers build &quot;just in case&quot; features.</p>
+<p>The key is finding the balance: make things right for today while enabling (not implementing) tomorrow's changes.</p>
+<p>As the YAGNI principle states: don't add functionality until you actually need it.</p>
+<h3 id="3-side-effects-and-unclear-intentions" tabindex="-1">3. Side Effects and Unclear Intentions <a class="header-anchor" href="#3-side-effects-and-unclear-intentions">#</a></h3>
+<p>Consider this example:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DepositAmount</span><span class="token punctuation">(</span><span class="token class-name">Account</span> account<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">decimal</span></span> amount<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    account<span class="token punctuation">.</span>Balance <span class="token operator">+=</span> amount<span class="token punctuation">;</span>
+    account<span class="token punctuation">.</span>LastActivityDate <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>Now<span class="token punctuation">;</span>
+    account<span class="token punctuation">.</span><span class="token function">UpgradeAccountTier</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Side effect!</span>
+    <span class="token function">SendPromotionalEmails</span><span class="token punctuation">(</span>account<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">// Another unexpected side effect!</span>
+<span class="token punctuation">}</span></code></pre>
+<p>From the method name <code>DepositAmount</code>, would you expect it to upgrade the account tier and send emails? This violates two key principles:</p>
 <ul>
-<li>First breakdown solutions in pseudocode, then in computer code</li>
-<li>Pseudocode can be written closer to a plain language or closer to a computer code</li>
-<li>Keep the pseudocode high-level, but not too generic</li>
-<li>Solve problems using an &quot;outside-in&quot; way - start from the main program flow (outside), and then focus on the details (inside)</li>
+<li><strong>Side-effect free:</strong> Methods should do what their name suggests, nothing more</li>
+<li><strong>Intention revealing:</strong> Names should clearly indicate what the code does</li>
 </ul>
+<p>Hidden side effects create bugs and make debugging difficult. When code does more than its name suggests, understanding system behavior becomes a puzzle.</p>
+<h3 id="4-knowledge-duplication" tabindex="-1">4. Knowledge Duplication <a class="header-anchor" href="#4-knowledge-duplication">#</a></h3>
+<p>When code is duplicated, changing requirements means updating multiple places. If you forget to update everything, you create inconsistent behavior and bugs.</p>
+<p>When business rules are duplicated, they might be implemented slightly differently in multiple places. When requirements change, you must find every instance.</p>
+<p>I follow the <a href="https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)">Rule of Three</a>  for refactoring duplicated code: duplicate once if needed, but when you see it a third time, it's time to abstract.</p>
+<h3 id="5-inconsistent-coding-style" tabindex="-1">5. Inconsistent Coding Style <a class="header-anchor" href="#5-inconsistent-coding-style">#</a></h3>
+<p>When code follows different conventions and patterns, developers waste mental energy switching context. The codebase should look like it was written by a single person.</p>
+<p>Inconsistency goes beyond formatting - it includes naming, error handling, and how concepts are represented. When similar operations are implemented differently throughout the codebase, understanding becomes unnecessarily difficult.</p>
+<h3 id="6-poor-structure" tabindex="-1">6. Poor Structure <a class="header-anchor" href="#6-poor-structure">#</a></h3>
+<p>Code where it's difficult to find where to make changes quickly becomes unmaintainable. Developers spend about 10 times more time reading code than writing it.</p>
+<p>The fundamental rule for structuring code is: <strong>Code that changes together should be placed together.</strong></p>
+<p>When related functionality is scattered across the codebase, even simple feature additions require modifying many files, increasing the risk of overlooked side effects.</p>
+<h3 id="7-over-engineering" tabindex="-1">7. Over-Engineering <a class="header-anchor" href="#7-over-engineering">#</a></h3>
+<p>The worst over-engineering happens in the name of extensibility, yet often achieves the opposite. Over-engineered code becomes rigid and complex despite intentions to make it flexible.</p>
+<p>Signs of over-engineering include:</p>
+<ul>
+<li>Generic solutions for specific problems</li>
+<li>Design patterns used without clear necessity</li>
+<li>Excessive abstraction layers</li>
+<li>Complex inheritance hierarchies</li>
+</ul>
+<p>The paradox is that code designed to be &quot;flexible&quot; often becomes inflexible for the changes that actually happen.</p>
+<h3 id="8-under-engineering" tabindex="-1">8. Under-Engineering <a class="header-anchor" href="#8-under-engineering">#</a></h3>
+<p>Under-engineering leads to &quot;careless-driven development&quot; and creates technical debt. Under-engineered code lacks proper abstractions, error handling, and consideration of edge cases.</p>
+<p>Signs include:</p>
+<ul>
+<li>Copy-paste coding</li>
+<li>Magic numbers and hardcoded values</li>
+<li>Missing error handling</li>
+<li>Functions that do too many things at once</li>
+</ul>
+<p>Under-engineered code seems faster to write initially but slows down all future development.</p>
+<h2 id="the-thin-line-of-maintainability" tabindex="-1">The Thin Line of Maintainability <a class="header-anchor" href="#the-thin-line-of-maintainability">#</a></h2>
+<p>Not all code changes equally. The parts that change most frequently should be the easiest to change, so focus your maintainability efforts there.</p>
+<p>You can use Git commands like <code>git log --stat</code> to identify which files change most frequently. By focusing on high-churn areas, you get the best return on your maintainability investment.</p>
+<h2 id="focus-on-what-changes-most-often" tabindex="-1">Focus on What Changes Most Often <a class="header-anchor" href="#focus-on-what-changes-most-often">#</a></h2>
+<p>Maintainability isn't binary across the whole codebase. The parts that change most frequently should be the easiest to change. Not all code changes often, so focus your maintainability efforts on high-churn areas.</p>
+<p>You can use Git to analyze how your codebase changes over time to identify these areas. Commands like <code>git log --stat</code> or specialized git history analyzers can reveal which files change most frequently, giving you clear targets for maintainability improvements. By focusing your attention where it matters most, you get the best return on your maintainability investment.</p>
+<h2 id="final-thoughts" tabindex="-1">Final Thoughts <a class="header-anchor" href="#final-thoughts">#</a></h2>
+<p>Hardware is hard to change. Software should remain &quot;soft&quot;, easy to modify. When teams fear making changes, the software has hardened into something more like hardware.</p>
+<p>As Joel Spolsky said, &quot;It's harder to read code than to write it.&quot; Our job isn't just writing code, it's writing code that others (including our future selves) can easily understand and change.</p>
+<p>The next time you're reviewing code or writing your own, consider these factors. Are you introducing any of these maintainability problems? The awareness alone can help you avoid the most common pitfalls.</p>
+<p><em><strong>EDIT (2025):</strong> Even AI tools work better when the codebase is maintainable.</em></p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/exporting-c-objects-to-excel-with-closedxml/">How to Export to Excel in C#/.NET Core using ClosedXML</a></li><li>Next: <a href="/posts/building-windows-service-applications-in-net-core/">Building .NET Core Windows Services</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/system-as-etl-pipeline/">When I Realized Our System Was an ETL Pipeline</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/a-step-by-step-example-in-pseudocode-driven-programming/` was built on 2025-04-22T22:00:56.898Z -->
+		<!-- This page `/posts/what-makes-code-unmaintainable/` was built on 2025-04-22T22:00:56.900Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-E6F7C4Q881"></script>
