@@ -1,5 +1,5 @@
 {
-	"name": "bojanveljanovski",
+	"name": "codingpipe",
 	"version": "8.0.0",
 	"scripts": {
 		"build": "npx @11ty/eleventy",

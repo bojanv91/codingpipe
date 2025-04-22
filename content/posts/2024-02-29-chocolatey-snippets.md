@@ -40,13 +40,13 @@ refreshenv
 # PostgreSQL unsupervised with en_US collation:
 choco install postgresql14 --params "/Password:postgres /Port:5432" --ia "--enable-components server,commandlinetools --superaccount postgres --locale us"
 
-# RabbitMQ (for troubleshooting, see this: https://bojanveljanovski.com/posts/rabbitmq-cheatsheet/)
+# RabbitMQ (for troubleshooting, see this: https://codingpipe.com/posts/rabbitmq-cheatsheet/)
 choco install rabbitmq
 
-# AWS CLI (for usage, see this: https://bojanveljanovski.com/posts/aws-cli-cheatsheet/)
+# AWS CLI (for usage, see this: https://codingpipe.com/posts/aws-cli-cheatsheet/)
 choco install awscli
 
-# Node Version Manager for Windows (for usage, see this: https://bojanveljanovski.com/posts/npm-nvm-cheatsheet/)
+# Node Version Manager for Windows (for usage, see this: https://codingpipe.com/posts/npm-nvm-cheatsheet/)
 choco install nvm             
 
 # Let's Encrypt windows tool

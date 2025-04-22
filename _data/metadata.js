@@ -1,11 +1,11 @@
 module.exports = {
-	title: "BojanVeljanovski.com",
-	url: "https://bojanveljanovski.com/",
+	title: "CodingPipe.com",
+	url: "https://codingpipe.com/",
 	language: "en",
-	description: "I am writing self-notes that might be useful for other people as well on software development and programming in general.",
+	description: "Random thoughts about programming and software development",
 	author: {
 		name: "Bojan Veljanovski",
-		email: "bojanv91+blog@gmail.com",
-		url: "https://bojanveljanovski.com/about/"
+		email: "bojanv91+codingpipe@gmail.com",
+		url: "https://codingpipe.com/about/"
 	}
 }
