@@ -9,7 +9,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-When working with unfamiliar or complex codebase, building a quick prototype in a separate project can save you time and reduce risks before making any production code changes. With modern AI tools, you can create prototypes in hours instead of days.
+When working with unfamiliar or complex codebase, building a quick prototype in a separate project in isolation can save you time and reduce risks before making any production code changes. With modern AI/LLM tools, you can create prototypes in hours instead of days.
 
 ## Why Build a Prototype?
 
@@ -37,11 +37,11 @@ YourSolution/
 Keep your prototypes:
 
 - Minimal (test only what you need to understand)
-- Disposable (don't worry about code quality or architecture)
+- Disposable (don't worry about code quality or architecture, this is throw-away code)
 - Self-contained (avoid dependencies on production code)
 - Documented (capture what you learned)
 
-After prototyping, bring the **concepts** you learned to production code, not the prototype code itself.
+**After prototyping, bring the concepts you learned to production code, not the prototype code itself.**
 
 ## No Need to Ask Permission
 
@@ -51,7 +51,7 @@ A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast 
 
 ## Make It a Regular Practice
 
-The most effective developers have prototyping as a regular part of their toolkit.
+The most effective developers have prototyping practice as a regular part of their toolkit.
 
 When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.
 
@@ -71,16 +71,16 @@ public class SdkWrapper
 Instead:
 
 1. Create a prototype project
-2. Use AI to generate scaffolding (e.g. prompt: "Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling")
-3. Try different SDK features directly
+2. Use LLMs to generate scaffolding (e.g. prompt: "Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling")
+3. Try different SDK features by coding directly
 4. Test error cases and limits
-5. Understand how the SDK works
+5. Understand how the SDK works, play arround with various method calls
 6. _Then_ design your production integration based on what you learned
 
 This lets you experiment freely before committing to a design in your production codebase.
 
 ## Summary
 
-Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don't wait for permission—prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.
+Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don't wait for permission, prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.
 
 This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.

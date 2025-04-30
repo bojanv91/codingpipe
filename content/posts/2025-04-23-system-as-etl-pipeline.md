@@ -10,21 +10,21 @@ layout: layouts/post.njk
 
 I recently realized that two different systems I've worked on are actually doing the same thing - they're both ETL (Extract, Transform, Load) pipelines.
 
-For years, I worked on a security system where edge controllers collect data from card readers and door locks. These controllers do three main things:
+For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:
 
-- Extract data from different hardware types
+- Extract data from many different hardware types
 - Transform the data from many formats into one standard format
-- Load the data to cloud servers
+- Load the data to cloud services/databases
 
-I always saw this as just a system with syncing capability. I never thought of that part of the system as ETL.
+I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.
 
 Recently, I was working on a wearable device project with these parts:
 
 - Mobile apps connect to wearables using Bluetooth
 - The apps process raw device data from various manufacturers that we need to support
-- The apps send the processed data to our servers
+- The apps send the processed data to cloud services
 
-I was struggling with some design problems in the wearable project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.
+I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.
 
 Using what I learned from the security project, I could then see:
 

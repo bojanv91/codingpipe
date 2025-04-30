@@ -101,17 +101,11 @@ Signs include:
 
 Under-engineered code seems faster to write initially but slows down all future development.
 
-## The Thin Line of Maintainability
+## Focus on What Changes Most Often
 
 Not all code changes equally. The parts that change most frequently should be the easiest to change, so focus your maintainability efforts there.
 
 You can use Git commands like `git log --stat` to identify which files change most frequently. By focusing on high-churn areas, you get the best return on your maintainability investment.
-
-## Focus on What Changes Most Often
-
-Maintainability isn't binary across the whole codebase. The parts that change most frequently should be the easiest to change. Not all code changes often, so focus your maintainability efforts on high-churn areas.
-
-You can use Git to analyze how your codebase changes over time to identify these areas. Commands like `git log --stat` or specialized git history analyzers can reveal which files change most frequently, giving you clear targets for maintainability improvements. By focusing your attention where it matters most, you get the best return on your maintainability investment.
 
 ## Final Thoughts
 
