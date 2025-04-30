@@ -537,20 +537,20 @@ h1 {
 </ul>
 
 <p>I recently realized that two different systems I've worked on are actually doing the same thing - they're both ETL (Extract, Transform, Load) pipelines.</p>
-<p>For years, I worked on a security system where edge controllers collect data from card readers and door locks. These controllers do three main things:</p>
+<p>For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:</p>
 <ul>
-<li>Extract data from different hardware types</li>
+<li>Extract data from many different hardware types</li>
 <li>Transform the data from many formats into one standard format</li>
-<li>Load the data to cloud servers</li>
+<li>Load the data to cloud services/databases</li>
 </ul>
-<p>I always saw this as just a system with syncing capability. I never thought of that part of the system as ETL.</p>
+<p>I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.</p>
 <p>Recently, I was working on a wearable device project with these parts:</p>
 <ul>
 <li>Mobile apps connect to wearables using Bluetooth</li>
 <li>The apps process raw device data from various manufacturers that we need to support</li>
-<li>The apps send the processed data to our servers</li>
+<li>The apps send the processed data to cloud services</li>
 </ul>
-<p>I was struggling with some design problems in the wearable project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.</p>
+<p>I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.</p>
 <p>Using what I learned from the security project, I could then see:</p>
 <ul>
 <li>The mobile app is the transformation engine, just like the edge controller was</li>
@@ -586,7 +586,7 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-04-22T23:08:29.733Z -->
+		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-04-30T06:53:57.792Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

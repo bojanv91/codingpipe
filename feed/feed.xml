@@ -74,12 +74,9 @@
 &lt;li&gt;Functions that do too many things at once&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Under-engineered code seems faster to write initially but slows down all future development.&lt;/p&gt;
-&lt;h2 id=&quot;the-thin-line-of-maintainability&quot; tabindex=&quot;-1&quot;&gt;The Thin Line of Maintainability &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#the-thin-line-of-maintainability&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;focus-on-what-changes-most-often&quot; tabindex=&quot;-1&quot;&gt;Focus on What Changes Most Often &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#focus-on-what-changes-most-often&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Not all code changes equally. The parts that change most frequently should be the easiest to change, so focus your maintainability efforts there.&lt;/p&gt;
 &lt;p&gt;You can use Git commands like &lt;code&gt;git log --stat&lt;/code&gt; to identify which files change most frequently. By focusing on high-churn areas, you get the best return on your maintainability investment.&lt;/p&gt;
-&lt;h2 id=&quot;focus-on-what-changes-most-often&quot; tabindex=&quot;-1&quot;&gt;Focus on What Changes Most Often &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#focus-on-what-changes-most-often&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Maintainability isn&#39;t binary across the whole codebase. The parts that change most frequently should be the easiest to change. Not all code changes often, so focus your maintainability efforts on high-churn areas.&lt;/p&gt;
-&lt;p&gt;You can use Git to analyze how your codebase changes over time to identify these areas. Commands like &lt;code&gt;git log --stat&lt;/code&gt; or specialized git history analyzers can reveal which files change most frequently, giving you clear targets for maintainability improvements. By focusing your attention where it matters most, you get the best return on your maintainability investment.&lt;/p&gt;
 &lt;h2 id=&quot;final-thoughts&quot; tabindex=&quot;-1&quot;&gt;Final Thoughts &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#final-thoughts&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Hardware is hard to change. Software should remain &amp;quot;soft&amp;quot;, easy to modify. When teams fear making changes, the software has hardened into something more like hardware.&lt;/p&gt;
 &lt;p&gt;As Joel Spolsky said, &amp;quot;It&#39;s harder to read code than to write it.&amp;quot; Our job isn&#39;t just writing code, it&#39;s writing code that others (including our future selves) can easily understand and change.&lt;/p&gt;
@@ -94,20 +91,20 @@
 		<updated>2025-04-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/system-as-etl-pipeline/</id>
 		<content type="html">&lt;p&gt;I recently realized that two different systems I&#39;ve worked on are actually doing the same thing - they&#39;re both ETL (Extract, Transform, Load) pipelines.&lt;/p&gt;
-&lt;p&gt;For years, I worked on a security system where edge controllers collect data from card readers and door locks. These controllers do three main things:&lt;/p&gt;
+&lt;p&gt;For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Extract data from different hardware types&lt;/li&gt;
+&lt;li&gt;Extract data from many different hardware types&lt;/li&gt;
 &lt;li&gt;Transform the data from many formats into one standard format&lt;/li&gt;
-&lt;li&gt;Load the data to cloud servers&lt;/li&gt;
+&lt;li&gt;Load the data to cloud services/databases&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;I always saw this as just a system with syncing capability. I never thought of that part of the system as ETL.&lt;/p&gt;
+&lt;p&gt;I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.&lt;/p&gt;
 &lt;p&gt;Recently, I was working on a wearable device project with these parts:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Mobile apps connect to wearables using Bluetooth&lt;/li&gt;
 &lt;li&gt;The apps process raw device data from various manufacturers that we need to support&lt;/li&gt;
-&lt;li&gt;The apps send the processed data to our servers&lt;/li&gt;
+&lt;li&gt;The apps send the processed data to cloud services&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;I was struggling with some design problems in the wearable project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.&lt;/p&gt;
+&lt;p&gt;I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.&lt;/p&gt;
 &lt;p&gt;Using what I learned from the security project, I could then see:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The mobile app is the transformation engine, just like the edge controller was&lt;/li&gt;
@@ -229,7 +226,7 @@
 		<link href="https://codingpipe.com/posts/power-of-prototyping/"/>
 		<updated>2025-04-21T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/power-of-prototyping/</id>
-		<content type="html">&lt;p&gt;When working with unfamiliar or complex codebase, building a quick prototype in a separate project can save you time and reduce risks before making any production code changes. With modern AI tools, you can create prototypes in hours instead of days.&lt;/p&gt;
+		<content type="html">&lt;p&gt;When working with unfamiliar or complex codebase, building a quick prototype in a separate project in isolation can save you time and reduce risks before making any production code changes. With modern AI/LLM tools, you can create prototypes in hours instead of days.&lt;/p&gt;
 &lt;h2 id=&quot;why-build-a-prototype&quot; tabindex=&quot;-1&quot;&gt;Why Build a Prototype? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#why-build-a-prototype&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;A prototype gives you a safe space to try ideas without breaking existing code. Benefits include:&lt;/p&gt;
 &lt;ul&gt;
@@ -250,16 +247,16 @@
 &lt;p&gt;Keep your prototypes:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Minimal (test only what you need to understand)&lt;/li&gt;
-&lt;li&gt;Disposable (don&#39;t worry about code quality or architecture)&lt;/li&gt;
+&lt;li&gt;Disposable (don&#39;t worry about code quality or architecture, this is throw-away code)&lt;/li&gt;
 &lt;li&gt;Self-contained (avoid dependencies on production code)&lt;/li&gt;
 &lt;li&gt;Documented (capture what you learned)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;After prototyping, bring the &lt;strong&gt;concepts&lt;/strong&gt; you learned to production code, not the prototype code itself.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;After prototyping, bring the concepts you learned to production code, not the prototype code itself.&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&quot;no-need-to-ask-permission&quot; tabindex=&quot;-1&quot;&gt;No Need to Ask Permission &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#no-need-to-ask-permission&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;You don&#39;t need special approval to create a prototype, just like you don&#39;t need permission to write tests, refactor code, or document systems.&lt;/p&gt;
 &lt;p&gt;A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast delivery, a quick prototype actually saves time, not wastes it.&lt;/p&gt;
 &lt;h2 id=&quot;make-it-a-regular-practice&quot; tabindex=&quot;-1&quot;&gt;Make It a Regular Practice &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#make-it-a-regular-practice&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The most effective developers have prototyping as a regular part of their toolkit.&lt;/p&gt;
+&lt;p&gt;The most effective developers have prototyping practice as a regular part of their toolkit.&lt;/p&gt;
 &lt;p&gt;When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.&lt;/p&gt;
 &lt;h2 id=&quot;example-testing-a-new-sdk&quot; tabindex=&quot;-1&quot;&gt;Example: Testing a New SDK &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#example-testing-a-new-sdk&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;One of the use cases for prototyping is when integrating a new SDK or library:&lt;/p&gt;
@@ -272,15 +269,15 @@
 &lt;p&gt;Instead:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Create a prototype project&lt;/li&gt;
-&lt;li&gt;Use AI to generate scaffolding (e.g. prompt: &amp;quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&amp;quot;)&lt;/li&gt;
-&lt;li&gt;Try different SDK features directly&lt;/li&gt;
+&lt;li&gt;Use LLMs to generate scaffolding (e.g. prompt: &amp;quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&amp;quot;)&lt;/li&gt;
+&lt;li&gt;Try different SDK features by coding directly&lt;/li&gt;
 &lt;li&gt;Test error cases and limits&lt;/li&gt;
-&lt;li&gt;Understand how the SDK works&lt;/li&gt;
+&lt;li&gt;Understand how the SDK works, play arround with various method calls&lt;/li&gt;
 &lt;li&gt;&lt;em&gt;Then&lt;/em&gt; design your production integration based on what you learned&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;This lets you experiment freely before committing to a design in your production codebase.&lt;/p&gt;
 &lt;h2 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#summary&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don&#39;t wait for permission—prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.&lt;/p&gt;
+&lt;p&gt;Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don&#39;t wait for permission, prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.&lt;/p&gt;
 &lt;p&gt;This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.&lt;/p&gt;
 </content>
 	</entry>

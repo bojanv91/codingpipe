@@ -537,7 +537,7 @@ h1 {
 		<li><a href="/tags/techniques/" class="post-tag">Techniques</a></li>
 </ul>
 
-<p>When working with unfamiliar or complex codebase, building a quick prototype in a separate project can save you time and reduce risks before making any production code changes. With modern AI tools, you can create prototypes in hours instead of days.</p>
+<p>When working with unfamiliar or complex codebase, building a quick prototype in a separate project in isolation can save you time and reduce risks before making any production code changes. With modern AI/LLM tools, you can create prototypes in hours instead of days.</p>
 <h2 id="why-build-a-prototype" tabindex="-1">Why Build a Prototype? <a class="header-anchor" href="#why-build-a-prototype">#</a></h2>
 <p>A prototype gives you a safe space to try ideas without breaking existing code. Benefits include:</p>
 <ul>
@@ -558,16 +558,16 @@ h1 {
 <p>Keep your prototypes:</p>
 <ul>
 <li>Minimal (test only what you need to understand)</li>
-<li>Disposable (don't worry about code quality or architecture)</li>
+<li>Disposable (don't worry about code quality or architecture, this is throw-away code)</li>
 <li>Self-contained (avoid dependencies on production code)</li>
 <li>Documented (capture what you learned)</li>
 </ul>
-<p>After prototyping, bring the <strong>concepts</strong> you learned to production code, not the prototype code itself.</p>
+<p><strong>After prototyping, bring the concepts you learned to production code, not the prototype code itself.</strong></p>
 <h2 id="no-need-to-ask-permission" tabindex="-1">No Need to Ask Permission <a class="header-anchor" href="#no-need-to-ask-permission">#</a></h2>
 <p>You don't need special approval to create a prototype, just like you don't need permission to write tests, refactor code, or document systems.</p>
 <p>A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast delivery, a quick prototype actually saves time, not wastes it.</p>
 <h2 id="make-it-a-regular-practice" tabindex="-1">Make It a Regular Practice <a class="header-anchor" href="#make-it-a-regular-practice">#</a></h2>
-<p>The most effective developers have prototyping as a regular part of their toolkit.</p>
+<p>The most effective developers have prototyping practice as a regular part of their toolkit.</p>
 <p>When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.</p>
 <h2 id="example-testing-a-new-sdk" tabindex="-1">Example: Testing a New SDK <a class="header-anchor" href="#example-testing-a-new-sdk">#</a></h2>
 <p>One of the use cases for prototyping is when integrating a new SDK or library:</p>
@@ -580,15 +580,15 @@ h1 {
 <p>Instead:</p>
 <ol>
 <li>Create a prototype project</li>
-<li>Use AI to generate scaffolding (e.g. prompt: &quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&quot;)</li>
-<li>Try different SDK features directly</li>
+<li>Use LLMs to generate scaffolding (e.g. prompt: &quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&quot;)</li>
+<li>Try different SDK features by coding directly</li>
 <li>Test error cases and limits</li>
-<li>Understand how the SDK works</li>
+<li>Understand how the SDK works, play arround with various method calls</li>
 <li><em>Then</em> design your production integration based on what you learned</li>
 </ol>
 <p>This lets you experiment freely before committing to a design in your production codebase.</p>
 <h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
-<p>Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don't wait for permission—prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.</p>
+<p>Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don't wait for permission, prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.</p>
 <p>This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/transformation-pipelines-solving-complex-data-processing-loops/">Transformation Pipelines: Solving Complex Data Processing Loops</a></li><li>Next: <a href="/posts/google-sheets-as-a-backend/">Using Google Sheets API as a Backend</a></li>
@@ -598,7 +598,7 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/posts/power-of-prototyping/` was built on 2025-04-22T23:08:29.732Z -->
+		<!-- This page `/posts/power-of-prototyping/` was built on 2025-04-30T06:53:57.791Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

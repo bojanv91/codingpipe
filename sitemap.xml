@@ -182,121 +182,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/links/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/net-framework/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/data-access/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/code/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/architecture/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/misc/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/javascript/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/net-core/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/asp-net-core/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/postgres/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/docker/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/testing/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/programming/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/serilog/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/powershell/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/snippets/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/aws/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/problemdetails/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/patterns/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/techniques/</loc>
-		<lastmod>2025-04-22</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/posts/system-as-etl-pipeline/</loc>
 		<lastmod>2025-04-23</lastmod>
 	</url>
@@ -304,5 +189,120 @@
 	<url>
 		<loc>https://codingpipe.com/posts/what-makes-code-unmaintainable/</loc>
 		<lastmod>2025-04-24</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/links/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/net-framework/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/data-access/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/code/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/architecture/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/misc/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/javascript/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/net-core/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/asp-net-core/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/postgres/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/docker/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/testing/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/programming/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/logging/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/serilog/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/powershell/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/snippets/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/aws/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/problemdetails/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/patterns/</loc>
+		<lastmod>2025-04-30</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/techniques/</loc>
+		<lastmod>2025-04-30</lastmod>
 	</url>
 </urlset>
