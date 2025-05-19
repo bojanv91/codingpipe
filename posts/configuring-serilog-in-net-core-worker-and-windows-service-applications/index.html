@@ -12,7 +12,7 @@
 		<link rel="manifest" href="/site.webmanifest"></link>
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
-		<meta name="generator" content="Eleventy v3.0.0">
+		<meta name="generator" content="Eleventy v3.1.0">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -560,48 +560,48 @@ dotnet add package Serilog.Sinks.File
 
 namespace PlaygroundWorkerService
 {
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>   <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Program</span>
-<span class="token prefix unchanged"> </span>   <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>       <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
-<span class="token prefix unchanged"> </span>       <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>           Directory<span class="token punctuation">.</span><span class="token function">SetCurrentDirectory</span><span class="token punctuation">(</span>AppDomain<span class="token punctuation">.</span>CurrentDomain<span class="token punctuation">.</span>BaseDirectory<span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span>
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token comment">// The initial bootstrap logger is able to log errors during start-up.</span>
-<span class="token prefix unchanged"> </span>           <span class="token comment">// It's fully replaced by the logger configured in `UseSerilog()`.</span>
-</span><span class="token inserted-sign inserted language-cs"><span class="token prefix inserted">+</span>            Log<span class="token punctuation">.</span>Logger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LoggerConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token prefix inserted">+</span>                <span class="token punctuation">.</span>WriteTo<span class="token punctuation">.</span><span class="token function">Console</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token prefix inserted">+</span>                <span class="token punctuation">.</span><span class="token function">CreateBootstrapLogger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span>
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Starting up"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span>
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token keyword">try</span>
-<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>               <span class="token class-name">IHost</span> host <span class="token operator">=</span> Host<span class="token punctuation">.</span><span class="token function">CreateDefaultBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
-<span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">ConfigureServices</span><span class="token punctuation">(</span>services <span class="token operator">=></span>
-<span class="token prefix unchanged"> </span>                   <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>                       services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token prefix unchanged"> </span>                   <span class="token punctuation">}</span><span class="token punctuation">)</span>
-</span><span class="token inserted-sign inserted language-cs"><span class="token prefix inserted">+</span>                    <span class="token punctuation">.</span><span class="token function">UseSerilog</span><span class="token punctuation">(</span><span class="token punctuation">(</span>hostingContext<span class="token punctuation">,</span> services<span class="token punctuation">,</span> loggerConfiguration<span class="token punctuation">)</span> <span class="token operator">=></span> loggerConfiguration
-<span class="token prefix inserted">+</span>                        <span class="token punctuation">.</span>ReadFrom<span class="token punctuation">.</span><span class="token function">Configuration</span><span class="token punctuation">(</span>hostingContext<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">)</span>
-</span><span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">UseWindowsService</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token prefix unchanged"> </span>                   <span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token prefix unchanged"> </span>                   
-<span class="token prefix unchanged"> </span>               host<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span>
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Stopped cleanly"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span>
-<span class="token unchanged language-cs"><span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
-<span class="token prefix unchanged"> </span>           <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
-<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"An unhandled exception occured during bootstrapping"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
-<span class="token prefix unchanged"> </span>           <span class="token keyword">finally</span>
-<span class="token prefix unchanged"> </span>           <span class="token punctuation">{</span>
-<span class="token prefix unchanged"> </span>               Log<span class="token punctuation">.</span><span class="token function">CloseAndFlush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token prefix unchanged"> </span>           <span class="token punctuation">}</span>
-<span class="token prefix unchanged"> </span>       <span class="token punctuation">}</span>
-<span class="token prefix unchanged"> </span>   <span class="token punctuation">}</span>
-</span>}</code></pre>
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+            // The initial bootstrap logger is able to log errors during start-up.
+            // It's fully replaced by the logger configured in `UseSerilog()`.
++            Log.Logger = new LoggerConfiguration()
++                .WriteTo.Console()
++                .CreateBootstrapLogger();
+
+            Log.Information("Starting up");
+
+            try
+            {
+                IHost host = Host.CreateDefaultBuilder(args)
+                    .ConfigureServices(services =>
+                    {
+                        services.AddHostedService&lt;Worker>();
+                    })
++                    .UseSerilog((hostingContext, services, loggerConfiguration) => loggerConfiguration
++                        .ReadFrom.Configuration(hostingContext.Configuration))
+                    .UseWindowsService()
+                    .Build();
+                    
+                host.Run();
+
+                Log.Information("Stopped cleanly");
+
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "An unhandled exception occured during bootstrapping");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+    }
+}</code></pre>
 <p>The <code>.UseSerilog()</code> call will redirect all log events through your <em>Serilog</em> pipeline.</p>
 <p><strong>Next,</strong> we'll configure the logger using JSON configuration strings placed in the <em>appsettings.json</em>:</p>
 <pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
@@ -677,7 +677,7 @@ namespace PlaygroundWorkerService
 
 		<footer></footer>
 
-		<!-- This page `/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/` was built on 2025-04-30T06:53:57.790Z -->
+		<!-- This page `/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/` was built on 2025-05-19T20:16:37.643Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

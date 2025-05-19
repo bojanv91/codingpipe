@@ -12,14 +12,14 @@
 	</author>
 	
 	<entry>
-		<title>What Makes Code Unmaintainable?</title>
+		<title>8 ways to make your code impossible to maintain</title>
 		<link href="https://codingpipe.com/posts/what-makes-code-unmaintainable/"/>
 		<updated>2025-04-24T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/what-makes-code-unmaintainable/</id>
 		<content type="html">&lt;p&gt;&lt;em&gt;&lt;strong&gt;From the archives. Originally written in 2016, edited in 2025.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.&lt;/p&gt;
 &lt;p&gt;Before judging any code, we need to understand what problem it solves and which trade-offs were considered. However, certain patterns consistently make code harder to maintain:&lt;/p&gt;
-&lt;h2 id=&quot;8-factors-that-make-code-unmaintainable&quot; tabindex=&quot;-1&quot;&gt;8 Factors That Make Code Unmaintainable &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-factors-that-make-code-unmaintainable&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;8-factors-that-make-code-unmaintainable&quot; tabindex=&quot;-1&quot;&gt;8 factors that make code unmaintainable &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-factors-that-make-code-unmaintainable&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;h3 id=&quot;1-excessive-coupling&quot; tabindex=&quot;-1&quot;&gt;1. Excessive Coupling &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#1-excessive-coupling&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Code coupled with many dependencies creates a chain reaction of changes. Modifying one class requires changes in other dependent classes, which triggers more changes elsewhere. This &amp;quot;dependency hell&amp;quot; is why simple changes often take days instead of minutes.&lt;/p&gt;
 &lt;p&gt;I&#39;ve seen teams spend entire sprints making what should have been a simple configuration change, as it required updates across dozens of tightly coupled components.&lt;/p&gt;
@@ -86,11 +86,11 @@
 	</entry>
 	
 	<entry>
-		<title>When I Realized Our System Was an ETL Pipeline</title>
+		<title>How I found the same ETL pattern in two different systems</title>
 		<link href="https://codingpipe.com/posts/system-as-etl-pipeline/"/>
 		<updated>2025-04-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/system-as-etl-pipeline/</id>
-		<content type="html">&lt;p&gt;I recently realized that two different systems I&#39;ve worked on are actually doing the same thing - they&#39;re both ETL (Extract, Transform, Load) pipelines.&lt;/p&gt;
+		<content type="html">&lt;p&gt;I recently realized that two different systems I&#39;ve worked on are actually doing the same thing - they&#39;re both a style of ETL (Extract, Transform, Load) pipelines.&lt;/p&gt;
 &lt;p&gt;For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Extract data from many different hardware types&lt;/li&gt;
@@ -136,7 +136,7 @@
 	</entry>
 	
 	<entry>
-		<title>Using Google Sheets API as a Backend</title>
+		<title>Google Sheets API as a Database - Building a Lightweight Backend</title>
 		<link href="https://codingpipe.com/posts/google-sheets-as-a-backend/"/>
 		<updated>2025-04-22T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/google-sheets-as-a-backend/</id>
@@ -222,7 +222,7 @@
 	</entry>
 	
 	<entry>
-		<title>The Power of Prototyping in Unfamiliar Codebases</title>
+		<title>Prototype First: Reduce Risk When Working with Unfamiliar Code</title>
 		<link href="https://codingpipe.com/posts/power-of-prototyping/"/>
 		<updated>2025-04-21T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/power-of-prototyping/</id>
@@ -283,7 +283,7 @@
 	</entry>
 	
 	<entry>
-		<title>Transformation Pipelines: Solving Complex Data Processing Loops</title>
+		<title>Simplifying Data Flows with Transformation Pipelines</title>
 		<link href="https://codingpipe.com/posts/transformation-pipelines-solving-complex-data-processing-loops/"/>
 		<updated>2025-04-20T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/transformation-pipelines-solving-complex-data-processing-loops/</id>
@@ -472,7 +472,7 @@
 	</entry>
 	
 	<entry>
-		<title>Correlation IDs with Serilog in ASP.NET Core Background Tasks</title>
+		<title>Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog</title>
 		<link href="https://codingpipe.com/posts/serilog-correlationid-background-task/"/>
 		<updated>2025-03-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/serilog-correlationid-background-task/</id>
@@ -581,7 +581,7 @@
 	</entry>
 	
 	<entry>
-		<title>Use Enums Over Booleans for Status Fields</title>
+		<title>Status Fields - Why Enums Beat Booleans for Maintainability</title>
 		<link href="https://codingpipe.com/posts/use-enums-over-booleans/"/>
 		<updated>2024-10-30T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/use-enums-over-booleans/</id>
@@ -635,7 +635,7 @@ In most such situations, choosing Enum is a much better choice. Enums are more d
 	</entry>
 	
 	<entry>
-		<title>Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests</title>
+		<title>Testing Error Responses in ASP.NET Core using ProblemDetails</title>
 		<link href="https://codingpipe.com/posts/validating-problemdetails-in-aspnetcore-integration-tests/"/>
 		<updated>2024-08-10T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/validating-problemdetails-in-aspnetcore-integration-tests/</id>
@@ -1398,48 +1398,48 @@ dotnet add package Serilog.Sinks.File
 
 namespace PlaygroundWorkerService
 {
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Program&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;AppDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CurrentDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;BaseDirectory&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token comment&quot;&gt;// The initial bootstrap logger is able to log errors during start-up.&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token comment&quot;&gt;// It&#39;s fully replaced by the logger configured in `UseSerilog()`.&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token inserted-sign inserted language-cs&quot;&gt;&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;            Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;LoggerConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;                &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WriteTo&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;                &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateBootstrapLogger&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting up&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               &lt;span class=&quot;token class-name&quot;&gt;IHost&lt;/span&gt; host &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateDefaultBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureServices&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;services &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                       services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;AddHostedService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Worker&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token inserted-sign inserted language-cs&quot;&gt;&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;                    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UseSerilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hostingContext&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; services&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; loggerConfiguration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; loggerConfiguration
-&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;                        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ReadFrom&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;hostingContext&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UseWindowsService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Stopped cleanly&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-cs&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token keyword&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Exception&lt;/span&gt; ex&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Fatal&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ex&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;An unhandled exception occured during bootstrapping&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token keyword&quot;&gt;finally&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CloseAndFlush&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+            // The initial bootstrap logger is able to log errors during start-up.
+            // It&#39;s fully replaced by the logger configured in `UseSerilog()`.
++            Log.Logger = new LoggerConfiguration()
++                .WriteTo.Console()
++                .CreateBootstrapLogger();
+
+            Log.Information(&quot;Starting up&quot;);
+
+            try
+            {
+                IHost host = Host.CreateDefaultBuilder(args)
+                    .ConfigureServices(services =&gt;
+                    {
+                        services.AddHostedService&amp;lt;Worker&gt;();
+                    })
++                    .UseSerilog((hostingContext, services, loggerConfiguration) =&gt; loggerConfiguration
++                        .ReadFrom.Configuration(hostingContext.Configuration))
+                    .UseWindowsService()
+                    .Build();
+                    
+                host.Run();
+
+                Log.Information(&quot;Stopped cleanly&quot;);
+
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, &quot;An unhandled exception occured during bootstrapping&quot;);
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+    }
+}&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The &lt;code&gt;.UseSerilog()&lt;/code&gt; call will redirect all log events through your &lt;em&gt;Serilog&lt;/em&gt; pipeline.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Next,&lt;/strong&gt; we&#39;ll configure the logger using JSON configuration strings placed in the &lt;em&gt;appsettings.json&lt;/em&gt;:&lt;/p&gt;
 &lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
@@ -1535,24 +1535,24 @@ Worker.cs
 &lt;strong&gt;And then,&lt;/strong&gt; set the current directory to the actual base directory of your app - a fix to the base app path for Windows Service apps.&lt;/p&gt;
 &lt;pre class=&quot;language-diff-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-diff-csharp&quot;&gt;namespace PlaygroundWorkerService
 {
-&lt;span class=&quot;token unchanged language-csharp&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Program&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/span&gt; args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token inserted-sign inserted language-csharp&quot;&gt;&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;	        Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;AppDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CurrentDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;BaseDirectory&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-csharp&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           &lt;span class=&quot;token class-name&quot;&gt;IHost&lt;/span&gt; host &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateDefaultBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureServices&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;services &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;                   services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;AddHostedService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Worker&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token inserted-sign inserted language-csharp&quot;&gt;&lt;span class=&quot;token prefix inserted&quot;&gt;+&lt;/span&gt;                &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UseWindowsService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;span class=&quot;token unchanged language-csharp&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;               &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;/span&gt;
-&lt;span class=&quot;token unchanged language-csharp&quot;&gt;&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;           host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;       &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token prefix unchanged&quot;&gt; &lt;/span&gt;   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
++	        Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
+            IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices(services =&gt;
+                {
+                    services.AddHostedService&amp;lt;Worker&gt;();
+                })
++                .UseWindowsService()
+                .Build();
+
+            host.Run();
+        }
+    }
+}&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;NOTE:&lt;/strong&gt; When the app runs as a service, &lt;code&gt;.UseWindowsService()&lt;/code&gt; sets the &lt;a href=&quot;https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.hosting.ihostenvironment.contentrootpath#microsoft-extensions-hosting-ihostenvironment-contentrootpath&quot;&gt;ContentRootPath&lt;/a&gt; to &lt;a href=&quot;https://learn.microsoft.com/en-us/dotnet/api/system.appcontext.basedirectory#system-appcontext-basedirectory&quot;&gt;AppContext.BaseDirectory&lt;/a&gt; which for a Windows Service defaults to &lt;code&gt;C:&#92;Windows&#92;system32&lt;/code&gt;. This means that any log files (or any other files) that you would expect to find in your local app folder, will appear in the system32 folder. The fix for this side effect is the following line of code which we already added above:&lt;/p&gt;
 &lt;pre class=&quot;language-cs&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-cs&quot;&gt;Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;AppDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CurrentDomain&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;BaseDirectory&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;strong&gt;Now&lt;/strong&gt;, if you Ctrl+F5 start this project it will still properly run as a console application in the terminal, but also can be started as a Windows Service and run in the background.&lt;/p&gt;
@@ -1594,7 +1594,7 @@ sc delete &amp;quot;PlaygroundWorkerService&amp;quot;
 	</entry>
 	
 	<entry>
-		<title>Pseudocode-Driven Programming: Step-by-Step Example</title>
+		<title>How to Use Pseudocode to Design Better Software - Working Example</title>
 		<link href="https://codingpipe.com/posts/a-step-by-step-example-in-pseudocode-driven-programming/"/>
 		<updated>2023-08-13T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/a-step-by-step-example-in-pseudocode-driven-programming/</id>
@@ -1813,7 +1813,7 @@ When you start the web application from the integration tests using the TestServ
 	</entry>
 	
 	<entry>
-		<title>PostgreSQL Docker Compose Setup</title>
+		<title>My PostgreSQL development setup with Docker Compose</title>
 		<link href="https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/"/>
 		<updated>2023-08-09T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/</id>
@@ -1888,7 +1888,7 @@ Some failures go away if you just re-run the requests, and sometimes you&#39;ll 
 	</entry>
 	
 	<entry>
-		<title>Dynamic SQL Query Building in .NET Core using SqlKata</title>
+		<title>Building dynamic SQL queries: string concatenation vs SqlKata</title>
 		<link href="https://codingpipe.com/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/"/>
 		<updated>2023-01-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/</id>
@@ -2039,7 +2039,7 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>AppSettings: Typed Configuration in .NET Core using the Options Pattern</title>
+		<title>Strongly-typed configuration in .NET Core</title>
 		<link href="https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/"/>
 		<updated>2023-01-08T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</id>
@@ -2094,7 +2094,7 @@ builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt
 	</entry>
 	
 	<entry>
-		<title>Select N+1 Data Access Performance Problem</title>
+		<title>Solving the N+1 query problem</title>
 		<link href="https://codingpipe.com/posts/select-n-plus-1-problem/"/>
 		<updated>2018-06-10T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/select-n-plus-1-problem/</id>
@@ -2365,7 +2365,7 @@ builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt
 	</entry>
 	
 	<entry>
-		<title>How to refactor Feature Envy Code</title>
+		<title>Feature envy refactoring - moving methods to their rightful home</title>
 		<link href="https://codingpipe.com/posts/refactoring-a-feature-envy-code/"/>
 		<updated>2017-07-29T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/refactoring-a-feature-envy-code/</id>
