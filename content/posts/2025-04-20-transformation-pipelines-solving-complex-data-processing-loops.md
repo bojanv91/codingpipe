@@ -1,5 +1,5 @@
 ---
-title: "Transformation Pipelines: Solving Complex Data Processing Loops"
+title: "Simplifying Data Flows with Transformation Pipelines"
 date: 2025-04-20
 dateUpdated: Last Modified
 permalink: /posts/transformation-pipelines-solving-complex-data-processing-loops/

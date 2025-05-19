@@ -1,5 +1,5 @@
 ---
-title: "Pseudocode-Driven Programming: Step-by-Step Example"
+title: "How to Use Pseudocode to Design Better Software - Working Example"
 date: 2023-08-13
 dateUpdated: Last Modified
 permalink: /posts/a-step-by-step-example-in-pseudocode-driven-programming/

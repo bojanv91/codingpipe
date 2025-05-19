@@ -1,5 +1,5 @@
 ---
-title: "Using Google Sheets API as a Backend"
+title: "Google Sheets API as a Database - Building a Lightweight Backend"
 date: 2025-04-22
 dateUpdated: Last Modified
 permalink: /posts/google-sheets-as-a-backend/

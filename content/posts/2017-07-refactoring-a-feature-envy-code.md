@@ -1,5 +1,5 @@
 ---
-title: "How to refactor Feature Envy Code"
+title: "Feature envy refactoring - moving methods to their rightful home"
 date: 2017-07-29
 dateUpdated: Last Modified
 permalink: /posts/refactoring-a-feature-envy-code/

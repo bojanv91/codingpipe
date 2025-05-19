@@ -1,5 +1,5 @@
 ---
-title: "AppSettings: Typed Configuration in .NET Core using the Options Pattern"
+title: "Strongly-typed configuration in .NET Core"
 date: 2023-01-08
 dateUpdated: Last Modified
 permalink: /posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/

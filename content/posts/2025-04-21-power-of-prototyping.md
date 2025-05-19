@@ -1,5 +1,5 @@
 ---
-title: "The Power of Prototyping in Unfamiliar Codebases"
+title: "Prototype First: Reduce Risk When Working with Unfamiliar Code"
 date: 2025-04-21
 dateUpdated: Last Modified
 permalink: /posts/power-of-prototyping/

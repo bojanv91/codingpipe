@@ -1,5 +1,5 @@
 ---
-title: "What Makes Code Unmaintainable?"
+title: "8 ways to make your code impossible to maintain"
 date: 2025-04-24
 dateUpdated: Last Modified
 permalink: /posts/what-makes-code-unmaintainable/
@@ -14,7 +14,7 @@ Software systems inevitably change. The challenge is we rarely know when or wher
 
 Before judging any code, we need to understand what problem it solves and which trade-offs were considered. However, certain patterns consistently make code harder to maintain:
 
-## 8 Factors That Make Code Unmaintainable
+## 8 factors that make code unmaintainable
 
 ### 1. Excessive Coupling
 

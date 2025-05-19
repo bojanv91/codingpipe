@@ -1,5 +1,5 @@
 ---
-title: "When I Realized Our System Was an ETL Pipeline"
+title: "How I found the same ETL pattern in two different systems"
 date: 2025-04-23
 dateUpdated: Last Modified
 permalink: /posts/system-as-etl-pipeline/
@@ -8,7 +8,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-I recently realized that two different systems I've worked on are actually doing the same thing - they're both ETL (Extract, Transform, Load) pipelines.
+I recently realized that two different systems I've worked on are actually doing the same thing - they're both a style of ETL (Extract, Transform, Load) pipelines.
 
 For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:
 

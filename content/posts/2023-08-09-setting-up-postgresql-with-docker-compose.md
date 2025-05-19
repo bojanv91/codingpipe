@@ -1,5 +1,5 @@
 ---
-title: "PostgreSQL Docker Compose Setup"
+title: "My PostgreSQL development setup with Docker Compose"
 date: 2023-08-09
 dateUpdated: Last Modified
 permalink: /posts/setting-up-postgresql-with-docker-compose/

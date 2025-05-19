@@ -1,5 +1,5 @@
 ---
-title: "Correlation IDs with Serilog in ASP.NET Core Background Tasks"
+title: "Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog"
 date: 2025-03-23
 dateUpdated: Last Modified
 permalink: /posts/serilog-correlationid-background-task/

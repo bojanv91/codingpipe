@@ -1,5 +1,5 @@
 ---
-title: "Use Enums Over Booleans for Status Fields"
+title: "Status Fields - Why Enums Beat Booleans for Maintainability"
 date: 2024-10-30
 dateUpdated: Last Modified
 permalink: /posts/use-enums-over-booleans/

@@ -1,5 +1,5 @@
 ---
-title: "Dynamic SQL Query Building in .NET Core using SqlKata"
+title: "Building dynamic SQL queries: string concatenation vs SqlKata"
 date: 2023-01-23
 dateUpdated: Last Modified
 permalink: /posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/
@@ -16,6 +16,7 @@ In this post, we'll build a typical search query that can filter by any optional
 Let's look at the typical implementations written in .NET application code.
 
 ## Query building with string concatenation
+
 In this example, we're building a base query from which we'll build the list and count queries. Finally, we're using Dapper to execute both queries. We use [ContosoUniversity](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/complex-data-model/_static/diagram.png?view=aspnetcore-7.0) database as a referenced database example.
 
 ```csharp
@@ -92,6 +93,7 @@ Here are a couple of things we're keeping an eye on while building such queries:
 - making sure we're adding SQL parameters in the SQL query string (e.g.,`" and Name = @Param"`), and we're not adding the parameter's values into the string with concatenation (not like this: `$" and Name = '{request.Name}'"`) which opens our code to SQL injection.
 
 ## Query building with SqlKata
+
 This example builds on top of the string concatenation example - you can view it as a rewritten version of it only by using only [SqlKata](https://sqlkata.com/).
 
 SqlKata is an expression-based query-building library for C#. I've used it in many projects with great success. Use cases vary, from building ad-hoc dynamic SQL queries for reports and charts, to advanced user-generated reports and dashboard builders.

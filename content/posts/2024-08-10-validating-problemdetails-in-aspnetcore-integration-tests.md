@@ -1,5 +1,5 @@
 ---
-title: "Validating ProblemDetails Error Responses in ASP.NET Core API Integration Tests"
+title: "Testing Error Responses in ASP.NET Core using ProblemDetails"
 date: 2024-08-10
 dateUpdated: Last Modified
 permalink: /posts/validating-problemdetails-in-aspnetcore-integration-tests/
