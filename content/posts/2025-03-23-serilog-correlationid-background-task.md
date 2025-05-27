@@ -5,8 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/serilog-correlationid-background-task/
 tags:
   - ASP.NET Core
-  - Serilog
-  - Logging
+  - C#
 layout: layouts/post.njk
 ---
 
@@ -17,11 +16,11 @@ Background tasks in ASP.NET Core applications run independently of the HTTP pipe
 ```csharp
 public static class LoggerExtensions
 {
-    /// <summary>
-    /// Creates a new logger instance with a unique correlation ID.
-    /// Usage:
-		///   var serviceLogger = Log.ForContext<MyService>();
-		///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID
+  /// <summary>
+  /// Creates a new logger instance with a unique correlation ID.
+  /// Usage:
+  ///   var serviceLogger = Log.ForContext<MyService>();
+  ///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID
     /// </summary>
     /// <param name="baseLogger">The base logger instance.</param>
     /// <returns>A new logger instance with a correlation ID.</returns>
@@ -48,7 +47,7 @@ public class MyBackgroundTask : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             // Create a contextual logger from the base logger with a unique
-						// correlation ID for this execution cycle
+      // correlation ID for this execution cycle
             var logger = _serviceLogger.ForCorrelationIdContext();
             logger.Information("Starting background task cycle");
 

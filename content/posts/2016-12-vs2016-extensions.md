@@ -3,8 +3,6 @@ title: "Top Visual Studio 2015 Extensions I Use"
 date: 2016-12-31
 dateUpdated: Last Modified
 permalink: /posts/vs2016-extensions/
-tags:
-  - Misc
 layout: layouts/post.njk
 ---
 

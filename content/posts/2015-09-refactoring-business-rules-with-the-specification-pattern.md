@@ -12,16 +12,16 @@ The other day, one of my colleges asked me for code review on a specific part of
 
 Here is the original code:  
 
-```
+```csharp
 //..
 
 var newCompany = new Company(message.Name, message.CountryId);
-	
+ 
 // Query all companies from database 
 var companies = _companyRepository.Query().ToList();
 // Check if the newly created company is unique
 if (companies.Any(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId))
-	throw new Exception("A company with the same name and country already exists");
+ throw new Exception("A company with the same name and country already exists");
 
 session.Save(newCompany);
 //..
@@ -35,10 +35,10 @@ Also, I provide here the `tl;dr;` version of the code:
 //..
 
 var newCompany = new Company(message.Name, message.CountryId);
-	
+ 
 var spec = new UniqueCompanySpecification(_companyRepository);
 if (spec.IsSatisfiedBy(newCompany) == false)
-	throw new CompanyAlreadyExistsException();
+ throw new CompanyAlreadyExistsException();
 
 session.Save(newCompany);
 //..
@@ -50,28 +50,28 @@ session.Save(newCompany);
 
 ```
 var numberOfSameCompanies = _companyRepository.Query()
-	.Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
-	.Count();
+ .Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
+ .Count();
 if (numberOfSameCompanies > 0)
-	throw new Exception("A company with the same name and country already exists");
+ throw new Exception("A company with the same name and country already exists");
 ```
 
 The query above retrieves the number of companies satisfying the given `where` condition. Performance issues have been solved.
 
-## Step 2 - Make The `if` Condition Check Explicit 
+## Step 2 - Make The `if` Condition Check Explicit
 
 ```
 var numberOfSameCompanies = _companyRepository.Query()
-	.Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
-	.Count();
+ .Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
+ .Count();
 var doesCompanyAlreadyExists = numberOfSameCompanies > 0;
 if (doesCompanyAlreadyExists)
-	throw new Exception("A company with the same name and country already exists");
+ throw new Exception("A company with the same name and country already exists");
 ```
 
 By setting some explicit conditions, we gain clear understanding of what the code does.
 
-## Step 3 - Make The Business Rule Violation Explicit 
+## Step 3 - Make The Business Rule Violation Explicit
 
 Original:
 
@@ -106,57 +106,57 @@ The 'Specification Pattern' is a tactical design pattern presented in Eric Evans
 Here, you can see how it is used:
 
 ```
-	var spec = new UniqueCompanySpecification(_companyRepository);
-	if (spec.IsSatisfiedBy(newCompany) == false)
-		throw new CompanyAlreadyExistsException();
+ var spec = new UniqueCompanySpecification(_companyRepository);
+ if (spec.IsSatisfiedBy(newCompany) == false)
+  throw new CompanyAlreadyExistsException();
 ```
 
 And the implementation details:
 
-```	
-	public class UniqueCompanySpecification : ISpecification<Company>
-	{
-		readonly ICompanyRepository _companyRepository;
+``` 
+ public class UniqueCompanySpecification : ISpecification<Company>
+ {
+  readonly ICompanyRepository _companyRepository;
 
-		public UniqueCompanySpecification(ICompanyRepository companyRepository)
-		{
-			_companyRepository = companyRepository;
-		}
+  public UniqueCompanySpecification(ICompanyRepository companyRepository)
+  {
+   _companyRepository = companyRepository;
+  }
 
-		public bool IsSatisfiedBy(Company candidate)
-		{
-			var numberOfSameCompanies = _companyRepository.Query()
-				.Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
-				.Count();
-			bool isUnique = numberOfSameCompanies == 0;
-			return isUnique;
-		}
-	}
+  public bool IsSatisfiedBy(Company candidate)
+  {
+   var numberOfSameCompanies = _companyRepository.Query()
+    .Where(x => x.Name == newCompany.Name && x.CountryId == newCompany.CountryId)
+    .Count();
+   bool isUnique = numberOfSameCompanies == 0;
+   return isUnique;
+  }
+ }
 
-	public interface ISpecification<T>
-	{
-		bool IsSatisfiedBy(T candidate);
-	} 
+ public interface ISpecification<T>
+ {
+  bool IsSatisfiedBy(T candidate);
+ } 
 ```
 
 After all re-factoring steps, the final code is as following:
 
 ```
-	//..
+ //..
 
-	var newCompany = new Company(message.Name, message.CountryId);
-	
-	var spec = new UniqueCompanySpecification(_companyRepository);
-	if (spec.IsSatisfiedBy(newCompany) == false)
-		throw new CompanyAlreadyExistsException();
+ var newCompany = new Company(message.Name, message.CountryId);
+ 
+ var spec = new UniqueCompanySpecification(_companyRepository);
+ if (spec.IsSatisfiedBy(newCompany) == false)
+  throw new CompanyAlreadyExistsException();
 
-	session.Save(newCompany);
-	//..
+ session.Save(newCompany);
+ //..
 ```
 
 # Summary
 
-In this article, I've shown a re-factoring process and usage of the Specification Pattern in order to satisfy an explicit business rule.     
+In this article, I've shown a re-factoring process and usage of the Specification Pattern in order to satisfy an explicit business rule.
 The re-factoring steps we took:  
 
 1. Solve the query performance issues

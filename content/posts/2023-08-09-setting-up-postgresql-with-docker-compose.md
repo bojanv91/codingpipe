@@ -6,6 +6,7 @@ permalink: /posts/setting-up-postgresql-with-docker-compose/
 tags:
   - Postgres
   - Docker
+  - DevOps
 layout: layouts/post.njk
 ---
 

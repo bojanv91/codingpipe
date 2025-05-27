@@ -4,7 +4,8 @@ date: 2024-10-30
 dateUpdated: Last Modified
 permalink: /posts/use-enums-over-booleans/
 tags:
-  - Programming
+  - Code
+  - Software Design
 layout: layouts/post.njk
 ---
 

@@ -4,7 +4,8 @@ date: 2025-04-24
 dateUpdated: Last Modified
 permalink: /posts/what-makes-code-unmaintainable/
 tags:
-  - Programming
+  - Software Design
+  - Code
 layout: layouts/post.njk
 ---
 

@@ -1,10 +1,10 @@
 ---
-title: "Test-Specific AppSettings in ASP.NET Core Integration Tests"
+title: "Test-Specific AppSettings Configuration in ASP.NET Core integration tests"
 date: 2023-08-10
 dateUpdated: Last Modified
 permalink: /posts/test-specific-appsettings-in-aspnet-core-integration-tests/
 tags:
-  - .NET Core
+  - ASP.NET Core
   - Testing
 layout: layouts/post.njk
 ---

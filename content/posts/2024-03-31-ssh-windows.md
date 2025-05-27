@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/ssh-windows-snippets/
 tags:
   - Snippets
+  - DevOps
 layout: layouts/post.njk
 ---
 

@@ -4,8 +4,8 @@ description: Select N+1 is a data-access performance problem. Any code that iter
 date: 2018-06-10
 permalink: /posts/select-n-plus-1-problem/
 tags:
+  - Code
   - Data Access
-  - .NET Core
 layout: layouts/post.njk
 ---
 

@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/postgresql-cheatsheet/
 tags:
   - Snippets
+  - DevOps
   - Postgres
 layout: layouts/post.njk
 ---

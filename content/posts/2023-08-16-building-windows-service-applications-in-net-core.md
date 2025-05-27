@@ -4,7 +4,8 @@ date: 2023-08-16
 dateUpdated: Last Modified
 permalink: /posts/building-windows-service-applications-in-net-core/
 tags:
-  - .NET Core
+  - ASP.NET Core 
+  - C#
 layout: layouts/post.njk
 ---
 
@@ -120,4 +121,4 @@ sc delete "PlaygroundWorkerService"
 
 ## Further reading
 
-- [Adding Serilog logger to a .NET Core Windows Service app](/2023-08-16-creating-and-deploying-a-windows-service-app-in-dotnet) 
+- [Adding Serilog logger to a .NET Core Windows Service app](/2023-08-16-creating-and-deploying-a-windows-service-app-in-dotnet)

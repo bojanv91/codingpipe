@@ -5,8 +5,8 @@ date: 2025-04-21
 dateUpdated: Last Modified
 permalink: /posts/power-of-prototyping/
 tags:
-  - Programming
-  - Techniques
+  - Software Design
+  - Productivity
 keywords: "how to reduce development risk, prototyping best practices, avoid coding problems, prototype first development"
 layout: layouts/post.njk
 ---

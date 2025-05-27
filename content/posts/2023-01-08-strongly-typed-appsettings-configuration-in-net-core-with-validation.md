@@ -1,5 +1,5 @@
 ---
-title: "Type-Safe Configuration in .NET Core"
+title: "Type-Safe AppSettings Configuration in .NET Core"
 date: 2023-01-08
 dateUpdated: Last Modified
 permalink: /posts/type-safe-configuration-in-net-core/

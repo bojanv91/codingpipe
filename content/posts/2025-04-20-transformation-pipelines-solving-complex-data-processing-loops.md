@@ -4,8 +4,8 @@ date: 2025-04-20
 dateUpdated: Last Modified
 permalink: /posts/transformation-pipelines-solving-complex-data-processing-loops/
 tags:
-  - Programming
-  - Patterns
+  - Code
+  - Software Design
 layout: layouts/post.njk
 ---
 

@@ -4,7 +4,7 @@ date: 2024-01-07
 dateUpdated: Last Modified
 permalink: /posts/what-to-log/
 tags:
-  - Logging
+  - Software Design
 layout: layouts/post.njk
 ---
 

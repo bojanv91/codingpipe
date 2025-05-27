@@ -4,7 +4,7 @@ date: 2023-08-12
 dateUpdated: Last Modified
 permalink: /posts/exporting-c-objects-to-excel-with-closedxml/
 tags:
-  - .NET Core
+  - ASP.NET Core
 layout: layouts/post.njk
 ---
 

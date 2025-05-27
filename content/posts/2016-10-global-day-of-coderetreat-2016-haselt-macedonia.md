@@ -4,7 +4,7 @@ date: 2016-10-27
 dateUpdated: Last Modified
 permalink: /posts/global-day-of-coderetreat-2016-haselt-macedonia/
 tags:
-  - Misc
+  - Event
 layout: layouts/post.njk
 ---
 

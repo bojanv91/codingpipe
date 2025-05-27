@@ -4,7 +4,8 @@ date: 2025-04-23
 dateUpdated: Last Modified
 permalink: /posts/system-as-etl-pipeline/
 tags:
-  - Programming
+  - Architecture
+  - Software Design
 layout: layouts/post.njk
 ---
 

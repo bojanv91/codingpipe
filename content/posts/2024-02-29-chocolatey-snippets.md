@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/chocolatey-cheatsheet/
 tags:
   - Snippets
+  - DevOps
 layout: layouts/post.njk
 ---
 

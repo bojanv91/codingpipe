@@ -5,7 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/validating-problemdetails-in-aspnetcore-integration-tests/
 tags:
   - ASP.NET Core
-  - ProblemDetails
+  - Testing
 layout: layouts/post.njk
 ---
 

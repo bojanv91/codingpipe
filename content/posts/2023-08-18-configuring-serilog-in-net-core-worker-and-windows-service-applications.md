@@ -5,8 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/
 tags:
   - ASP.NET Core
-  - Logging
-  - Serilog
+  - C#
 layout: layouts/post.njk
 ---
 

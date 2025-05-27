@@ -5,6 +5,7 @@ dateUpdated: Last Modified
 permalink: /posts/refactoring-a-feature-envy-code/
 tags:
   - Code
+  - Refactoring
 layout: layouts/post.njk
 ---
 

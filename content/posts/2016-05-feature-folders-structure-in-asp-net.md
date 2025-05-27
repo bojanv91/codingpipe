@@ -4,8 +4,7 @@ date: 2016-05-27
 dateUpdated: Last Modified
 permalink: /posts/feature-folders-structure-in-asp-net/
 tags:
-  - .NET Framework
-  - Architecture
+  - Software Design
 layout: layouts/post.njk
 ---
 
@@ -15,12 +14,11 @@ Most of the time developers make modifications related to a single feature (e.g.
 
 > Files that change together should be structured together.
 
-
-## Horizontal (Technical) vs. Vertical (Business) Folder Structure 
+## Horizontal (Technical) vs. Vertical (Business) Folder Structure
 
 On the left side you can see the common MVC structure. On the right side you can see the feature folders structure of the very same project.
 
-```
+```plaintext
     Styles
         Shared.css
         Login.css
@@ -74,7 +72,7 @@ On the left side you can see the common MVC structure. On the right side you can
 
 <div style=""></div>
 
-```
+```plaintext
     Features
         Courses
             CoursesController.cs
@@ -134,7 +132,7 @@ Food for thought:
 
 Example of single feature evolved as Angular application/module:
 
-```
+```plaintext
     Features
         ...
         ShoppingCart
@@ -153,21 +151,20 @@ Example of single feature evolved as Angular application/module:
 
 ## Benefits of using Feature Folders (over technical folder structure)
 
-Structuring your files by features (business concerns) makes things easier to find and manage. 
+Structuring your files by features (business concerns) makes things easier to find and manage.
 
 - Time spent on navigation through Solution Explorer to locate interdependent files is drastically reduced since they are all in a single folder.
-- You don't step over each other toes with your peers, thus, avoid spending time on fixing merge conflicts. 
+- You don't step over each other toes with your peers, thus, avoid spending time on fixing merge conflicts.
 - You can scale and modify each feature on its own, independently from other features and even use different UI technology.
 - You immediately understand what an application does and where to find necessary files for your given requirement.
-- You can easily reuse similar features across projects by simply copying just a single folder. 
+- You can easily reuse similar features across projects by simply copying just a single folder.
 - You can reason much easier about each feature just by looking in a single (feature) folder.
-
 
 ## Implementing Feature Folders in ASP.NET MVC 5
 
 To make this work in ASP.NET MVC 5, we should inherit the ``RazorViewEngine`` and change the view location parts to ones that fit our new structure.
 
-```
+```csharp
     public class FeatureFoldersRazorViewEngine : RazorViewEngine
     {
         public FeatureFoldersRazorViewEngine()
@@ -189,7 +186,7 @@ To make this work in ASP.NET MVC 5, we should inherit the ``RazorViewEngine`` an
 
 Next, we have to add our newly created ``FeatureFoldersRazorViewEngine`` in our application.
 
-```
+```csharp
     public class Global : HttpApplication
     {
         void Application_Start(object sender, EventArgs e)
@@ -205,4 +202,4 @@ Next, we have to add our newly created ``FeatureFoldersRazorViewEngine`` in our 
 
 Structuring our MVC projects following feature folders approach increases the productivity of our dev teams.
 
-At our company, we have been using feature folders project structure on over dozens projects for over a year, and due to the high success and productivity boost, it became our default project structure on the presentation layer. 
+At our company, we have been using feature folders project structure on over dozens projects for over a year, and due to the high success and productivity boost, it became our default project structure on the presentation layer.

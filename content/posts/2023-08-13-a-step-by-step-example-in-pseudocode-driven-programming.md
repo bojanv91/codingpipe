@@ -4,7 +4,8 @@ date: 2023-08-13
 dateUpdated: Last Modified
 permalink: /posts/a-step-by-step-example-in-pseudocode-driven-programming/
 tags:
-  - Programming
+  - Software Design
+  - Code
 layout: layouts/post.njk
 ---
 

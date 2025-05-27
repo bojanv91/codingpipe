@@ -3,8 +3,6 @@ title: "Visual Studio 2017 Tips"
 date: 2017-03-09
 dateUpdated: Last Modified
 permalink: /posts/visual-studio-2017-notes/
-tags:
-  - Misc
 layout: layouts/post.njk
 ---
 

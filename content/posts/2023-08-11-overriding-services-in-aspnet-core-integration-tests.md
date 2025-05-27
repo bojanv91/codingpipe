@@ -1,10 +1,10 @@
 ---
-title: "Mocking Services in ASP.NET Core Tests with ConfigureTestServices()"
+title: "Overriding services ASP.NET Core integration tests using ConfigureTestServices"
 date: 2023-08-11
 dateUpdated: Last Modified
 permalink: /posts/overriding-services-in-aspnet-core-integration-tests/
 tags:
-  - .NET Core
+  - ASP.NET Core
   - Testing
 layout: layouts/post.njk
 ---
