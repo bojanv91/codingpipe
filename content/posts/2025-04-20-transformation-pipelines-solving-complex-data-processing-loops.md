@@ -1,17 +1,17 @@
 ---
-title: "Simplifying Data Flows with Transformation Pipelines"
+title: "Refactoring complex loops with transformation pipelines"
 date: 2025-04-20
 dateUpdated: Last Modified
-permalink: /posts/transformation-pipelines-solving-complex-data-processing-loops/
+permalink: /posts/complex-loops-to-transformation-pipelines/
 tags:
   - Code
   - Software Design
 layout: layouts/post.njk
 ---
 
-Ever encountered a method with a 100+ line loop that does everything at once? These complex loops try to validate data, normalize values, apply business rules, and generate statistics all in one place. As they grow, each new requirement risks breaking existing logic, and testing becomes nearly impossible.
+Complex loops that validate data, apply business rules, and generate statistics in one place become increasingly difficult to maintain. Each new requirement risks breaking existing logic, and testing these interdependent operations becomes challenging.
 
-## The Problem: Complex Loops
+## The problem: complex loops
 
 Complex loops typically start simple but grow organically as developers add "just one more condition" rather than refactoring. The example below started as basic GPS point processing but expanded with additional steps for elevation tracking, speed calculation, and terrain classification. With each new feature, the code became harder to maintain:
 
@@ -22,9 +22,6 @@ public class ActivitySummary ProcessGpxData(List<GpxPoint> gpxPoints)
     double totalDistance = 0;
     double totalElevationGain = 0;
     List<GpxPoint> processedPoints = new List<GpxPoint>();
-    
-    // NOTE: This example has been shortened for brevity while preserving
-    // the key pattern of a complex loop with multiple responsibilities
     
     for (int i = 0; i < gpxPoints.Count; i++)
     {
@@ -62,7 +59,10 @@ public class ActivitySummary ProcessGpxData(List<GpxPoint> gpxPoints)
         else
         {
             // Initialize first point
-            // ...initialization code...
+            point.SegmentDistance = 0;
+            point.Speed = 0;
+            point.SmoothedElevation = point.Elevation;
+            point.TerrainType = "flat";
         }
         
         processedPoints.Add(point);
@@ -72,21 +72,21 @@ public class ActivitySummary ProcessGpxData(List<GpxPoint> gpxPoints)
     {
         ProcessedPoints = processedPoints,
         TotalDistance = totalDistance,
-        // Other properties...
+        TotalElevationGain = totalElevationGain
     };
 }
 ```
 
-These complex loops create code that:
+These loops:
 
-- Does too many things at once instead of separating concerns
-- Resists changes as dependencies are hidden and unclear
-- Makes unit testing difficult by coupling unrelated operations together
-- Creates excessive mental load for developers trying to understand it
+- Do too many things at once instead of separating concerns
+- Resist changes as dependencies are hidden and unclear
+- Make unit testing difficult by coupling unrelated operations together
+- Create excessive mental load for developers trying to understand them
 
-## The Solution: Transformation Pipelines
+## The solution: transformation pipelines
 
-The solution is to break down complex processing into a transformation pipeline with discrete steps connected by an intermediate data structure. Each step has a single responsibility and transforms the data in a specific way:
+The solution is to break down complex processing into a transformation pipeline where each step has a single responsibility:
 
 ```csharp
 public ActivitySummary ProcessGpxData(List<GpxPoint> gpxPoints)
@@ -106,7 +106,7 @@ public ActivitySummary ProcessGpxData(List<GpxPoint> gpxPoints)
 }
 ```
 
-Each step has a single responsibility and can be implemented, tested, and modified independently. The key to making this work is an intermediate data structure that carries accumulated state between processing steps:
+**Each step has a single responsibility and can be implemented, tested, and modified independently.** The key to making this work is an intermediate data structure that carries accumulated state between processing steps:
 
 ```csharp
 private class GpxIntermediateData
@@ -130,7 +130,7 @@ private class GpxIntermediateData
 }
 ```
 
-## Implementation Details
+## Implementation details
 
 Let's see how some of the pipeline steps would be implemented:
 
@@ -147,6 +147,23 @@ private List<GpxIntermediateData> MapToIntermediateData(List<GpxPoint> gpxPoints
     }).ToList();
 }
 
+// Step 2: Calculate metrics between adjacent points
+private List<GpxIntermediateData> CalculateSegmentMetrics(List<GpxIntermediateData> points)
+{
+    for (int i = 1; i < points.Count; i++)
+    {
+        var current = points[i];
+        var previous = points[i - 1];
+        
+        current.SegmentDistance = CalculateHaversineDistance(previous, current);
+        current.Speed = CalculateSpeed(current.SegmentDistance, 
+                                     current.Timestamp - previous.Timestamp);
+        current.ElevationDelta = current.Elevation - previous.Elevation;
+    }
+    
+    return points;
+}
+
 // Step 3: Filter out GPS glitches based on unreasonable speeds
 private List<GpxIntermediateData> FilterGpsGlitches(List<GpxIntermediateData> points)
 {
@@ -159,28 +176,9 @@ private List<GpxIntermediateData> FilterGpsGlitches(List<GpxIntermediateData> po
     // Filter out glitches
     return points.Where(p => !p.IsGpsGlitch).ToList();
 }
-
-// Step 5: Apply smoothing to elevation data
-private List<GpxIntermediateData> ApplyDataSmoothing(List<GpxIntermediateData> points)
-{
-    // Skip if not enough points for smoothing
-    if (points.Count <= 2)
-        return points;
-        
-    // Apply a simple moving average window
-    for (int i = 1; i < points.Count - 1; i++)
-    {
-        // Simple 3-point moving average smoothing
-        points[i].SmoothedElevation = (points[i-1].Elevation + 
-                                      points[i].Elevation + 
-                                      points[i+1].Elevation) / 3;
-    }
-    
-    return points;
-}
 ```
 
-## Benefits of the Pipeline Approach
+## Benefits of the pipeline approach
 
 - Each step can be tested independently
 - Changes affect only single functions, not the entire process
@@ -189,9 +187,9 @@ private List<GpxIntermediateData> ApplyDataSmoothing(List<GpxIntermediateData> p
 - Functions can be reused in other systems
 - New steps can be added without changing existing code
 
-Creating intermediate data structures improves code clarity, which is often worth the small performance cost in most applications.
+Creating intermediate data structures improves code clarity, which is often worth the small performance cost in most applications. This same approach works for booking systems, commerce workflows, reporting pipelines, hardware sensor processing, or any multi-step data processing.
 
-## Related Patterns and Principles
+## Related patterns and principles
 
 This approach leverages several established patterns:
 
@@ -205,14 +203,4 @@ Unlike distributed implementations of these patterns, our approach applies them 
 
 When you spot a loop doing too much (tracking state, applying business rules, and formatting output simultaneously), consider refactoring it to a data transformation pipeline.
 
-Don't try to do everything at once. Divide problems into subproblems, solve them independently, then merge them in the final solution.
-
-Next time you encounter such a complex loop:
-
-1. Identify each distinct operation being performed
-2. Design an intermediate data structure that can carry all necessary state
-3. Create single-purpose functions for each transformation step
-4. Chain them together in a clear sequence
-5. Write tests for each independent step
-
-This approach improves code quality and makes future maintenance easier.
+Break problems into subproblems, solve them independently, then merge them in the final solution. This approach improves code quality and makes future maintenance easier.

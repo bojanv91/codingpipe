@@ -1,6 +1,6 @@
 ---
-title: "Hours of prototyping can save weeks of problems"
-description: "How to reduce development risk? Build it twice: Prototype first, Production second"
+title: "Prototype first, production second"
+description: "How to reduce development risk? Build it twice: Prototype first, Production second. Hours of prototyping can save weeks of problems."
 date: 2025-04-21
 dateUpdated: Last Modified
 permalink: /posts/power-of-prototyping/
