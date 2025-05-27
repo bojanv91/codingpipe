@@ -323,19 +323,20 @@
 	</entry>
 	
 	<entry>
-		<title>Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog</title>
+		<title>Correlation IDs for ASP.NET Core background tasks</title>
 		<link href="https://codingpipe.com/posts/serilog-correlationid-background-task/"/>
 		<updated>2025-03-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/serilog-correlationid-background-task/</id>
-		<content type="html">&lt;p&gt;Background tasks in ASP.NET Core applications run independently of the HTTP pipeline, which means they don&#39;t have access to the HTTP request X-Correlation-Id header that&#39;s typically used for correlating logs in web applications. As a result, the correlation ID for background tasks is always null by default. To solve this problem, we should create a unique correlation ID for each background task execution cycle, allowing us to correlate all logs from a single execution run.&lt;/p&gt;
-&lt;h2 id=&quot;setting-up-the-logger-extension&quot; tabindex=&quot;-1&quot;&gt;Setting Up the Logger Extension &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#setting-up-the-logger-extension&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+		<content type="html">&lt;p&gt;Correlation IDs enable you to trace related log entries across distributed systems by linking them with a unique identifier. This becomes essential when troubleshooting issues that span multiple services or execution contexts.&lt;/p&gt;
+&lt;p&gt;Background tasks in ASP.NET Core run outside the HTTP pipeline, so they can&#39;t access request correlation IDs, leaving their logs uncorrelated by default. The solution is creating a unique correlation ID for each background task execution cycle, allowing you to trace all logs from a single run.&lt;/p&gt;
+&lt;h2 id=&quot;setting-up-the-logger-extension&quot; tabindex=&quot;-1&quot;&gt;Setting up the logger extension &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#setting-up-the-logger-extension&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LoggerExtensions&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
-  &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
-  &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
-  &lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
-  &lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext();&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;/summary&gt;&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;param name=&quot;baseLogger&quot;&gt;The base logger instance.&amp;lt;/param&gt;&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;returns&gt;A new logger instance with a correlation ID.&amp;lt;/returns&gt;&lt;/span&gt;
@@ -344,8 +345,8 @@
         &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CorrelationId&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Guid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NewGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ToString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;using-correlation-ids-in-background-services&quot; tabindex=&quot;-1&quot;&gt;Using Correlation IDs in Background Services &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#using-correlation-ids-in-background-services&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Here&#39;s a minimal example of implementing correlation IDs in a background service:&lt;/p&gt;
+&lt;h2 id=&quot;using-correlation-ids-in-background-services&quot; tabindex=&quot;-1&quot;&gt;Using correlation IDs in background services &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#using-correlation-ids-in-background-services&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here&#39;s how to implement correlation IDs in a background service:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyBackgroundTask&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;BackgroundService&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; _serviceLogger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;MyBackgroundTask&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
@@ -356,8 +357,7 @@
 
         &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IsCancellationRequested&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;token comment&quot;&gt;// Create a contextual logger from the base logger with a unique&lt;/span&gt;
-      &lt;span class=&quot;token comment&quot;&gt;// correlation ID for this execution cycle&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// Create a contextual logger with a unique correlation ID for this execution cycle&lt;/span&gt;
             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
             logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting background task cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
@@ -405,14 +405,14 @@
         &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WriteTo&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token named-parameter punctuation&quot;&gt;outputTemplate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; 
             &lt;span class=&quot;token string&quot;&gt;&quot;[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj} {Properties:j}{NewLine}{Exception}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;example-log-output&quot; tabindex=&quot;-1&quot;&gt;Example Log Output &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#example-log-output&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Here&#39;s an example of what the logs might look like in your console:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;HTTP Request Logs (with correlation ID from HTTP header):&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;example-log-output&quot; tabindex=&quot;-1&quot;&gt;Example log output &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#example-log-output&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Here&#39;s what the logs look like in your console:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;HTTP request logs (with correlation ID from HTTP header):&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 HTTP GET /api/products responded 200 in 45.6ms
 [10:15:22 DBG] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Retrieved 10 products from database
 [10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Request completed
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Background Task Logs (with generated correlation ID):&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Background task logs (with generated correlation ID):&lt;/strong&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[10:20:00 INF] Background service started
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting background task cycle
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting to process items
@@ -420,33 +420,27 @@
 [10:20:00 DBG] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Finalizing processing cycle
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Completed background task cycle successfully
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note how each execution of the background task gets its own correlation ID that&#39;s different from HTTP request correlation IDs, but all logs from the same background task execution cycle share the same ID.&lt;/p&gt;
-&lt;h2 id=&quot;nuget-dependencies&quot; tabindex=&quot;-1&quot;&gt;NuGet Dependencies &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#nuget-dependencies&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;For a complete setup, you&#39;ll need to install the following NuGet packages:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Serilog.AspNetCore&lt;/strong&gt; - For core Serilog integration with ASP.NET Core&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Serilog.Enrichers.CorrelationId&lt;/strong&gt; - For the &lt;code&gt;.Enrich.WithCorrelationId()&lt;/code&gt; extension&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Console&lt;/strong&gt; - For console output (if that&#39;s where you&#39;re sending logs)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Each background task execution gets its own unique correlation ID, and all logs from the same execution cycle share that same ID.&lt;/p&gt;
+&lt;p&gt;For the &lt;code&gt;.Enrich.WithCorrelationId()&lt;/code&gt; extension you need to install:&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog.Enrichers.ClientInfo&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This approach works for any background service where you need to correlate logs within execution cycles. Use it when debugging complex background operations or when you need to trace the flow of long-running processes.&lt;/p&gt;
 </content>
 	</entry>
 	
 	<entry>
-		<title>Status Fields - Why Enums Beat Booleans for Maintainability</title>
+		<title>Use enums over booleans for status fields</title>
 		<link href="https://codingpipe.com/posts/use-enums-over-booleans/"/>
 		<updated>2024-10-30T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/use-enums-over-booleans/</id>
-		<content type="html">&lt;p&gt;In business applications, we often need to track the state of entities - users, orders, payments, etc. While boolean flags might seem simple, they often lead to maintenance headaches. Here&#39;s why you should consider using enums instead.&lt;/p&gt;
-&lt;h2 id=&quot;1-the-meaning-of-false-is-not-always-clear&quot; tabindex=&quot;-1&quot;&gt;1: The meaning of false is not always clear &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/#1-the-meaning-of-false-is-not-always-clear&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The meaning of false is not always clear when using Booleans for status fields.&lt;/p&gt;
-&lt;p&gt;Let&#39;s see this example:&lt;/p&gt;
+		<content type="html">&lt;p&gt;In business applications, we often need to track the state of entities - users, orders, payments, etc. I&#39;ve encountered this maintenance issue across multiple projects: boolean status fields create ambiguity and become difficult to extend. Here&#39;s why enums provide better long-term maintainability.&lt;/p&gt;
+&lt;h2 id=&quot;the-meaning-of-false-is-not-always-clear&quot; tabindex=&quot;-1&quot;&gt;The meaning of FALSE is not always clear &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/#the-meaning-of-false-is-not-always-clear&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The meaning of &lt;strong&gt;false&lt;/strong&gt; is not always clear when using booleans for status fields.&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsActive &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;What does it mean when IsActive is false? Does that mean the user has been banned? Or is the email not yet verified?
-In most such situations, choosing Enum is a much better choice. Enums are more descriptive and flexible.&lt;/p&gt;
-&lt;p&gt;Let&#39;s refactor:&lt;/p&gt;
+&lt;p&gt;What does it mean when &lt;strong&gt;IsActive&lt;/strong&gt; is &lt;strong&gt;false&lt;/strong&gt;? Does that mean the user has been banned? Or is the email not yet verified? Or an admin disabled the login for that user? Enums provide better clarity and flexibility.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the refactored version:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserStatus&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   Active&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -458,16 +452,16 @@ In most such situations, choosing Enum is a much better choice. Enums are more d
   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;UserStatus&lt;/span&gt; Status &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now you know that the user can be in active or pending verification state. This approach makes the meaning of the user&#39;s states obvious.&lt;/p&gt;
-&lt;h2 id=&quot;2-expanding-with-a-third-option-is-a-very-challenging-refactor&quot; tabindex=&quot;-1&quot;&gt;2: Expanding with a third option is a very challenging refactor &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/#2-expanding-with-a-third-option-is-a-very-challenging-refactor&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Adding a third state like “Banned,” using Booleans can get problematic. Let&#39;s see this example:&lt;/p&gt;
+&lt;h2 id=&quot;adding-states-becomes-complex-with-booleans&quot; tabindex=&quot;-1&quot;&gt;Adding states becomes complex with booleans &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/#adding-states-becomes-complex-with-booleans&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This ambiguity problem gets worse when you need to expand beyond two states. Adding a third state like &amp;quot;Banned&amp;quot; with booleans becomes problematic:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsActive &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// from the original example&lt;/span&gt;
   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; IsBanned &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// newly added state for handling banned users&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This approach creates four possible combinations, but only two are valid. Managing these relationships can become complicated very quickly. Can an active user be banned? What happens then - what field takes precedence?&lt;/p&gt;
-&lt;p&gt;Additionally, what about existing data? We need to change the DB schema and migrate a lot of data to the new schema, which may create downtime or technical hurdles, especially at scale.&lt;/p&gt;
-&lt;p&gt;With Enums, adding a new state is simple:&lt;/p&gt;
+&lt;p&gt;This approach creates four possible combinations, but only two are valid. Managing these relationships becomes complicated quickly. Can an active user be banned? What happens then - what field takes precedence?&lt;/p&gt;
+&lt;p&gt;Additionally, what about existing data? You need to change the DB schema and migrate data to the new schema, which may create downtime or technical hurdles, especially at scale.&lt;/p&gt;
+&lt;p&gt;With enums, adding a new state is simple:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserStatus&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   Active&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -475,34 +469,37 @@ In most such situations, choosing Enum is a much better choice. Enums are more d
   Banned  &lt;span class=&quot;token comment&quot;&gt;// new state&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;rules-of-thumb&quot; tabindex=&quot;-1&quot;&gt;Rules of thumb &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/use-enums-over-booleans/#rules-of-thumb&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Here are some rules of thumb that I use:&lt;/p&gt;
+&lt;p&gt;Here are some guidelines I follow:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;Start with an enum if there’s any chance you’ll need more than two states in the future.&lt;/li&gt;
+&lt;li&gt;Start with an enum if there&#39;s any chance you&#39;ll need more than two states in the future.&lt;/li&gt;
 &lt;li&gt;Use boolean flags only for clear yes/no scenarios that are unlikely to change.&lt;/li&gt;
-&lt;li&gt;Before adding a boolean flag, ask yourself: “Could this need more states down the road?”&lt;/li&gt;
+&lt;li&gt;Before adding a boolean flag, ask yourself: &amp;quot;Could this need more states down the road?&amp;quot;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Using enums over booleans early for potentially expandable status fields ensures easier maintenance and clearer code in the long run. I won&#39;t consider it as over-engineering.&lt;/p&gt;
+&lt;p&gt;This pattern works well for order statuses (Draft, Pending, Shipped, Delivered), payment states, and any workflow where entities progress through multiple stages. Using enums early for potentially expandable status fields saves significant refactoring effort later.&lt;/p&gt;
 </content>
 	</entry>
 	
 	<entry>
-		<title>Testing Error Responses in ASP.NET Core using ProblemDetails</title>
-		<link href="https://codingpipe.com/posts/validating-problemdetails-in-aspnetcore-integration-tests/"/>
+		<title>Testing ProblemDetails responses in ASP.NET Core</title>
+		<link href="https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/"/>
 		<updated>2024-08-10T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/validating-problemdetails-in-aspnetcore-integration-tests/</id>
-		<content type="html">&lt;p&gt;This post describes how to write xUnit integration tests for an ASP.NET Core API project that uses the &lt;strong&gt;ProblemDetails&lt;/strong&gt; error response format.&lt;/p&gt;
+		<id>https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/</id>
+		<content type="html">&lt;p&gt;When building APIs that return structured error responses using ProblemDetails, you need integration tests that validate both the HTTP status codes and the error response structure. I&#39;ve found that testing only status codes misses important validation errors and business rule violations that clients depend on.&lt;/p&gt;
 &lt;p&gt;To read more on &lt;strong&gt;ProblemDetails&lt;/strong&gt;, check &lt;a href=&quot;https://www.rfc-editor.org/rfc/rfc9457&quot;&gt;RFC9457&lt;/a&gt; and &lt;a href=&quot;https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-8.0#problem-details&quot;&gt;ProblemDetails in ASP.NET Core&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;First, ensure you have the necessary NuGet packages installed in your test project. You can install them using the following .NET CLI commands in the command line:&lt;/p&gt;
+&lt;h2 id=&quot;setting-up-the-test-dependencies&quot; tabindex=&quot;-1&quot;&gt;Setting up the test dependencies &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/#setting-up-the-test-dependencies&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;First, ensure you have the necessary NuGet packages installed in your test project:&lt;/p&gt;
 &lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Microsoft.AspNetCore.Mvc.Testing
 dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package xunit
 dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Shouldly
 dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flurl.Http&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Now, implement the test fixture that starts the API project in memory within the integration tests:&lt;/p&gt;
+&lt;h2 id=&quot;creating-the-test-fixture&quot; tabindex=&quot;-1&quot;&gt;Creating the test fixture &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/#creating-the-test-fixture&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Implement the test fixture that starts the API project in memory within the integration tests:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AspNetCore&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Mvc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Testing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Flurl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Http&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;ContosoUniversity&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WebApi&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Playground&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WebApi&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;ContosoUniversity&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IntegrationTests&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Playground&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IntegrationTests&lt;/span&gt; 
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ApiTestFixture&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IAsyncLifetime&lt;/span&gt;&lt;/span&gt; 
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;FlurlClient&lt;/span&gt; _client&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
@@ -527,35 +524,26 @@ dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flu
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The above code uses &lt;strong&gt;WebApplicationFactory&amp;lt;ContosoUniversity.WebApi.Program&amp;gt;&lt;/strong&gt; to start the API in-memory for testing.&lt;/p&gt;
-&lt;p&gt;Next, create a base class for your test classes that will configure the &lt;strong&gt;Flurl.Http&lt;/strong&gt; client:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Flurl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Http&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;ContosoUniversity&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IntegrationTests&lt;/span&gt; 
-&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;abstract&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;BaseIntegrationTest&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IClassFixture&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ApiTestFixture&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt; 
-  &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;FlurlClient&lt;/span&gt; Client&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; BaseUrl &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;http://localhost/api&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;IntegrationTestBase&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ApiTestFixture&lt;/span&gt; fixture&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
-    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-      Client &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; fixture&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Client&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;IFlurlRequest&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; Client&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;BaseUrl &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;strong&gt;BaseIntegrationTest&lt;/strong&gt; class provides common functionality and configuration for all API test classes.&lt;/p&gt;
-&lt;p&gt;Now, write the test cases for managing students data:&lt;/p&gt;
+&lt;h2 id=&quot;writing-the-test-cases&quot; tabindex=&quot;-1&quot;&gt;Writing the test cases &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/#writing-the-test-cases&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Now you can write test cases that validate both successful responses and ProblemDetails error responses:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Flurl&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Http&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AspNetCore&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Mvc&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Shouldly&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;System&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Net&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;ContosoUniversity&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IntegrationTests&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ApiTests&lt;/span&gt; 
+&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Playground&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IntegrationTests&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ApiTests&lt;/span&gt; 
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StudentTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ApiTestFixture&lt;/span&gt; fixture&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;BaseIntegrationTest&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;fixture&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StudentTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IClassFixture&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ApiTestFixture&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;FlurlClient&lt;/span&gt; _client&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; BaseUrl &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;http://localhost/api&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;StudentTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ApiTestFixture&lt;/span&gt; fixture&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      _client &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; fixture&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Client&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;IFlurlRequest&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; _client&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;BaseUrl &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Create_student_with_valid_input&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
@@ -586,7 +574,7 @@ dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flu
         EnrollmentDate &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; DateTime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;UtcNow
       &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-      &lt;span class=&quot;token comment&quot;&gt;// Act`&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// Act&lt;/span&gt;
       &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; exception &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Should&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ThrowAsync&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;FlurlHttpException&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Request&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/students&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;PostJsonAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;studentWithEmptyFirstName&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
       &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
@@ -602,7 +590,7 @@ dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flu
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
     &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Create_student_fails_with_submited_reserved_name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Create_student_fails_with_submitted_reserved_name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
       &lt;span class=&quot;token comment&quot;&gt;// Arrange&lt;/span&gt;
       &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; studentWithReservedName &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; 
@@ -651,9 +639,8 @@ dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flu
       problemDetails&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Errors&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ShouldContainKey&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;EnrollmentDate&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
       problemDetails&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Errors&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;EnrollmentDate&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ShouldContain&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Enrollment date cannot be more than 500 days in the past.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;These tests check not only the status code but also the structure of the ProblemDetails error response where applicable.&lt;/p&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This approach validates both the HTTP status codes and the structure of ProblemDetails error responses. Testing the complete error response structure helps catch issues where your API returns the wrong status code or malformed error details that break client error handling.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1092,60 +1079,6 @@ aws configure &lt;span class=&quot;token function&quot;&gt;set&lt;/span&gt; aws_
 &lt;ul&gt;
 &lt;li&gt;https://aws.amazon.com/cli/&lt;/li&gt;
 &lt;li&gt;https://www.backblaze.com/docs/cloud-storage-use-the-aws-cli-with-backblaze-b2&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-	</entry>
-	
-	<entry>
-		<title>Problem-Solving Guide for Developers</title>
-		<link href="https://codingpipe.com/posts/problem-solving-guide-for-developers/"/>
-		<updated>2024-02-11T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/problem-solving-guide-for-developers/</id>
-		<content type="html">&lt;p&gt;The most common mistake developers make when solving problems is immediately starting with writing code for a solution that is not properly thought out for a problem that is not clearly understood.&lt;/p&gt;
-&lt;p&gt;There are countless ways how to approach problem-solving. In this post, I describe one approach with a couple of tips for software developers.&lt;/p&gt;
-&lt;p&gt;The process is made of four steps:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Analyze&lt;/strong&gt; - Understand the problem&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Plan&lt;/strong&gt; - Determine how to resolve the problem&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Implement&lt;/strong&gt; and test your solution incrementally&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Review&lt;/strong&gt; and refine your solution&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;step-1-analyze-understand-the-problem&quot; tabindex=&quot;-1&quot;&gt;Step 1: Analyze - Understand the problem &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/problem-solving-guide-for-developers/#step-1-analyze-understand-the-problem&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;General tips:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Define the problem clearly. Sometimes, you need to rewrite the problem statement so you can better understand it.&lt;/li&gt;
-&lt;li&gt;If the problem is too complex or too large, break it down into smaller, more manageable subproblems.&lt;/li&gt;
-&lt;li&gt;Identify possible causes of the problem, and focus on finding the root cause. You can use techniques such as the 5-Whys, flowcharts, and hypothesis testing.&lt;/li&gt;
-&lt;li&gt;Ask questions and clarify assumptions to avoid wasting time on irrelevant or incorrect solutions.&lt;/li&gt;
-&lt;li&gt;Validate your thinking by describing your understanding with your team. Seek other perspectives.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;If the problem is a bug caused by your code, try to reproduce it locally and in other environments as well. Is the bug consistently happening everywhere, or is it tied to a specific environment with a specific state of the database?&lt;/p&gt;
-&lt;p&gt;If it&#39;s a bug caused by the usage of a third-party service or a library (e.g., Stripe, SendGrid, RabbitMQ, EntityFramework, etc.), do research using the official documentation, discussion/support forum or the GitHub repository of the service/library. Also, you can research on the web or on chat AI tools (e.g., Bing Copilot) by using the specific error message or code.&lt;/p&gt;
-&lt;p&gt;And if it&#39;s a new feature request, open and read mindfully any related documents, specs, attachments, discussions, or comments for the given feature request. Then, explore the codebase in the area where the feature is being requested. Make sure you get familiar with the code, especially if it&#39;s unknown to you. This will help you understand the problem better and ask better questions.&lt;/p&gt;
-&lt;p&gt;Some problems require the majority of the problem-solving time spent on analysis, and others less so. Whatever the case, make sure you timebox this activity and avoid getting into analysis paralysis.&lt;/p&gt;
-&lt;h2 id=&quot;step-2-plan-determine-how-to-resolve-the-problem&quot; tabindex=&quot;-1&quot;&gt;Step 2: Plan - Determine how to resolve the problem &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/problem-solving-guide-for-developers/#step-2-plan-determine-how-to-resolve-the-problem&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Brainstorm and generate possible solutions. Involve your team in the process.&lt;/li&gt;
-&lt;li&gt;Think about the possible solutions, their pros and cons, risks, and trade-offs. Include them in your planning and design documents. Also, try to specify short-term and long-term solution options as well.&lt;/li&gt;
-&lt;li&gt;Evaluate and select the most suitable solution that would solve the problem. Try to think pragmatically, taking into account the greater business context (schedule, experience, team capacity, impact, cost, urgency, etc.).&lt;/li&gt;
-&lt;li&gt;Remember that any chosen solution has trade-offs. Be aware of them and communicate them clearly with the rest of the team (ideally, this will be part of the technical design document).&lt;/li&gt;
-&lt;li&gt;Design and create an action plan for the selected solution approach. Use techniques like pseudocode, prototypes, technical design documents, flowcharts, and sequence diagrams to plan and design your solution.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;step-3-implement-and-test-your-solution-incrementally&quot; tabindex=&quot;-1&quot;&gt;Step 3: Implement and test your solution incrementally &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/problem-solving-guide-for-developers/#step-3-implement-and-test-your-solution-incrementally&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Execute the action plan and monitor the progress. Communicate and collaborate with the team and adjust the plan as needed.&lt;/li&gt;
-&lt;li&gt;Start with the simplest or most important subproblem and write working code.&lt;/li&gt;
-&lt;li&gt;Keep it small, keep it testable.&lt;/li&gt;
-&lt;li&gt;Make changes in code incrementally until the entire problem is solved.&lt;/li&gt;
-&lt;li&gt;Test your code in each iteration.&lt;/li&gt;
-&lt;li&gt;Use debugging tools, logging, and unit/integration testing to find and fix errors in your implementation before anyone from QA or end-users finds them.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;step-4-review-and-refine-your-solution&quot; tabindex=&quot;-1&quot;&gt;Step 4: Review and refine your solution &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/problem-solving-guide-for-developers/#step-4-review-and-refine-your-solution&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Ensure your solution solves the problem.&lt;/li&gt;
-&lt;li&gt;Review your code in the same way that others will review it and make any necessary tweaks. Ensure you followed the agreed coding conventions and best practices.&lt;/li&gt;
-&lt;li&gt;Refactor your code for readability, security, and performance.&lt;/li&gt;
-&lt;li&gt;Be mindful and pragmatic when choosing what to optimize and how much time and energy you&#39;ll spend. Optimize &amp;quot;just enough&amp;quot;.&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 	</entry>

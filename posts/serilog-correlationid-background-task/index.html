@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog</title>
+		<title>Correlation IDs for ASP.NET Core background tasks</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,7 +526,7 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog</h1>
+<h1>Correlation IDs for ASP.NET Core background tasks</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2025-03-23">Mar 23, 2025</time></li>
@@ -534,18 +534,20 @@ h1 {
 	<li><span>4 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a> • </li>
-		<li><a href="/tags/c/" class="post-tag">C#</a></li>
+		<li><a href="/tags/serilog/" class="post-tag">Serilog</a> • </li>
+		<li><a href="/tags/logging/" class="post-tag">Logging</a></li>
 </ul>
 
-<p>Background tasks in ASP.NET Core applications run independently of the HTTP pipeline, which means they don't have access to the HTTP request X-Correlation-Id header that's typically used for correlating logs in web applications. As a result, the correlation ID for background tasks is always null by default. To solve this problem, we should create a unique correlation ID for each background task execution cycle, allowing us to correlate all logs from a single execution run.</p>
-<h2 id="setting-up-the-logger-extension" tabindex="-1">Setting Up the Logger Extension <a class="header-anchor" href="#setting-up-the-logger-extension">#</a></h2>
+<p>Correlation IDs enable you to trace related log entries across distributed systems by linking them with a unique identifier. This becomes essential when troubleshooting issues that span multiple services or execution contexts.</p>
+<p>Background tasks in ASP.NET Core run outside the HTTP pipeline, so they can't access request correlation IDs, leaving their logs uncorrelated by default. The solution is creating a unique correlation ID for each background task execution cycle, allowing you to trace all logs from a single run.</p>
+<h2 id="setting-up-the-logger-extension" tabindex="-1">Setting up the logger extension <a class="header-anchor" href="#setting-up-the-logger-extension">#</a></h2>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">LoggerExtensions</span>
 <span class="token punctuation">{</span>
-  <span class="token comment">/// &lt;summary></span>
-  <span class="token comment">/// Creates a new logger instance with a unique correlation ID.</span>
-  <span class="token comment">/// Usage:</span>
-  <span class="token comment">///   var serviceLogger = Log.ForContext&lt;MyService>();</span>
-  <span class="token comment">///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID</span>
+    <span class="token comment">/// &lt;summary></span>
+    <span class="token comment">/// Creates a new logger instance with a unique correlation ID.</span>
+    <span class="token comment">/// Usage:</span>
+    <span class="token comment">///   var serviceLogger = Log.ForContext&lt;MyService>();</span>
+    <span class="token comment">///   var contextLogger = serviceLogger.ForCorrelationIdContext();</span>
     <span class="token comment">/// &lt;/summary></span>
     <span class="token comment">/// &lt;param name="baseLogger">The base logger instance.&lt;/param></span>
     <span class="token comment">/// &lt;returns>A new logger instance with a correlation ID.&lt;/returns></span>
@@ -554,8 +556,8 @@ h1 {
         <span class="token keyword">return</span> baseLogger<span class="token punctuation">.</span><span class="token function">ForContext</span><span class="token punctuation">(</span><span class="token string">"CorrelationId"</span><span class="token punctuation">,</span> Guid<span class="token punctuation">.</span><span class="token function">NewGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ToString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="using-correlation-ids-in-background-services" tabindex="-1">Using Correlation IDs in Background Services <a class="header-anchor" href="#using-correlation-ids-in-background-services">#</a></h2>
-<p>Here's a minimal example of implementing correlation IDs in a background service:</p>
+<h2 id="using-correlation-ids-in-background-services" tabindex="-1">Using correlation IDs in background services <a class="header-anchor" href="#using-correlation-ids-in-background-services">#</a></h2>
+<p>Here's how to implement correlation IDs in a background service:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyBackgroundTask</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BackgroundService</span></span>
 <span class="token punctuation">{</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger</span> _serviceLogger <span class="token operator">=</span> Log<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">ForContext</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>MyBackgroundTask<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -566,8 +568,7 @@ h1 {
 
         <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>stoppingToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
         <span class="token punctuation">{</span>
-            <span class="token comment">// Create a contextual logger from the base logger with a unique</span>
-      <span class="token comment">// correlation ID for this execution cycle</span>
+            <span class="token comment">// Create a contextual logger with a unique correlation ID for this execution cycle</span>
             <span class="token class-name"><span class="token keyword">var</span></span> logger <span class="token operator">=</span> _serviceLogger<span class="token punctuation">.</span><span class="token function">ForCorrelationIdContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             logger<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Starting background task cycle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -615,14 +616,14 @@ h1 {
         <span class="token punctuation">.</span>WriteTo<span class="token punctuation">.</span><span class="token function">Console</span><span class="token punctuation">(</span><span class="token named-parameter punctuation">outputTemplate</span><span class="token punctuation">:</span> 
             <span class="token string">"[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj} {Properties:j}{NewLine}{Exception}"</span><span class="token punctuation">)</span>
 <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="example-log-output" tabindex="-1">Example Log Output <a class="header-anchor" href="#example-log-output">#</a></h2>
-<p>Here's an example of what the logs might look like in your console:</p>
-<p><strong>HTTP Request Logs (with correlation ID from HTTP header):</strong></p>
+<h2 id="example-log-output" tabindex="-1">Example log output <a class="header-anchor" href="#example-log-output">#</a></h2>
+<p>Here's what the logs look like in your console:</p>
+<p><strong>HTTP request logs (with correlation ID from HTTP header):</strong></p>
 <pre><code>[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 HTTP GET /api/products responded 200 in 45.6ms
 [10:15:22 DBG] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Retrieved 10 products from database
 [10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Request completed
 </code></pre>
-<p><strong>Background Task Logs (with generated correlation ID):</strong></p>
+<p><strong>Background task logs (with generated correlation ID):</strong></p>
 <pre><code>[10:20:00 INF] Background service started
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting background task cycle
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting to process items
@@ -630,23 +631,19 @@ h1 {
 [10:20:00 DBG] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Finalizing processing cycle
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Completed background task cycle successfully
 </code></pre>
-<p>Note how each execution of the background task gets its own correlation ID that's different from HTTP request correlation IDs, but all logs from the same background task execution cycle share the same ID.</p>
-<h2 id="nuget-dependencies" tabindex="-1">NuGet Dependencies <a class="header-anchor" href="#nuget-dependencies">#</a></h2>
-<p>For a complete setup, you'll need to install the following NuGet packages:</p>
-<ul>
-<li><strong>Serilog.AspNetCore</strong> - For core Serilog integration with ASP.NET Core</li>
-<li><strong>Serilog.Enrichers.CorrelationId</strong> - For the <code>.Enrich.WithCorrelationId()</code> extension</li>
-<li><strong>Serilog.Sinks.Console</strong> - For console output (if that's where you're sending logs)</li>
-</ul>
+<p>Each background task execution gets its own unique correlation ID, and all logs from the same execution cycle share that same ID.</p>
+<p>For the <code>.Enrich.WithCorrelationId()</code> extension you need to install:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">dotnet <span class="token function">add</span> package Serilog.Enrichers.ClientInfo</code></pre>
+<p>This approach works for any background service where you need to correlate logs within execution cycles. Use it when debugging complex background operations or when you need to trace the flow of long-running processes.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/use-enums-over-booleans/">Status Fields - Why Enums Beat Booleans for Maintainability</a></li><li>Next: <a href="/posts/complex-loops-to-transformation-pipelines/">Refactoring complex loops with transformation pipelines</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/use-enums-over-booleans/">Use enums over booleans for status fields</a></li><li>Next: <a href="/posts/complex-loops-to-transformation-pipelines/">Refactoring complex loops with transformation pipelines</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/serilog-correlationid-background-task/` was built on 2025-05-27T12:46:14.297Z -->
+		<!-- This page `/posts/serilog-correlationid-background-task/` was built on 2025-05-27T16:28:32.098Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Testing Error Responses in ASP.NET Core using ProblemDetails</title>
+		<title>Testing ProblemDetails responses in ASP.NET Core</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,7 +526,7 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Testing Error Responses in ASP.NET Core using ProblemDetails</h1>
+<h1>Testing ProblemDetails responses in ASP.NET Core</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2024-08-10">Aug 10, 2024</time></li>
@@ -537,19 +537,22 @@ h1 {
 		<li><a href="/tags/testing/" class="post-tag">Testing</a></li>
 </ul>
 
-<p>This post describes how to write xUnit integration tests for an ASP.NET Core API project that uses the <strong>ProblemDetails</strong> error response format.</p>
+<p>When building APIs that return structured error responses using ProblemDetails, you need integration tests that validate both the HTTP status codes and the error response structure. I've found that testing only status codes misses important validation errors and business rule violations that clients depend on.</p>
 <p>To read more on <strong>ProblemDetails</strong>, check <a href="https://www.rfc-editor.org/rfc/rfc9457">RFC9457</a> and <a href="https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-8.0#problem-details">ProblemDetails in ASP.NET Core</a>.</p>
-<p>First, ensure you have the necessary NuGet packages installed in your test project. You can install them using the following .NET CLI commands in the command line:</p>
+<h2 id="setting-up-the-test-dependencies" tabindex="-1">Setting up the test dependencies <a class="header-anchor" href="#setting-up-the-test-dependencies">#</a></h2>
+<p>First, ensure you have the necessary NuGet packages installed in your test project:</p>
 <pre class="language-bash" tabindex="0"><code class="language-bash">dotnet <span class="token function">add</span> package Microsoft.AspNetCore.Mvc.Testing
 dotnet <span class="token function">add</span> package xunit
 dotnet <span class="token function">add</span> package Shouldly
 dotnet <span class="token function">add</span> package Flurl.Http</code></pre>
-<p>Now, implement the test fixture that starts the API project in memory within the integration tests:</p>
+<h2 id="creating-the-test-fixture" tabindex="-1">Creating the test fixture <a class="header-anchor" href="#creating-the-test-fixture">#</a></h2>
+<p>Implement the test fixture that starts the API project in memory within the integration tests:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc<span class="token punctuation">.</span>Testing</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">Flurl<span class="token punctuation">.</span>Http</span><span class="token punctuation">;</span>
-<span class="token keyword">using</span> <span class="token namespace">ContosoUniversity<span class="token punctuation">.</span>WebApi</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">Playground<span class="token punctuation">.</span>WebApi</span><span class="token punctuation">;</span>
 
-<span class="token keyword">namespace</span> <span class="token namespace">ContosoUniversity<span class="token punctuation">.</span>IntegrationTests</span> <span class="token punctuation">{</span>
+<span class="token keyword">namespace</span> <span class="token namespace">Playground<span class="token punctuation">.</span>IntegrationTests</span> 
+<span class="token punctuation">{</span>
   <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ApiTestFixture</span><span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">WebApplicationFactory<span class="token punctuation">&lt;</span>Program<span class="token punctuation">></span></span><span class="token punctuation">,</span> <span class="token class-name">IAsyncLifetime</span></span> 
   <span class="token punctuation">{</span>
     <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">FlurlClient</span> _client<span class="token punctuation">;</span>
@@ -574,35 +577,26 @@ dotnet <span class="token function">add</span> package Flurl.Http</code></pre>
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>The above code uses <strong>WebApplicationFactory&lt;ContosoUniversity.WebApi.Program&gt;</strong> to start the API in-memory for testing.</p>
-<p>Next, create a base class for your test classes that will configure the <strong>Flurl.Http</strong> client:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">Flurl<span class="token punctuation">.</span>Http</span><span class="token punctuation">;</span>
-
-<span class="token keyword">namespace</span> <span class="token namespace">ContosoUniversity<span class="token punctuation">.</span>IntegrationTests</span> 
-<span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">BaseIntegrationTest</span><span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IClassFixture<span class="token punctuation">&lt;</span>ApiTestFixture<span class="token punctuation">></span></span></span> 
-  <span class="token punctuation">{</span>
-    <span class="token keyword">protected</span> <span class="token keyword">readonly</span> <span class="token class-name">FlurlClient</span> Client<span class="token punctuation">;</span>
-    <span class="token keyword">protected</span> <span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">string</span></span> BaseUrl <span class="token operator">=</span> <span class="token string">"http://localhost/api"</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">protected</span> <span class="token function">IntegrationTestBase</span><span class="token punctuation">(</span><span class="token class-name">ApiTestFixture</span> fixture<span class="token punctuation">)</span> 
-    <span class="token punctuation">{</span>
-      Client <span class="token operator">=</span> fixture<span class="token punctuation">.</span>Client<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">protected</span> <span class="token return-type class-name">IFlurlRequest</span> <span class="token function">Request</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> url<span class="token punctuation">)</span> <span class="token operator">=></span> Client<span class="token punctuation">.</span><span class="token function">Request</span><span class="token punctuation">(</span>BaseUrl <span class="token operator">+</span> url<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>The <strong>BaseIntegrationTest</strong> class provides common functionality and configuration for all API test classes.</p>
-<p>Now, write the test cases for managing students data:</p>
+<h2 id="writing-the-test-cases" tabindex="-1">Writing the test cases <a class="header-anchor" href="#writing-the-test-cases">#</a></h2>
+<p>Now you can write test cases that validate both successful responses and ProblemDetails error responses:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">Flurl<span class="token punctuation">.</span>Http</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">Shouldly</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Net</span><span class="token punctuation">;</span>
 
-<span class="token keyword">namespace</span> <span class="token namespace">ContosoUniversity<span class="token punctuation">.</span>IntegrationTests<span class="token punctuation">.</span>ApiTests</span> 
+<span class="token keyword">namespace</span> <span class="token namespace">Playground<span class="token punctuation">.</span>IntegrationTests<span class="token punctuation">.</span>ApiTests</span> 
 <span class="token punctuation">{</span>
-  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StudentTests</span><span class="token punctuation">(</span><span class="token class-name">ApiTestFixture</span> fixture<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token function">BaseIntegrationTest</span><span class="token punctuation">(</span>fixture<span class="token punctuation">)</span>
+  <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StudentTests</span><span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IClassFixture<span class="token punctuation">&lt;</span>ApiTestFixture<span class="token punctuation">></span></span></span>
+  <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">FlurlClient</span> _client<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">const</span> <span class="token class-name"><span class="token keyword">string</span></span> BaseUrl <span class="token operator">=</span> <span class="token string">"http://localhost/api"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">StudentTests</span><span class="token punctuation">(</span><span class="token class-name">ApiTestFixture</span> fixture<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+      _client <span class="token operator">=</span> fixture<span class="token punctuation">.</span>Client<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token return-type class-name">IFlurlRequest</span> <span class="token function">Request</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> url<span class="token punctuation">)</span> <span class="token operator">=></span> _client<span class="token punctuation">.</span><span class="token function">Request</span><span class="token punctuation">(</span>BaseUrl <span class="token operator">+</span> url<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">{</span>
     <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Fact</span></span><span class="token punctuation">]</span>
     <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">Create_student_with_valid_input</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
@@ -633,7 +627,7 @@ dotnet <span class="token function">add</span> package Flurl.Http</code></pre>
         EnrollmentDate <span class="token operator">=</span> DateTime<span class="token punctuation">.</span>UtcNow
       <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-      <span class="token comment">// Act`</span>
+      <span class="token comment">// Act</span>
       <span class="token class-name"><span class="token keyword">var</span></span> exception <span class="token operator">=</span> <span class="token keyword">await</span> Should<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">ThrowAsync</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>FlurlHttpException<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token keyword">async</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
         <span class="token keyword">await</span> <span class="token function">Request</span><span class="token punctuation">(</span><span class="token string">"/students"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">PostJsonAsync</span><span class="token punctuation">(</span>studentWithEmptyFirstName<span class="token punctuation">)</span><span class="token punctuation">;</span>
       <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -649,7 +643,7 @@ dotnet <span class="token function">add</span> package Flurl.Http</code></pre>
     <span class="token punctuation">}</span>
 
     <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Fact</span></span><span class="token punctuation">]</span>
-    <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">Create_student_fails_with_submited_reserved_name</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">Create_student_fails_with_submitted_reserved_name</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">{</span>
       <span class="token comment">// Arrange</span>
       <span class="token class-name"><span class="token keyword">var</span></span> studentWithReservedName <span class="token operator">=</span> <span class="token keyword">new</span> 
@@ -698,18 +692,17 @@ dotnet <span class="token function">add</span> package Flurl.Http</code></pre>
       problemDetails<span class="token punctuation">.</span>Errors<span class="token punctuation">.</span><span class="token function">ShouldContainKey</span><span class="token punctuation">(</span><span class="token string">"EnrollmentDate"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
       problemDetails<span class="token punctuation">.</span>Errors<span class="token punctuation">[</span><span class="token string">"EnrollmentDate"</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">ShouldContain</span><span class="token punctuation">(</span><span class="token string">"Enrollment date cannot be more than 500 days in the past."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>These tests check not only the status code but also the structure of the ProblemDetails error response where applicable.</p>
+  <span class="token punctuation">}</span></code></pre>
+<p>This approach validates both the HTTP status codes and the structure of ProblemDetails error responses. Testing the complete error response structure helps catch issues where your API returns the wrong status code or malformed error details that break client error handling.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/ssh-windows-snippets/">SSH tips on Windows</a></li><li>Next: <a href="/posts/use-enums-over-booleans/">Status Fields - Why Enums Beat Booleans for Maintainability</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/ssh-windows-snippets/">SSH tips on Windows</a></li><li>Next: <a href="/posts/use-enums-over-booleans/">Use enums over booleans for status fields</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/validating-problemdetails-in-aspnetcore-integration-tests/` was built on 2025-05-27T12:46:14.296Z -->
+		<!-- This page `/posts/testing-problemdetails-in-aspnetcore-integration-tests/` was built on 2025-05-27T16:28:32.098Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
