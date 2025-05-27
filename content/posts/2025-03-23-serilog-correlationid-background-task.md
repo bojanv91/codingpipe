@@ -1,26 +1,29 @@
 ---
-title: "Tracing Background Tasks in ASP.NET Core with Correlation IDs and Serilog"
+title: "Correlation IDs for ASP.NET Core background tasks"
 date: 2025-03-23
 dateUpdated: Last Modified
 permalink: /posts/serilog-correlationid-background-task/
 tags:
   - ASP.NET Core
-  - C#
+  - Serilog
+  - Logging
 layout: layouts/post.njk
 ---
 
-Background tasks in ASP.NET Core applications run independently of the HTTP pipeline, which means they don't have access to the HTTP request X-Correlation-Id header that's typically used for correlating logs in web applications. As a result, the correlation ID for background tasks is always null by default. To solve this problem, we should create a unique correlation ID for each background task execution cycle, allowing us to correlate all logs from a single execution run.
+Correlation IDs enable you to trace related log entries across distributed systems by linking them with a unique identifier. This becomes essential when troubleshooting issues that span multiple services or execution contexts.
 
-## Setting Up the Logger Extension
+Background tasks in ASP.NET Core run outside the HTTP pipeline, so they can't access request correlation IDs, leaving their logs uncorrelated by default. The solution is creating a unique correlation ID for each background task execution cycle, allowing you to trace all logs from a single run.
+
+## Setting up the logger extension
 
 ```csharp
 public static class LoggerExtensions
 {
-  /// <summary>
-  /// Creates a new logger instance with a unique correlation ID.
-  /// Usage:
-  ///   var serviceLogger = Log.ForContext<MyService>();
-  ///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID
+    /// <summary>
+    /// Creates a new logger instance with a unique correlation ID.
+    /// Usage:
+    ///   var serviceLogger = Log.ForContext<MyService>();
+    ///   var contextLogger = serviceLogger.ForCorrelationIdContext();
     /// </summary>
     /// <param name="baseLogger">The base logger instance.</param>
     /// <returns>A new logger instance with a correlation ID.</returns>
@@ -31,9 +34,9 @@ public static class LoggerExtensions
 }
 ```
 
-## Using Correlation IDs in Background Services
+## Using correlation IDs in background services
 
-Here's a minimal example of implementing correlation IDs in a background service:
+Here's how to implement correlation IDs in a background service:
 
 ```csharp
 public class MyBackgroundTask : BackgroundService
@@ -46,8 +49,7 @@ public class MyBackgroundTask : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            // Create a contextual logger from the base logger with a unique
-      // correlation ID for this execution cycle
+            // Create a contextual logger with a unique correlation ID for this execution cycle
             var logger = _serviceLogger.ForCorrelationIdContext();
             logger.Information("Starting background task cycle");
 
@@ -102,11 +104,11 @@ builder.Host.UseSerilog((context, configuration) =>
 );
 ```
 
-## Example Log Output
+## Example log output
 
-Here's an example of what the logs might look like in your console:
+Here's what the logs look like in your console:
 
-**HTTP Request Logs (with correlation ID from HTTP header):**
+**HTTP request logs (with correlation ID from HTTP header):**
 
 ```
 [10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 HTTP GET /api/products responded 200 in 45.6ms
@@ -114,7 +116,7 @@ Here's an example of what the logs might look like in your console:
 [10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Request completed
 ```
 
-**Background Task Logs (with generated correlation ID):**
+**Background task logs (with generated correlation ID):**
 
 ```
 [10:20:00 INF] Background service started
@@ -125,12 +127,12 @@ Here's an example of what the logs might look like in your console:
 [10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Completed background task cycle successfully
 ```
 
-Note how each execution of the background task gets its own correlation ID that's different from HTTP request correlation IDs, but all logs from the same background task execution cycle share the same ID.
+Each background task execution gets its own unique correlation ID, and all logs from the same execution cycle share that same ID.
 
-## NuGet Dependencies
+For the `.Enrich.WithCorrelationId()` extension you need to install:
 
-For a complete setup, you'll need to install the following NuGet packages:
+```bash
+dotnet add package Serilog.Enrichers.ClientInfo
+```
 
-* **Serilog.AspNetCore** - For core Serilog integration with ASP.NET Core
-* **Serilog.Enrichers.CorrelationId** - For the `.Enrich.WithCorrelationId()` extension
-* **Serilog.Sinks.Console** - For console output (if that's where you're sending logs)
+This approach works for any background service where you need to correlate logs within execution cycles. Use it when debugging complex background operations or when you need to trace the flow of long-running processes.

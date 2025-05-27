@@ -1,5 +1,5 @@
 ---
-title: "Status Fields - Why Enums Beat Booleans for Maintainability"
+title: "Use enums over booleans for status fields"
 date: 2024-10-30
 dateUpdated: Last Modified
 permalink: /posts/use-enums-over-booleans/
@@ -9,74 +9,71 @@ tags:
 layout: layouts/post.njk
 ---
 
-In business applications, we often need to track the state of entities - users, orders, payments, etc. While boolean flags might seem simple, they often lead to maintenance headaches. Here's why you should consider using enums instead.
+In business applications, we often need to track the state of entities - users, orders, payments, etc. I've encountered this maintenance issue across multiple projects: boolean status fields create ambiguity and become difficult to extend. Here's why enums provide better long-term maintainability.
 
-## 1: The meaning of false is not always clear
+## The meaning of FALSE is not always clear
 
-The meaning of false is not always clear when using Booleans for status fields.
-
-Let's see this example:
+The meaning of **false** is not always clear when using booleans for status fields.
 
 ```csharp
 public class User
 {
-    public bool IsActive { get; set; }
+    public bool IsActive { get; set; }
 }
 ```
 
-What does it mean when IsActive is false? Does that mean the user has been banned? Or is the email not yet verified?
-In most such situations, choosing Enum is a much better choice. Enums are more descriptive and flexible.
+What does it mean when **IsActive** is **false**? Does that mean the user has been banned? Or is the email not yet verified? Or an admin disabled the login for that user? Enums provide better clarity and flexibility.
 
-Let's refactor:
+Here's the refactored version:
 
 ```csharp
 public enum UserStatus
 {
-  Active,
-  PendingVerification
+  Active,
+  PendingVerification
 }
- 
+ 
 public class User
 {
-  public UserStatus Status { get; set; }
+  public UserStatus Status { get; set; }
 }
 ```
 
 Now you know that the user can be in active or pending verification state. This approach makes the meaning of the user's states obvious.
 
-## 2: Expanding with a third option is a very challenging refactor
+## Adding states becomes complex with booleans
 
-Adding a third state like “Banned,” using Booleans can get problematic. Let's see this example:
+This ambiguity problem gets worse when you need to expand beyond two states. Adding a third state like "Banned" with booleans becomes problematic:
 
 ```csharp
 public class User
 {
-  public bool IsActive { get; set; }  // from the original example
-  public bool IsBanned { get; set; }  // newly added state for handling banned users
+  public bool IsActive { get; set; }  // from the original example
+  public bool IsBanned { get; set; }  // newly added state for handling banned users
 }
 ```
 
-This approach creates four possible combinations, but only two are valid. Managing these relationships can become complicated very quickly. Can an active user be banned? What happens then - what field takes precedence?
+This approach creates four possible combinations, but only two are valid. Managing these relationships becomes complicated quickly. Can an active user be banned? What happens then - what field takes precedence?
 
-Additionally, what about existing data? We need to change the DB schema and migrate a lot of data to the new schema, which may create downtime or technical hurdles, especially at scale.
+Additionally, what about existing data? You need to change the DB schema and migrate data to the new schema, which may create downtime or technical hurdles, especially at scale.
 
-With Enums, adding a new state is simple:
+With enums, adding a new state is simple:
 
 ```csharp
 public enum UserStatus
 {
-  Active,
-  PendingVerification,
-  Banned  // new state
+  Active,
+  PendingVerification,
+  Banned  // new state
 }
 ```
 
 ## Rules of thumb
 
-Here are some rules of thumb that I use:
+Here are some guidelines I follow:
 
-1. Start with an enum if there’s any chance you’ll need more than two states in the future.
+1. Start with an enum if there's any chance you'll need more than two states in the future.
 2. Use boolean flags only for clear yes/no scenarios that are unlikely to change.
-3. Before adding a boolean flag, ask yourself: “Could this need more states down the road?”
+3. Before adding a boolean flag, ask yourself: "Could this need more states down the road?"
 
-Using enums over booleans early for potentially expandable status fields ensures easier maintenance and clearer code in the long run. I won't consider it as over-engineering.
+This pattern works well for order statuses (Draft, Pending, Shipped, Delivered), payment states, and any workflow where entities progress through multiple stages. Using enums early for potentially expandable status fields saves significant refactoring effort later.

@@ -1,60 +1,46 @@
 ---
-title: Problem-Solving Guide for Developers
+title: Problem-solving guide for developers
 date: 2024-02-11
 dateUpdated: Last Modified
 permalink: /posts/problem-solving-guide-for-developers/
-tags:
-  - Productivity
 layout: layouts/post.njk
+draft: true
+eleventyExcludeFromCollections: true
 ---
-The most common mistake developers make when solving problems is immediately starting with writing code for a solution that is not properly thought out for a problem that is not clearly understood.
 
-There are countless ways how to approach problem-solving. In this post, I describe one approach with a couple of tips for software developers.
+Jumping straight into writing code without understanding the problem clearly often leads to wasted time and frustration. A structured approach helps avoid this common pitfall.
 
-The process is made of four steps:
+A couple of years ago I discovered George Pólya's "How to Solve It." The ideas from his book helped me better categorize and describe a process I was already using. Here's the four-step process:
 
 1. **Analyze** - Understand the problem
-2. **Plan** - Determine how to resolve the problem
+2. **Plan** - Determine how to resolve the problem  
 3. **Implement** and test your solution incrementally
 4. **Review** and refine your solution
 
-## Step 1: Analyze - Understand the problem
+## Step 1: Analyze - understand the problem
 
-General tips:
-- Define the problem clearly. Sometimes, you need to rewrite the problem statement so you can better understand it.
-- If the problem is too complex or too large, break it down into smaller, more manageable subproblems.
-- Identify possible causes of the problem, and focus on finding the root cause. You can use techniques such as the 5-Whys, flowcharts, and hypothesis testing.
-- Ask questions and clarify assumptions to avoid wasting time on irrelevant or incorrect solutions.
-- Validate your thinking by describing your understanding with your team. Seek other perspectives.
+I start by defining the problem clearly, often rewriting the problem statement until I truly understand it. For complex problems, I break them down into smaller, manageable pieces.
 
-If the problem is a bug caused by your code, try to reproduce it locally and in other environments as well. Is the bug consistently happening everywhere, or is it tied to a specific environment with a specific state of the database?
+When dealing with bugs, I focus on reproduction first. Can I reproduce it locally? Is it environment-specific or tied to particular data states? For third-party library issues, I create prototypes and PoCs to reproduce problems in isolation, dive into official documentation and GitHub issues using specific error messages, and leverage Google searches and LLM tools for additional context.
 
-If it's a bug caused by the usage of a third-party service or a library (e.g., Stripe, SendGrid, RabbitMQ, EntityFramework, etc.), do research using the official documentation, discussion/support forum or the GitHub repository of the service/library. Also, you can research on the web or on chat AI tools (e.g., Bing Copilot) by using the specific error message or code.
+For new features, I read all related specs and explore the existing codebase in that area. This helps me understand the problem better and ask informed questions.
 
-And if it's a new feature request, open and read mindfully any related documents, specs, attachments, discussions, or comments for the given feature request. Then, explore the codebase in the area where the feature is being requested. Make sure you get familiar with the code, especially if it's unknown to you. This will help you understand the problem better and ask better questions.
+The key is knowing when to stop analyzing and avoid analysis paralysis.
 
-Some problems require the majority of the problem-solving time spent on analysis, and others less so. Whatever the case, make sure you timebox this activity and avoid getting into analysis paralysis.
+## Step 2: Plan - determine how to resolve the problem
 
-## Step 2: Plan - Determine how to resolve the problem
+I use prototyping (or you may call it spiking, PoCing, ..) as a key tool for learning and determining multiple approaches to find the best solution. I brainstorm possible solutions and involve my team in evaluating each option's pros, cons, and trade-offs within our business context.
 
-- Brainstorm and generate possible solutions. Involve your team in the process.
-- Think about the possible solutions, their pros and cons, risks, and trade-offs. Include them in your planning and design documents. Also, try to specify short-term and long-term solution options as well.
-- Evaluate and select the most suitable solution that would solve the problem. Try to think pragmatically, taking into account the greater business context (schedule, experience, team capacity, impact, cost, urgency, etc.).
-- Remember that any chosen solution has trade-offs. Be aware of them and communicate them clearly with the rest of the team (ideally, this will be part of the technical design document).
-- Design and create an action plan for the selected solution approach. Use techniques like pseudocode, prototypes, technical design documents, flowcharts, and sequence diagrams to plan and design your solution.
+After prototyping and evaluation, I create solution designs, implementation plans, or tech specs depending on team maturity and system complexity. Sometimes that's two paragraphs, sometimes a diagram, and sometimes a dozen pages with various diagrams and references.
 
-## Step 3: Implement and test your solution incrementally
+## Step 3: Implement and test incrementally
 
-- Execute the action plan and monitor the progress. Communicate and collaborate with the team and adjust the plan as needed.
-- Start with the simplest or most important subproblem and write working code.
-- Keep it small, keep it testable.
-- Make changes in code incrementally until the entire problem is solved.
-- Test your code in each iteration.
-- Use debugging tools, logging, and unit/integration testing to find and fix errors in your implementation before anyone from QA or end-users finds them.
+I start with the simplest or most critical piece and write working code. Small, testable changes work better than big rewrites. I test each iteration and use debugging tools, logging, and automated tests to catch issues before QA or users do.
 
-## Step 4: Review and refine your solution
+Communication with the team and adjusting the plan as needed keeps the implementation on track.
 
-- Ensure your solution solves the problem.
-- Review your code in the same way that others will review it and make any necessary tweaks. Ensure you followed the agreed coding conventions and best practices.
-- Refactor your code for readability, security, and performance.
-- Be mindful and pragmatic when choosing what to optimize and how much time and energy you'll spend. Optimize "just enough".
+## Step 4: Review and refine
+
+I ensure the solution actually solves the original problem, then review the code as if someone else wrote it. I refactor for readability and performance, but stay pragmatic about what needs optimization.
+
+This process has saved me countless hours of debugging poorly planned solutions. The time invested upfront in understanding and planning pays dividends when the implementation goes smoothly.

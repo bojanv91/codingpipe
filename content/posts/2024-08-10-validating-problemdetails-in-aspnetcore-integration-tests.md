@@ -1,19 +1,21 @@
 ---
-title: "Testing Error Responses in ASP.NET Core using ProblemDetails"
+title: "Testing ProblemDetails responses in ASP.NET Core"
 date: 2024-08-10
 dateUpdated: Last Modified
-permalink: /posts/validating-problemdetails-in-aspnetcore-integration-tests/
+permalink: /posts/testing-problemdetails-in-aspnetcore-integration-tests/
 tags:
   - ASP.NET Core
   - Testing
 layout: layouts/post.njk
 ---
 
-This post describes how to write xUnit integration tests for an ASP.NET Core API project that uses the **ProblemDetails** error response format.
+When building APIs that return structured error responses using ProblemDetails, you need integration tests that validate both the HTTP status codes and the error response structure. I've found that testing only status codes misses important validation errors and business rule violations that clients depend on.
 
 To read more on **ProblemDetails**, check [RFC9457](https://www.rfc-editor.org/rfc/rfc9457) and [ProblemDetails in ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/error-handling?view=aspnetcore-8.0#problem-details).
 
-First, ensure you have the necessary NuGet packages installed in your test project. You can install them using the following .NET CLI commands in the command line:
+## Setting up the test dependencies
+
+First, ensure you have the necessary NuGet packages installed in your test project:
 
 ```bash
 dotnet add package Microsoft.AspNetCore.Mvc.Testing
@@ -22,14 +24,17 @@ dotnet add package Shouldly
 dotnet add package Flurl.Http
 ```
 
-Now, implement the test fixture that starts the API project in memory within the integration tests:
+## Creating the test fixture
+
+Implement the test fixture that starts the API project in memory within the integration tests:
 
 ```csharp
 using Microsoft.AspNetCore.Mvc.Testing;
 using Flurl.Http;
-using ContosoUniversity.WebApi;
+using Playground.WebApi;
 
-namespace ContosoUniversity.IntegrationTests {
+namespace Playground.IntegrationTests 
+{
   public class ApiTestFixture: WebApplicationFactory<Program>, IAsyncLifetime 
   {
     private readonly FlurlClient _client;
@@ -56,33 +61,9 @@ namespace ContosoUniversity.IntegrationTests {
 }
 ```
 
-The above code uses **WebApplicationFactory<ContosoUniversity.WebApi.Program>** to start the API in-memory for testing.
+## Writing the test cases
 
-Next, create a base class for your test classes that will configure the **Flurl.Http** client:
-
-```csharp
-using Flurl.Http;
-
-namespace ContosoUniversity.IntegrationTests 
-{
-  public abstract class BaseIntegrationTest: IClassFixture<ApiTestFixture> 
-  {
-    protected readonly FlurlClient Client;
-    protected const string BaseUrl = "http://localhost/api";
-
-    protected IntegrationTestBase(ApiTestFixture fixture) 
-    {
-      Client = fixture.Client;
-    }
-
-    protected IFlurlRequest Request(string url) => Client.Request(BaseUrl + url);
-  }
-}
-```
-
-The **BaseIntegrationTest** class provides common functionality and configuration for all API test classes.
-
-Now, write the test cases for managing students data:
+Now you can write test cases that validate both successful responses and ProblemDetails error responses:
 
 ```csharp
 using Flurl.Http;
@@ -90,9 +71,19 @@ using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using System.Net;
 
-namespace ContosoUniversity.IntegrationTests.ApiTests 
+namespace Playground.IntegrationTests.ApiTests 
 {
-  public class StudentTests(ApiTestFixture fixture): BaseIntegrationTest(fixture)
+  public class StudentTests: IClassFixture<ApiTestFixture>
+  {
+    private readonly FlurlClient _client;
+    private const string BaseUrl = "http://localhost/api";
+
+    public StudentTests(ApiTestFixture fixture)
+    {
+      _client = fixture.Client;
+    }
+
+    private IFlurlRequest Request(string url) => _client.Request(BaseUrl + url);
   {
     [Fact]
     public async Task Create_student_with_valid_input() 
@@ -123,7 +114,7 @@ namespace ContosoUniversity.IntegrationTests.ApiTests
         EnrollmentDate = DateTime.UtcNow
       };
 
-      // Act`
+      // Act
       var exception = await Should.ThrowAsync<FlurlHttpException>(async() => {
         await Request("/students").PostJsonAsync(studentWithEmptyFirstName);
       });
@@ -139,7 +130,7 @@ namespace ContosoUniversity.IntegrationTests.ApiTests
     }
 
     [Fact]
-    public async Task Create_student_fails_with_submited_reserved_name()
+    public async Task Create_student_fails_with_submitted_reserved_name()
     {
       // Arrange
       var studentWithReservedName = new 
@@ -189,7 +180,6 @@ namespace ContosoUniversity.IntegrationTests.ApiTests
       problemDetails.Errors["EnrollmentDate"].ShouldContain("Enrollment date cannot be more than 500 days in the past.");
     }
   }
-}
 ```
 
-These tests check not only the status code but also the structure of the ProblemDetails error response where applicable.
+This approach validates both the HTTP status codes and the structure of ProblemDetails error responses. Testing the complete error response structure helps catch issues where your API returns the wrong status code or malformed error details that break client error handling.
