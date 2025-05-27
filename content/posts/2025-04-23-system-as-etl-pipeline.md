@@ -1,5 +1,5 @@
 ---
-title: "How I found the same ETL pattern in two different systems"
+title: "The hidden ETL pipeline in your system"
 date: 2025-04-23
 dateUpdated: Last Modified
 permalink: /posts/system-as-etl-pipeline/
@@ -8,44 +8,18 @@ tags:
 layout: layouts/post.njk
 ---
 
-I recently realized that two different systems I've worked on are actually doing the same thing - they're both a style of ETL (Extract, Transform, Load) pipelines.
+A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized part of the system was functioning as an ETL pipeline, but it was not originally designed as one.
 
-For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:
+This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.
 
-- Extract data from many different hardware types
-- Transform the data from many formats into one standard format
-- Load the data to cloud services/databases
+Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.
 
-I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.
+Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.
 
-Recently, I was working on a wearable device project with these parts:
+It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile apps.
 
-- Mobile apps connect to wearables using Bluetooth
-- The apps process raw device data from various manufacturers that we need to support
-- The apps send the processed data to cloud services
+While both systems sent data back down (settings and configurations), this was separate from the ETL process. Keeping these concerns apart made the design cleaner.
 
-I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.
+Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.
 
-Using what I learned from the security project, I could then see:
-
-- The mobile app is the transformation engine, just like the edge controller was
-- Local storage is mainly for making transfers reliable, not for offline use
-- The rules for transforming/mapping data formats are the most valuable part
-- The data mainly flows one way (device → app → server)
-
-By applying these ETL concepts from the security system to our wearable project, we are able to focus on improving each part separately: getting better data from devices, creating better rules for transforming/mapping data, and sending data to servers more efficiently.
-
-This ETL view also clarifies other parts of the system:
-
-1. **Reporting is simpler from the destination**: We don't need complex reporting capabilities on devices or in the mobile app. Reports are much easier to create from the already processed and aggregated data in the backend.
-
-2. **Separating ETL from configuration**: Both systems do have some data flowing from cloud servers down to devices (like settings and configurations), but this is a separate concern from the ETL process. Keeping these separate makes both easier to manage.
-
-3. **Optimization opportunities**: Seeing this as ETL opens up many ways to improve the pipeline:
-
-    - Batching data before sending
-    - Cleaning up glitches or unnecessary data points
-    - Removing duplicate data entries
-    - Compressing data for efficient transfer
-
-Sometimes the best solutions come from seeing the patterns across different projects.
+What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.

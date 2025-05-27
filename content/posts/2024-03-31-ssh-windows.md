@@ -1,5 +1,5 @@
 ---
-title: "SSH Command Snippets (Windows)"
+title: "SSH tips on Windows"
 date: 2024-03-31
 dateUpdated: Last Modified
 permalink: /posts/ssh-windows-snippets/
@@ -8,12 +8,13 @@ tags:
 layout: layouts/post.njk
 ---
 
-Windows 10 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.
+Windows 11 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.
 
 ## Connecting to a Linux server
 
 Open a terminal and run the following command:
-```
+
+```plaintext
 ssh username@12.34.56.78
 ```
 
@@ -22,7 +23,8 @@ The first time you connect, you’ll be prompted to accept the host key. After t
 To log out, run the `exit` command or press `Ctrl+D`.
 
 If your Linux server has a different SSH port, let's say 10322, use the `-p` flag:
-```
+
+```plaintext
 ssh username@12.34.56.78 -p 10322
 ```
 
@@ -38,6 +40,156 @@ Use [WinSCP](https://winscp.net/eng/download.php) for that.
 
 ## Additional Resources
 
-- https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui
-- https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/
-- https://docs.vultr.com/port-forwarding-and-proxying-using-openssh
+- <https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui>
+- <https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/>
+- <https://docs.vultr.com/port-forwarding-and-proxying-using-openssh>
+
+## Managing SSH Keys with OpenSSH and Bitwarden
+
+### 1. Set up your environment
+
+Create the SSH directory if it doesn't exist:
+
+```powershell
+mkdir -p $env:USERPROFILE\.ssh
+```
+
+### 2. Generate SSH Key Pair
+
+1. Open PowerShell and generate an Ed25519 key (recommended):
+
+```powershell
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+Or RSA if required:
+
+```powershell
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+2. When prompted:
+   - Save to default location (`%USERPROFILE%\.ssh\id_ed25519` or `id_rsa`)
+   - Set a strong passphrase
+
+This creates two files:
+
+- Private key: `id_ed25519` (no extension)
+- Public key: `id_ed25519.pub`
+
+### 3. Store in Bitwarden
+
+1. Open Bitwarden and create a new Secure Note
+2. Title: "SSH Key - [Purpose]" (e.g., "SSH Key - Work Laptop 2024")
+3. Add attachments:
+   - Browse to `%USERPROFILE%\.ssh\`
+   - Attach both `id_ed25519` and `id_ed25519.pub`
+4. Add to notes:
+
+```plaintext
+Server: example.com
+Username: myuser
+Key Type: Ed25519
+Created: [Date]
+Passphrase: [your-passphrase]
+
+Public Key:
+[paste contents of id_ed25519.pub here]
+
+Usage:
+1. Download private key
+2. Save to ~/.ssh/id_ed25519
+3. Set permissions: chmod 600 ~/.ssh/id_ed25519
+```
+
+5. Add tags: "ssh", "credentials", "work"
+6. Save
+
+### 4. Deploy to Server
+
+1. Copy your public key to the server:
+
+```powershell
+# Method 1: Using ssh-copy-id (if available)
+ssh-copy-id -i ~/.ssh/id_ed25519.pub username@example.com
+
+# Method 2: Manual copy
+type $env:USERPROFILE\.ssh\id_ed25519.pub | ssh username@example.com "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+
+2. Verify the connection:
+
+```powershell
+ssh -i $env:USERPROFILE\.ssh\id_ed25519 username@example.com
+```
+
+### 5. Recovery Process
+
+If you need to recover access from a new device:
+
+1. Install OpenSSH client if not present:
+
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0
+```
+
+2. Create SSH directory:
+
+```powershell
+mkdir -p $env:USERPROFILE\.ssh
+```
+
+3. Download private key from Bitwarden
+4. Save as `%USERPROFILE%\.ssh\id_ed25519`
+5. Set correct permissions:
+
+```powershell
+icacls "%USERPROFILE%\.ssh\id_ed25519" /inheritance:r /grant:r "%USERNAME%":"F"
+```
+
+6. Test connection:
+
+```powershell
+ssh -i $env:USERPROFILE\.ssh\id_ed25519 username@example.com
+```
+
+7. After recovery, generate new keys and update servers
+
+### Connecting to Servers with SSH Keys
+
+1. Basic connection with default key location:
+```powershell
+ssh username@192.168.1.100
+```
+
+2. Specify a different port (e.g., 10322):
+```powershell
+ssh -p 10322 username@192.168.1.100
+```
+
+3. Explicitly specify which key to use:
+```powershell
+ssh -i $env:USERPROFILE\.ssh\id_ed25519 username@192.168.1.100
+```
+
+4. For multiple servers/keys, create a config file at `%USERPROFILE%\.ssh\config`:
+```plaintext
+Host myserver1
+    HostName 192.168.1.100
+    User username
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+
+Host myserver2
+    HostName 192.168.1.200
+    User otheruser
+    Port 10322
+    IdentityFile ~/.ssh/id_rsa
+```
+
+Then connect using the alias:
+```powershell
+ssh myserver1
+```
+
+> 💡 Tip: After adding your key to a server, you won't need to enter a password. You'll only need the key's passphrase (if you set one).

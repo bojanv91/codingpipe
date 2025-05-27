@@ -1,14 +1,16 @@
 ---
-title: "Strongly-typed configuration in .NET Core"
+title: "Type-Safe Configuration in .NET Core"
 date: 2023-01-08
 dateUpdated: Last Modified
-permalink: /posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/
+permalink: /posts/type-safe-configuration-in-net-core/
 tags:
   - ASP.NET Core
 layout: layouts/post.njk
 ---
 
-Create a strongly typed configuration class for **appsettings.json** using **required** and **init** properties:
+Working with configuration in .NET applications, I've seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here's how I use strongly-typed configuration classes to catch these issues at compile time.
+
+Let's create a configuration class that matches our **appsettings.json** structure:
 
 ```csharp
 public class AppSettings
@@ -28,9 +30,11 @@ public class AppSettings
 }
 ```
 
-Match your **appsettings.json** structure:
+In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.
 
-```csharp
+Which matches our **appsettings.json** structure:
+
+```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=myserver;Database=mydb;"
@@ -41,7 +45,7 @@ Match your **appsettings.json** structure:
 }
 ```
 
-Register in **Program.cs**:
+I prefer this registration approach in **Program.cs** because it gives you both `IOptions<T>` access and direct injection:
 
 ```csharp
 builder.Services.Configure<AppSettings>(builder.Configuration);
@@ -54,10 +58,10 @@ Use in services:
 public class MyService(AppSettings _appSettings)
 {
     public void DoWork()
-		{
-				var connectionString = _appSettings.ConnectionStrings.DefaultConnection;
-				// ...
-		}
+    {
+        var connectionString = _appSettings.ConnectionStrings.DefaultConnection;
+        // ...
+    }
 }
 ```
 
@@ -67,11 +71,17 @@ Use in Blazor SSR Razor file:
 @inject AppSettings appSettings
 ```
 
-## Benefits of This Approach
+Use in minimal APIs:
 
-This implementation provides several advantages over traditional string-based configuration access:
+```csharp
+app.MapGet("/api/status", (AppSettings settings) => 
+{
+    // Use settings.ConnectionStrings.DefaultConnection for database operations
+    // Use settings.Logging.LogLevel for logging configuration
+    return Results.Ok(new { Status = "Healthy" });
+});
+```
 
-- Compile-time type checking prevents configuration key typos
-- IntelliSense support improves developer productivity
-- The **required** modifier ensures all necessary configuration values are provided
-- **Init**-only properties prevent accidental configuration modifications
+For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.
+
+Using required properties means you'll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.
