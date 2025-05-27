@@ -12,23 +12,19 @@
 	</author>
 	
 	<entry>
-		<title>8 ways to make your code impossible to maintain</title>
+		<title>8 code patterns that destroy maintainability</title>
 		<link href="https://codingpipe.com/posts/what-makes-code-unmaintainable/"/>
 		<updated>2025-04-24T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/what-makes-code-unmaintainable/</id>
-		<content type="html">&lt;p&gt;&lt;em&gt;&lt;strong&gt;From the archives. Originally written in 2016, edited in 2025.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.&lt;/p&gt;
-&lt;p&gt;Before judging any code, we need to understand what problem it solves and which trade-offs were considered. However, certain patterns consistently make code harder to maintain:&lt;/p&gt;
+		<content type="html">&lt;p&gt;Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.&lt;/p&gt;
 &lt;h2 id=&quot;8-factors-that-make-code-unmaintainable&quot; tabindex=&quot;-1&quot;&gt;8 factors that make code unmaintainable &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-factors-that-make-code-unmaintainable&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;h3 id=&quot;1-excessive-coupling&quot; tabindex=&quot;-1&quot;&gt;1. Excessive Coupling &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#1-excessive-coupling&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&quot;1-excessive-coupling&quot; tabindex=&quot;-1&quot;&gt;1. Excessive coupling &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#1-excessive-coupling&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Code coupled with many dependencies creates a chain reaction of changes. Modifying one class requires changes in other dependent classes, which triggers more changes elsewhere. This &amp;quot;dependency hell&amp;quot; is why simple changes often take days instead of minutes.&lt;/p&gt;
-&lt;p&gt;I&#39;ve seen teams spend entire sprints making what should have been a simple configuration change, as it required updates across dozens of tightly coupled components.&lt;/p&gt;
-&lt;p&gt;Excessive coupling means you can&#39;t change anything without changing everything, turning maintenance into a nightmare.&lt;/p&gt;
-&lt;h3 id=&quot;2-solving-imaginary-future-problems&quot; tabindex=&quot;-1&quot;&gt;2. Solving Imaginary Future Problems &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#2-solving-imaginary-future-problems&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I&#39;ve seen teams spend entire sprints on what should have been simple configuration changes because they required updates across dozens of tightly coupled components. When you can&#39;t change anything without changing everything, maintenance becomes a nightmare.&lt;/p&gt;
+&lt;h3 id=&quot;2-solving-imaginary-future-problems&quot; tabindex=&quot;-1&quot;&gt;2. Solving imaginary future problems &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#2-solving-imaginary-future-problems&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Code that tries to solve future or speculative problems that haven&#39;t happened yet quickly becomes unmaintainable. We often don&#39;t know what tomorrow&#39;s problems will be, yet many developers build &amp;quot;just in case&amp;quot; features.&lt;/p&gt;
-&lt;p&gt;The key is finding the balance: make things right for today while enabling (not implementing) tomorrow&#39;s changes.&lt;/p&gt;
-&lt;p&gt;As the YAGNI principle states: don&#39;t add functionality until you actually need it.&lt;/p&gt;
-&lt;h3 id=&quot;3-side-effects-and-unclear-intentions&quot; tabindex=&quot;-1&quot;&gt;3. Side Effects and Unclear Intentions &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#3-side-effects-and-unclear-intentions&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The key is making things right for today while enabling tomorrow&#39;s changes without implementing them. Follow YAGNI: don&#39;t add functionality until you need it.&lt;/p&gt;
+&lt;h3 id=&quot;3-side-effects-and-unclear-intentions&quot; tabindex=&quot;-1&quot;&gt;3. Side effects and unclear intentions &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#3-side-effects-and-unclear-intentions&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Consider this example:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DepositAmount&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Account&lt;/span&gt; account&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;decimal&lt;/span&gt;&lt;/span&gt; amount&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
@@ -37,101 +33,43 @@
     account&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UpgradeAccountTier&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// Side effect!&lt;/span&gt;
     &lt;span class=&quot;token function&quot;&gt;SendPromotionalEmails&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;account&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// Another unexpected side effect!&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;From the method name &lt;code&gt;DepositAmount&lt;/code&gt;, would you expect it to upgrade the account tier and send emails? This violates two key principles:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Side-effect free:&lt;/strong&gt; Methods should do what their name suggests, nothing more&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Intention revealing:&lt;/strong&gt; Names should clearly indicate what the code does&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Hidden side effects create bugs and make debugging difficult. When code does more than its name suggests, understanding system behavior becomes a puzzle.&lt;/p&gt;
-&lt;h3 id=&quot;4-knowledge-duplication&quot; tabindex=&quot;-1&quot;&gt;4. Knowledge Duplication &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#4-knowledge-duplication&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;When code is duplicated, changing requirements means updating multiple places. If you forget to update everything, you create inconsistent behavior and bugs.&lt;/p&gt;
-&lt;p&gt;When business rules are duplicated, they might be implemented slightly differently in multiple places. When requirements change, you must find every instance.&lt;/p&gt;
-&lt;p&gt;I follow the &lt;a href=&quot;https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)&quot;&gt;Rule of Three&lt;/a&gt;  for refactoring duplicated code: duplicate once if needed, but when you see it a third time, it&#39;s time to abstract.&lt;/p&gt;
-&lt;h3 id=&quot;5-inconsistent-coding-style&quot; tabindex=&quot;-1&quot;&gt;5. Inconsistent Coding Style &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#5-inconsistent-coding-style&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;When code follows different conventions and patterns, developers waste mental energy switching context. The codebase should look like it was written by a single person.&lt;/p&gt;
-&lt;p&gt;Inconsistency goes beyond formatting - it includes naming, error handling, and how concepts are represented. When similar operations are implemented differently throughout the codebase, understanding becomes unnecessarily difficult.&lt;/p&gt;
-&lt;h3 id=&quot;6-poor-structure&quot; tabindex=&quot;-1&quot;&gt;6. Poor Structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#6-poor-structure&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Code where it&#39;s difficult to find where to make changes quickly becomes unmaintainable. Developers spend about 10 times more time reading code than writing it.&lt;/p&gt;
-&lt;p&gt;The fundamental rule for structuring code is: &lt;strong&gt;Code that changes together should be placed together.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;When related functionality is scattered across the codebase, even simple feature additions require modifying many files, increasing the risk of overlooked side effects.&lt;/p&gt;
-&lt;h3 id=&quot;7-over-engineering&quot; tabindex=&quot;-1&quot;&gt;7. Over-Engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#7-over-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;The worst over-engineering happens in the name of extensibility, yet often achieves the opposite. Over-engineered code becomes rigid and complex despite intentions to make it flexible.&lt;/p&gt;
-&lt;p&gt;Signs of over-engineering include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Generic solutions for specific problems&lt;/li&gt;
-&lt;li&gt;Design patterns used without clear necessity&lt;/li&gt;
-&lt;li&gt;Excessive abstraction layers&lt;/li&gt;
-&lt;li&gt;Complex inheritance hierarchies&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;The paradox is that code designed to be &amp;quot;flexible&amp;quot; often becomes inflexible for the changes that actually happen.&lt;/p&gt;
-&lt;h3 id=&quot;8-under-engineering&quot; tabindex=&quot;-1&quot;&gt;8. Under-Engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-under-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Under-engineering leads to &amp;quot;careless-driven development&amp;quot; and creates technical debt. Under-engineered code lacks proper abstractions, error handling, and consideration of edge cases.&lt;/p&gt;
-&lt;p&gt;Signs include:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Copy-paste coding&lt;/li&gt;
-&lt;li&gt;Magic numbers and hardcoded values&lt;/li&gt;
-&lt;li&gt;Missing error handling&lt;/li&gt;
-&lt;li&gt;Functions that do too many things at once&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Under-engineered code seems faster to write initially but slows down all future development.&lt;/p&gt;
-&lt;h2 id=&quot;focus-on-what-changes-most-often&quot; tabindex=&quot;-1&quot;&gt;Focus on What Changes Most Often &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#focus-on-what-changes-most-often&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Not all code changes equally. The parts that change most frequently should be the easiest to change, so focus your maintainability efforts there.&lt;/p&gt;
-&lt;p&gt;You can use Git commands like &lt;code&gt;git log --stat&lt;/code&gt; to identify which files change most frequently. By focusing on high-churn areas, you get the best return on your maintainability investment.&lt;/p&gt;
-&lt;h2 id=&quot;final-thoughts&quot; tabindex=&quot;-1&quot;&gt;Final Thoughts &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#final-thoughts&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Hardware is hard to change. Software should remain &amp;quot;soft&amp;quot;, easy to modify. When teams fear making changes, the software has hardened into something more like hardware.&lt;/p&gt;
-&lt;p&gt;As Joel Spolsky said, &amp;quot;It&#39;s harder to read code than to write it.&amp;quot; Our job isn&#39;t just writing code, it&#39;s writing code that others (including our future selves) can easily understand and change.&lt;/p&gt;
-&lt;p&gt;The next time you&#39;re reviewing code or writing your own, consider these factors. Are you introducing any of these maintainability problems? The awareness alone can help you avoid the most common pitfalls.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;strong&gt;EDIT (2025):&lt;/strong&gt; Even AI tools work better when the codebase is maintainable.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;From the method name &amp;quot;DepositAmount&amp;quot;, would you expect it to upgrade the account tier and send emails? Methods should do what their name suggests, nothing more. When code does unexpected things, debugging becomes a puzzle where every method call might trigger hidden behavior across the system.&lt;/p&gt;
+&lt;h3 id=&quot;4-knowledge-duplication&quot; tabindex=&quot;-1&quot;&gt;4. Knowledge duplication &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#4-knowledge-duplication&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When code is duplicated, changing requirements means updating multiple places. Miss one, and you create bugs. Business rules duplicated across the codebase often drift apart over time.&lt;/p&gt;
+&lt;p&gt;I follow the Rule of Three: tolerate duplication twice, but refactor on the third occurrence. Just ensure the duplicated code truly represents the same concept. Sometimes similar-looking code serves different purposes and should remain separate.&lt;/p&gt;
+&lt;h3 id=&quot;5-inconsistent-coding-style&quot; tabindex=&quot;-1&quot;&gt;5. Inconsistent coding style &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#5-inconsistent-coding-style&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When code follows different conventions and patterns, developers waste mental energy switching contexts. Inconsistency goes beyond formatting: it includes naming, error handling, and how concepts are represented. The codebase should look like it was written by one person.&lt;/p&gt;
+&lt;h3 id=&quot;6-poor-structure&quot; tabindex=&quot;-1&quot;&gt;6. Poor structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#6-poor-structure&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Code becomes unmaintainable when it&#39;s difficult to find where to make changes. Since developers spend about 10 times more time reading code than writing it, structure matters. The fundamental rule: code that changes together should be placed together. When related functionality is scattered across the codebase, even simple additions require modifying many files, increasing the risk of overlooked side effects.&amp;quot;&lt;/p&gt;
+&lt;h3 id=&quot;7-over-engineering&quot; tabindex=&quot;-1&quot;&gt;7. Over-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#7-over-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The worst over-engineering happens in the name of extensibility. Code designed to handle every possible future scenario often can&#39;t handle the actual changes that occur.&lt;/p&gt;
+&lt;p&gt;Design for changes you&#39;ve already seen. If configuration values changed three times last year, make them configurable. If the core algorithm has been stable for two years, leave it alone. The paradox: &#39;flexible&#39; code often becomes inflexible for real-world changes.&lt;/p&gt;
+&lt;h3 id=&quot;8-under-engineering&quot; tabindex=&quot;-1&quot;&gt;8. Under-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-under-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Under-engineering creates technical debt through copy-paste coding, magic numbers, missing error handling, and functions doing too much. What seems faster initially slows all future development.&lt;/p&gt;
+&lt;h2 id=&quot;focus-on-what-changes-most-often&quot; tabindex=&quot;-1&quot;&gt;Focus on what changes most often &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#focus-on-what-changes-most-often&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Git can identify your most frequently changed files with:&lt;/p&gt;
+&lt;pre class=&quot;language-shell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; log &lt;span class=&quot;token parameter variable&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;format: --name-only &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;^$&#39;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;uniq&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sort&lt;/span&gt; &lt;span class=&quot;token parameter variable&quot;&gt;-nr&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;head&lt;/span&gt; -20. &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Files appearing in more than 25% of commits deserve extra attention for maintainability.&lt;/p&gt;
+&lt;h2 id=&quot;final-thoughts&quot; tabindex=&quot;-1&quot;&gt;Final thoughts &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#final-thoughts&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The true test of maintainable code isn&#39;t whether it works today, but whether a new team member can understand and modify it six months from now. As Joel Spolsky noted, &amp;quot;It&#39;s harder to read code than to write it&amp;quot; -- which is why our job isn&#39;t just writing code that works, but code that others can easily understand and change.&lt;/p&gt;
+&lt;p&gt;Every decision that makes code harder to understand compounds over time, eventually creating what Michael Feathers calls &amp;quot;legacy code&amp;quot;: code we&#39;re afraid to change. When reviewing or writing code, ask yourself if you&#39;re introducing any of these maintainability problems. Awareness alone can help you avoid the most common pitfalls.&lt;/p&gt;
+&lt;p&gt;*&lt;strong&gt;EDIT (2025):&lt;/strong&gt; Even AI tools work better when the codebase is maintainable. AI assistants can more accurately suggest improvements and detect bugs when code follows consistent patterns, has clear naming, and maintains proper separation of concerns. Conversely, the maintainability issues described above often confuse AI tools just as they confuse human developers.&lt;/p&gt;
 </content>
 	</entry>
 	
 	<entry>
-		<title>How I found the same ETL pattern in two different systems</title>
+		<title>The hidden ETL pipeline in your system</title>
 		<link href="https://codingpipe.com/posts/system-as-etl-pipeline/"/>
 		<updated>2025-04-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/system-as-etl-pipeline/</id>
-		<content type="html">&lt;p&gt;I recently realized that two different systems I&#39;ve worked on are actually doing the same thing - they&#39;re both a style of ETL (Extract, Transform, Load) pipelines.&lt;/p&gt;
-&lt;p&gt;For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Extract data from many different hardware types&lt;/li&gt;
-&lt;li&gt;Transform the data from many formats into one standard format&lt;/li&gt;
-&lt;li&gt;Load the data to cloud services/databases&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.&lt;/p&gt;
-&lt;p&gt;Recently, I was working on a wearable device project with these parts:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Mobile apps connect to wearables using Bluetooth&lt;/li&gt;
-&lt;li&gt;The apps process raw device data from various manufacturers that we need to support&lt;/li&gt;
-&lt;li&gt;The apps send the processed data to cloud services&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.&lt;/p&gt;
-&lt;p&gt;Using what I learned from the security project, I could then see:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The mobile app is the transformation engine, just like the edge controller was&lt;/li&gt;
-&lt;li&gt;Local storage is mainly for making transfers reliable, not for offline use&lt;/li&gt;
-&lt;li&gt;The rules for transforming/mapping data formats are the most valuable part&lt;/li&gt;
-&lt;li&gt;The data mainly flows one way (device → app → server)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;By applying these ETL concepts from the security system to our wearable project, we are able to focus on improving each part separately: getting better data from devices, creating better rules for transforming/mapping data, and sending data to servers more efficiently.&lt;/p&gt;
-&lt;p&gt;This ETL view also clarifies other parts of the system:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Reporting is simpler from the destination&lt;/strong&gt;: We don&#39;t need complex reporting capabilities on devices or in the mobile app. Reports are much easier to create from the already processed and aggregated data in the backend.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Separating ETL from configuration&lt;/strong&gt;: Both systems do have some data flowing from cloud servers down to devices (like settings and configurations), but this is a separate concern from the ETL process. Keeping these separate makes both easier to manage.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Optimization opportunities&lt;/strong&gt;: Seeing this as ETL opens up many ways to improve the pipeline:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Batching data before sending&lt;/li&gt;
-&lt;li&gt;Cleaning up glitches or unnecessary data points&lt;/li&gt;
-&lt;li&gt;Removing duplicate data entries&lt;/li&gt;
-&lt;li&gt;Compressing data for efficient transfer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Sometimes the best solutions come from seeing the patterns across different projects.&lt;/p&gt;
+		<content type="html">&lt;p&gt;A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized part of the system was functioning as an ETL pipeline, but it was not originally designed as one.&lt;/p&gt;
+&lt;p&gt;This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.&lt;/p&gt;
+&lt;p&gt;Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.&lt;/p&gt;
+&lt;p&gt;Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.&lt;/p&gt;
+&lt;p&gt;It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile apps.&lt;/p&gt;
+&lt;p&gt;While both systems sent data back down (settings and configurations), this was separate from the ETL process. Keeping these concerns apart made the design cleaner.&lt;/p&gt;
+&lt;p&gt;Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.&lt;/p&gt;
+&lt;p&gt;What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -222,18 +160,18 @@
 	</entry>
 	
 	<entry>
-		<title>Prototype First: Reduce Risk When Working with Unfamiliar Code</title>
+		<title>Hours of prototyping can save weeks of problems</title>
 		<link href="https://codingpipe.com/posts/power-of-prototyping/"/>
 		<updated>2025-04-21T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/power-of-prototyping/</id>
-		<content type="html">&lt;p&gt;When working with unfamiliar or complex codebase, building a quick prototype in a separate project in isolation can save you time and reduce risks before making any production code changes. With modern AI/LLM tools, you can create prototypes in hours instead of days.&lt;/p&gt;
+		<content type="html">&lt;p&gt;When working with unfamiliar or complex codebases, building a quick prototype in a separate project can save you time and reduce risks before making production changes. With modern AI tools, you can create prototypes much faster than before.&lt;/p&gt;
 &lt;h2 id=&quot;why-build-a-prototype&quot; tabindex=&quot;-1&quot;&gt;Why Build a Prototype? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#why-build-a-prototype&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;A prototype gives you a safe space to try ideas without breaking existing code. Benefits include:&lt;/p&gt;
+&lt;p&gt;A prototype gives you a safe space to experiment without breaking existing code:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Better understanding.&lt;/strong&gt; Working with a solution in isolation helps you understand the problem fully&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Lower risk.&lt;/strong&gt; Find technical limitations and issues early, before touching production code&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;More accurate planning.&lt;/strong&gt; Give better time estimates based on prototype results and new learning&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Clearer communication.&lt;/strong&gt; Show stakeholders something concrete instead of just explaining ideas&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Better understanding&lt;/strong&gt; - Test your approach in isolation to fully grasp how it works&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lower risk&lt;/strong&gt; - Find technical limitations and issues early, before touching production code&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Accurate planning&lt;/strong&gt; - Give better time estimates based on actual experience&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Clearer communication&lt;/strong&gt; - Show stakeholders something concrete instead of just explaining ideas&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&quot;how-to-create-effective-prototypes&quot; tabindex=&quot;-1&quot;&gt;How to Create Effective Prototypes &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#how-to-create-effective-prototypes&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Create a dedicated prototype project structure:&lt;/p&gt;
@@ -244,41 +182,24 @@
     ├── UIPlayground/
     ├── RefactoringProposal02/
     └── PerformanceBenchmarks/&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Keep your prototypes:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Minimal (test only what you need to understand)&lt;/li&gt;
-&lt;li&gt;Disposable (don&#39;t worry about code quality or architecture, this is throw-away code)&lt;/li&gt;
-&lt;li&gt;Self-contained (avoid dependencies on production code)&lt;/li&gt;
-&lt;li&gt;Documented (capture what you learned)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;After prototyping, bring the concepts you learned to production code, not the prototype code itself.&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;no-need-to-ask-permission&quot; tabindex=&quot;-1&quot;&gt;No Need to Ask Permission &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#no-need-to-ask-permission&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;You don&#39;t need special approval to create a prototype, just like you don&#39;t need permission to write tests, refactor code, or document systems.&lt;/p&gt;
-&lt;p&gt;A 2-hour prototype can prevent 2 weeks of problems. When stakeholders want fast delivery, a quick prototype actually saves time, not wastes it.&lt;/p&gt;
-&lt;h2 id=&quot;make-it-a-regular-practice&quot; tabindex=&quot;-1&quot;&gt;Make It a Regular Practice &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#make-it-a-regular-practice&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The most effective developers have prototyping practice as a regular part of their toolkit.&lt;/p&gt;
-&lt;p&gt;When faced with unfamiliar code, large existing codebases, complex design decisions, integration uncertainties, or similar, create a quick prototype first, then make changes in production with confidence.&lt;/p&gt;
+&lt;p&gt;Keep prototypes minimal, disposable, self-contained, and documented. Test only what you need to understand, don&#39;t worry about code quality, avoid production dependencies, and capture what you learned.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;After prototyping, bring the concepts to production code, not the prototype code itself.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;just-start-prototyping&quot; tabindex=&quot;-1&quot;&gt;Just Start Prototyping &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#just-start-prototyping&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;You don&#39;t need special approval to create a prototype. A few hours of prototyping can prevent weeks of problems. When stakeholders want fast delivery, prototyping actually saves time.&lt;/p&gt;
+&lt;p&gt;The most effective developers make prototyping a regular practice. When faced with unfamiliar code, complex design decisions, or integration uncertainties, create a quick prototype first, then make production changes with confidence.&lt;/p&gt;
 &lt;h2 id=&quot;example-testing-a-new-sdk&quot; tabindex=&quot;-1&quot;&gt;Example: Testing a New SDK &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#example-testing-a-new-sdk&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;One of the use cases for prototyping is when integrating a new SDK or library:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Don&#39;t do this first:&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;SdkWrapper&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;NewSdk&lt;/span&gt; _sdk&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// Creating abstractions for an SDK you don&#39;t understand yet&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Instead:&lt;/p&gt;
+&lt;p&gt;Instead of immediately creating abstractions for an SDK you don&#39;t understand:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Create a prototype project&lt;/li&gt;
-&lt;li&gt;Use LLMs to generate scaffolding (e.g. prompt: &amp;quot;Generate a C# test project that explores the key features of SDK, including authentication, main API calls, and error handling&amp;quot;)&lt;/li&gt;
-&lt;li&gt;Try different SDK features by coding directly&lt;/li&gt;
+&lt;li&gt;Use AI to generate scaffolding: &amp;quot;Generate a C# test project that explores the key features of [SDK], including authentication, main API calls, and error handling&amp;quot;&lt;/li&gt;
+&lt;li&gt;Try different SDK features directly&lt;/li&gt;
 &lt;li&gt;Test error cases and limits&lt;/li&gt;
-&lt;li&gt;Understand how the SDK works, play arround with various method calls&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Then&lt;/em&gt; design your production integration based on what you learned&lt;/li&gt;
+&lt;li&gt;Understand how the SDK actually works&lt;/li&gt;
+&lt;li&gt;Then design your production integration based on what you learned&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;This lets you experiment freely before committing to a design in your production codebase.&lt;/p&gt;
 &lt;h2 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/power-of-prototyping/#summary&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Prototypes help you safely explore unfamiliar code without risk to production systems. Create separate, disposable projects where you can experiment freely. Use AI tools to accelerate the process. Don&#39;t wait for permission, prototyping is a standard developer practice that prevents problems and improves designs. Whether exploring new SDKs or untangling complex systems, a few hours of prototyping can prevent weeks of production issues.&lt;/p&gt;
-&lt;p&gt;This approach accelerates learning and leads to more effective ways of working with unfamiliar code or complex systems.&lt;/p&gt;
+&lt;p&gt;Hours or days of prototyping can prevent weeks of production issues. Create separate projects where you can safely explore unfamiliar code and accelerate learning without risk.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -807,21 +728,19 @@ dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Flu
 	</entry>
 	
 	<entry>
-		<title>SSH Command Snippets (Windows)</title>
+		<title>SSH tips on Windows</title>
 		<link href="https://codingpipe.com/posts/ssh-windows-snippets/"/>
 		<updated>2024-03-31T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/ssh-windows-snippets/</id>
-		<content type="html">&lt;p&gt;Windows 10 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.&lt;/p&gt;
+		<content type="html">&lt;p&gt;Windows 11 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.&lt;/p&gt;
 &lt;h2 id=&quot;connecting-to-a-linux-server&quot; tabindex=&quot;-1&quot;&gt;Connecting to a Linux server &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#connecting-to-a-linux-server&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Open a terminal and run the following command:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ssh username@12.34.56.78
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;ssh username@12.34.56.78&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Replace &lt;code&gt;username&lt;/code&gt; with your Linux server username and &lt;code&gt;12.34.56.78&lt;/code&gt; with the server’s IP address.
 The first time you connect, you’ll be prompted to accept the host key. After that, enter your password to log in.
 To log out, run the &lt;code&gt;exit&lt;/code&gt; command or press &lt;code&gt;Ctrl+D&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;If your Linux server has a different SSH port, let&#39;s say 10322, use the &lt;code&gt;-p&lt;/code&gt; flag:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ssh username@12.34.56.78 -p 10322
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;ssh username@12.34.56.78 -p 10322&lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;downloading-uploading-files-between-your-windows-client-and-a-linux-server&quot; tabindex=&quot;-1&quot;&gt;Downloading/uploading files between your Windows client and a Linux server &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#downloading-uploading-files-between-your-windows-client-and-a-linux-server&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Use &lt;a href=&quot;https://winscp.net/eng/download.php&quot;&gt;WinSCP&lt;/a&gt; for that.&lt;/p&gt;
 &lt;h2 id=&quot;tools&quot; tabindex=&quot;-1&quot;&gt;Tools &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#tools&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
@@ -832,10 +751,131 @@ To log out, run the &lt;code&gt;exit&lt;/code&gt; command or press &lt;code&g
 &lt;/ul&gt;
 &lt;h2 id=&quot;additional-resources&quot; tabindex=&quot;-1&quot;&gt;Additional Resources &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#additional-resources&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui&lt;/li&gt;
-&lt;li&gt;https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/&lt;/li&gt;
-&lt;li&gt;https://docs.vultr.com/port-forwarding-and-proxying-using-openssh&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui&quot;&gt;https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/&quot;&gt;https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.vultr.com/port-forwarding-and-proxying-using-openssh&quot;&gt;https://docs.vultr.com/port-forwarding-and-proxying-using-openssh&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&quot;managing-ssh-keys-with-openssh-and-bitwarden&quot; tabindex=&quot;-1&quot;&gt;Managing SSH Keys with OpenSSH and Bitwarden &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#managing-ssh-keys-with-openssh-and-bitwarden&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;1-set-up-your-environment&quot; tabindex=&quot;-1&quot;&gt;1. Set up your environment &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#1-set-up-your-environment&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Create the SSH directory if it doesn&#39;t exist:&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;mkdir &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;p &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;2-generate-ssh-key-pair&quot; tabindex=&quot;-1&quot;&gt;2. Generate SSH Key Pair &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#2-generate-ssh-key-pair&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Open PowerShell and generate an Ed25519 key (recommended):&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh-keygen &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;t ed25519 &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;C &lt;span class=&quot;token string&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Or RSA if required:&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh-keygen &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;t rsa &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;b 4096 &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;C &lt;span class=&quot;token string&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;When prompted:
+&lt;ul&gt;
+&lt;li&gt;Save to default location (&lt;code&gt;%USERPROFILE%&#92;.ssh&#92;id_ed25519&lt;/code&gt; or &lt;code&gt;id_rsa&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Set a strong passphrase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This creates two files:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Private key: &lt;code&gt;id_ed25519&lt;/code&gt; (no extension)&lt;/li&gt;
+&lt;li&gt;Public key: &lt;code&gt;id_ed25519.pub&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;3-store-in-bitwarden&quot; tabindex=&quot;-1&quot;&gt;3. Store in Bitwarden &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#3-store-in-bitwarden&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Open Bitwarden and create a new Secure Note&lt;/li&gt;
+&lt;li&gt;Title: &amp;quot;SSH Key - [Purpose]&amp;quot; (e.g., &amp;quot;SSH Key - Work Laptop 2024&amp;quot;)&lt;/li&gt;
+&lt;li&gt;Add attachments:
+&lt;ul&gt;
+&lt;li&gt;Browse to &lt;code&gt;%USERPROFILE%&#92;.ssh&#92;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Attach both &lt;code&gt;id_ed25519&lt;/code&gt; and &lt;code&gt;id_ed25519.pub&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Add to notes:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;Server: example.com
+Username: myuser
+Key Type: Ed25519
+Created: [Date]
+Passphrase: [your-passphrase]
+
+Public Key:
+[paste contents of id_ed25519.pub here]
+
+Usage:
+1. Download private key
+2. Save to ~/.ssh/id_ed25519
+3. Set permissions: chmod 600 ~/.ssh/id_ed25519&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;Add tags: &amp;quot;ssh&amp;quot;, &amp;quot;credentials&amp;quot;, &amp;quot;work&amp;quot;&lt;/li&gt;
+&lt;li&gt;Save&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;4-deploy-to-server&quot; tabindex=&quot;-1&quot;&gt;4. Deploy to Server &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#4-deploy-to-server&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Copy your public key to the server:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Method 1: Using ssh-copy-id (if available)&lt;/span&gt;
+ssh-&lt;span class=&quot;token function&quot;&gt;copy-id&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;i ~&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh/id_ed25519&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;pub username@example&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com
+
+&lt;span class=&quot;token comment&quot;&gt;# Method 2: Manual copy&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&#92;id_ed25519&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;pub &lt;span class=&quot;token punctuation&quot;&gt;|&lt;/span&gt; ssh username@example&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com &lt;span class=&quot;token string&quot;&gt;&quot;mkdir -p ~/.ssh &amp;amp;&amp;amp; cat &gt;&gt; ~/.ssh/authorized_keys&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Verify the connection:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;i &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&#92;id_ed25519 username@example&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;5-recovery-process&quot; tabindex=&quot;-1&quot;&gt;5. Recovery Process &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#5-recovery-process&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;If you need to recover access from a new device:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Install OpenSSH client if not present:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Add-WindowsCapability&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Online &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Name OpenSSH&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Client~~~~0&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;0&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;0&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Create SSH directory:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;mkdir &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;p &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Download private key from Bitwarden&lt;/li&gt;
+&lt;li&gt;Save as &lt;code&gt;%USERPROFILE%&#92;.ssh&#92;id_ed25519&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Set correct permissions:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;icacls &lt;span class=&quot;token string&quot;&gt;&quot;%USERPROFILE%&#92;.ssh&#92;id_ed25519&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;inheritance:r &lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;grant:r &lt;span class=&quot;token string&quot;&gt;&quot;%USERNAME%&quot;&lt;/span&gt;:&lt;span class=&quot;token string&quot;&gt;&quot;F&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;6&quot;&gt;
+&lt;li&gt;Test connection:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;i &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&#92;id_ed25519 username@example&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;com&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;7&quot;&gt;
+&lt;li&gt;After recovery, generate new keys and update servers&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;connecting-to-servers-with-ssh-keys&quot; tabindex=&quot;-1&quot;&gt;Connecting to Servers with SSH Keys &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/ssh-windows-snippets/#connecting-to-servers-with-ssh-keys&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Basic connection with default key location:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh username@192&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;168&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;100&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;Specify a different port (e.g., 10322):&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;p 10322 username@192&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;168&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;100&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;Explicitly specify which key to use:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;i &lt;span class=&quot;token variable&quot;&gt;$env&lt;/span&gt;:USERPROFILE&#92;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ssh&#92;id_ed25519 username@192&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;168&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;100&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;For multiple servers/keys, create a config file at &lt;code&gt;%USERPROFILE%&#92;.ssh&#92;config&lt;/code&gt;:&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;Host myserver1
+    HostName 192.168.1.100
+    User username
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+
+Host myserver2
+    HostName 192.168.1.200
+    User otheruser
+    Port 10322
+    IdentityFile ~/.ssh/id_rsa&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Then connect using the alias:&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;ssh myserver1&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 Tip: After adding your key to a server, you won&#39;t need to enter a password. You&#39;ll only need the key&#39;s passphrase (if you set one).&lt;/p&gt;
+&lt;/blockquote&gt;
 </content>
 	</entry>
 	
@@ -1761,52 +1801,126 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
 	</entry>
 	
 	<entry>
-		<title>Custom AppSettings Configuration in ASP.NET Core Tests</title>
-		<link href="https://codingpipe.com/posts/custom-appsettings-configuration-in-aspnet-core-integration-tests/"/>
+		<title>Test-Specific AppSettings in ASP.NET Core Integration Tests</title>
+		<link href="https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/"/>
 		<updated>2023-08-10T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/custom-appsettings-configuration-in-aspnet-core-integration-tests/</id>
-		<content type="html">&lt;p&gt;&lt;strong&gt;Problem:&lt;/strong&gt; The ASP.NET integration tests use the web application project &lt;code&gt;appsettings.json&lt;/code&gt; configuration.
-When you start the web application from the integration tests using the TestServer (from the &lt;code&gt;Microsoft.AspNetCore.Mvc.Testing&lt;/code&gt; package), the web application uses the &lt;code&gt;appsettings.json&lt;/code&gt; configuration files that are placed in the web application root directory. Normally this doesn&#39;t suit us well since we need to have different configs for our integration tests for things like connection strings, storage URLs, etc.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt; Configure the ASP.NET integration tests to use the test project specific &lt;code&gt;appsettings.json&lt;/code&gt; configuration.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2023-08-10-using-custom-appsettings-configuration-in-aspnet-core-integration-tests-with-testserver/testserver-appsettings-diagram.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;To do this, create &lt;code&gt;appsettings.json&lt;/code&gt; and &lt;code&gt;appsettings.Development.json&lt;/code&gt; configuration files in the integration tests project.&lt;/p&gt;
-&lt;p&gt;Then, set the properties &lt;code&gt;Build Action = Content&lt;/code&gt; and &lt;code&gt;Copy to output directory = Copy if newer&lt;/code&gt; to both files.&lt;/p&gt;
-&lt;p&gt;Finally, configure the &lt;code&gt;WebApplicationFactory&lt;/code&gt; to use the configuration files from the test project itself. Here is a sample code and a test case.&lt;/p&gt;
-&lt;pre class=&quot;language-cs&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-cs&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AspNetCore&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Mvc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Testing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		<id>https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</id>
+		<content type="html">&lt;p&gt;When writing integration tests for ASP.NET Core applications, I&#39;ve run into a common issue: the TestServer uses the main application&#39;s &lt;code&gt;appsettings.json&lt;/code&gt; files by default. This becomes problematic when tests need different configuration values - like pointing to a test database instead of production.&lt;/p&gt;
+&lt;p&gt;Here&#39;s how I configure integration tests to use their own configuration files.&lt;/p&gt;
+&lt;p&gt;Let&#39;s create a test-specific &lt;code&gt;appsettings.json&lt;/code&gt; file in your integration test project:&lt;/p&gt;
+&lt;pre class=&quot;language-plpaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plpaintext&quot;&gt;Solution/
+├── PlaygroundApi/
+│   ├── appsettings.json          # Main app config
+│   ├── appsettings.Development.json
+│   └── Program.cs
+└── PlaygroundApi.Tests/
+    ├── appsettings.json          # Test-specific config
+    └── IntegrationTests.cs&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Main app appsettings.json:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Server=localhost;Database=ProductionDb;Trusted_Connection=true;&quot;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;prod-api-key-123&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Test project appsettings.json:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Host=localhost;Port=5432;Database=TestDb;Username=postgres;Password=test123&quot;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;test-api-key-456&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Add this minimal API endpoint to return the configuration value:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;app&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;MapGet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api-token&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;IConfiguration&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For the test config file, set these properties in Visual Studio:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Build Action&lt;/strong&gt;: Content&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Copy to output directory&lt;/strong&gt;: Copy if newer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This ensures the configuration file is available in your test output directory.&lt;/p&gt;
+&lt;p&gt;Now configure your &lt;code&gt;WebApplicationFactory&lt;/code&gt; to use the test project&#39;s configuration:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AspNetCore&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Mvc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Testing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Extensions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Tests&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UnitTest1&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IntegrationTests&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;UnitTest1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;IntegrationTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
             _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithWebHostBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
                 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
                     builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureAppConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
                     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;token comment&quot;&gt;// Clear existing configuration to avoid conflicts&lt;/span&gt;
+                        config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Sources&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                        
                         &lt;span class=&quot;token comment&quot;&gt;// Set the base path to the integration tests build output directory&lt;/span&gt;
-                        &lt;span class=&quot;token comment&quot;&gt;// where the integration tests&#39; config files will be copied into.&lt;/span&gt;
+                        &lt;span class=&quot;token comment&quot;&gt;// where the integration tests&#39; config file will be copied into.&lt;/span&gt;
                         config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetBasePath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                         config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddJsonFile&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;appsettings.json&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-                        config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddJsonFile&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;appsettings.Development.json&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
         &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Test1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ShouldUseTestConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; httpClient &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateClient&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; httpClient&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetStringAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; httpClient&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetStringAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api-token&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-            &lt;span class=&quot;token comment&quot;&gt;// Here the endpoint returns configuration specific result for testing purposes.&lt;/span&gt;
-            Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Equal&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ProjectKey is: &#39;integrationtests_local_development&#39;&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// Assert that the test-specific configuration value is returned&lt;/span&gt;
+            Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Equal&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;test-api-key-456&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I prefer this approach over environment variables or in-memory configuration because it keeps test settings explicit and version-controlled. You can easily see what configuration your tests are using, and different team members will have consistent test behavior.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;config.Sources.Clear()&lt;/code&gt; call ensures we don&#39;t inherit any configuration from the main application, and &lt;code&gt;SetBasePath(Directory.GetCurrentDirectory())&lt;/code&gt; tells the configuration system to look in the test project&#39;s output directory.&lt;/p&gt;
+&lt;h2 id=&quot;using-with-testcontainers&quot; tabindex=&quot;-1&quot;&gt;Using with Testcontainers &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/#using-with-testcontainers&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;When using Testcontainers, you can dynamically override the connection string after the container starts:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IntegrationTestsWithContainer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IAsyncLifetime&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PostgreSqlContainer&lt;/span&gt; _postgreSqlContainer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;PostgreSqlBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;InitializeAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; _postgreSqlContainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;StartAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithWebHostBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureAppConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+                &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                    config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Sources&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                    config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetBasePath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                    config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddJsonFile&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;appsettings.json&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                    
+                    &lt;span class=&quot;token comment&quot;&gt;// Override connection string with container&#39;s connection string&lt;/span&gt;
+                    config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddInMemoryCollection&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;Dictionary&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+                    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ConnectionStrings:DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _postgreSqlContainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetConnectionString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ShouldConnectToTestContainer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; httpClient &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateClient&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        
+        &lt;span class=&quot;token comment&quot;&gt;// Your test logic here using the containerized database&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DisposeAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; _postgreSqlContainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;DisposeAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;?.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Dispose&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 </content>
@@ -2039,11 +2153,12 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>Strongly-typed configuration in .NET Core</title>
-		<link href="https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/"/>
+		<title>Type-Safe Configuration in .NET Core</title>
+		<link href="https://codingpipe.com/posts/type-safe-configuration-in-net-core/"/>
 		<updated>2023-01-08T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</id>
-		<content type="html">&lt;p&gt;Create a strongly typed configuration class for &lt;strong&gt;appsettings.json&lt;/strong&gt; using &lt;strong&gt;required&lt;/strong&gt; and &lt;strong&gt;init&lt;/strong&gt; properties:&lt;/p&gt;
+		<id>https://codingpipe.com/posts/type-safe-configuration-in-net-core/</id>
+		<content type="html">&lt;p&gt;Working with configuration in .NET applications, I&#39;ve seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here&#39;s how I use strongly-typed configuration classes to catch these issues at compile time.&lt;/p&gt;
+&lt;p&gt;Let&#39;s create a configuration class that matches our &lt;strong&gt;appsettings.json&lt;/strong&gt; structure:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; required &lt;span class=&quot;token return-type class-name&quot;&gt;ConnectionStringsConfig&lt;/span&gt; ConnectionStrings &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
@@ -2059,37 +2174,39 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; required &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; LogLevel &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Match your &lt;strong&gt;appsettings.json&lt;/strong&gt; structure:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;token string&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token string&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Server=myserver;Database=mydb;&quot;&lt;/span&gt;
+&lt;p&gt;In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.&lt;/p&gt;
+&lt;p&gt;Which matches our &lt;strong&gt;appsettings.json&lt;/strong&gt; structure:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Server=myserver;Database=mydb;&quot;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;token string&quot;&gt;&quot;Logging&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token string&quot;&gt;&quot;LogLevel&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Information&quot;&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;Logging&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;LogLevel&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Information&quot;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Register in &lt;strong&gt;Program.cs&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;I prefer this registration approach in &lt;strong&gt;Program.cs&lt;/strong&gt; because it gives you both &lt;code&gt;IOptions&amp;lt;T&amp;gt;&lt;/code&gt; access and direct injection:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddSingleton&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetRequiredService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IOptions&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Value&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Use in services:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWork&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-		&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-				&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-				&lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
-		&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Use in Blazor SSR Razor file:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;@inject AppSettings appSettings&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;benefits-of-this-approach&quot; tabindex=&quot;-1&quot;&gt;Benefits of This Approach &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/#benefits-of-this-approach&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;This implementation provides several advantages over traditional string-based configuration access:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Compile-time type checking prevents configuration key typos&lt;/li&gt;
-&lt;li&gt;IntelliSense support improves developer productivity&lt;/li&gt;
-&lt;li&gt;The &lt;strong&gt;required&lt;/strong&gt; modifier ensures all necessary configuration values are provided&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Init&lt;/strong&gt;-only properties prevent accidental configuration modifications&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Use in minimal APIs:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;app&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;MapGet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api/status&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; settings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; 
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Use settings.ConnectionStrings.DefaultConnection for database operations&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;// Use settings.Logging.LogLevel for logging configuration&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; Results&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; Status &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Healthy&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.&lt;/p&gt;
+&lt;p&gt;Using required properties means you&#39;ll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.&lt;/p&gt;
 </content>
 	</entry>
 	

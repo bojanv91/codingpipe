@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>SSH Command Snippets (Windows)</title>
+		<title>SSH tips on Windows</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,27 +526,25 @@ h1 {
 
 		<main id="skip">
 			
-<h1>SSH Command Snippets (Windows)</h1>
+<h1>SSH tips on Windows</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2024-03-31">Mar 31, 2024</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>3 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/snippets/" class="post-tag">Snippets</a></li>
 </ul>
 
-<p>Windows 10 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.</p>
+<p>Windows 11 includes an OpenSSH client b default. You can use it directly from the PowerShell or command prompt terminal.</p>
 <h2 id="connecting-to-a-linux-server" tabindex="-1">Connecting to a Linux server <a class="header-anchor" href="#connecting-to-a-linux-server">#</a></h2>
 <p>Open a terminal and run the following command:</p>
-<pre><code>ssh username@12.34.56.78
-</code></pre>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">ssh username@12.34.56.78</code></pre>
 <p>Replace <code>username</code> with your Linux server username and <code>12.34.56.78</code> with the server’s IP address.
 The first time you connect, you’ll be prompted to accept the host key. After that, enter your password to log in.
 To log out, run the <code>exit</code> command or press <code>Ctrl+D</code>.</p>
 <p>If your Linux server has a different SSH port, let's say 10322, use the <code>-p</code> flag:</p>
-<pre><code>ssh username@12.34.56.78 -p 10322
-</code></pre>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">ssh username@12.34.56.78 -p 10322</code></pre>
 <h2 id="downloading-uploading-files-between-your-windows-client-and-a-linux-server" tabindex="-1">Downloading/uploading files between your Windows client and a Linux server <a class="header-anchor" href="#downloading-uploading-files-between-your-windows-client-and-a-linux-server">#</a></h2>
 <p>Use <a href="https://winscp.net/eng/download.php">WinSCP</a> for that.</p>
 <h2 id="tools" tabindex="-1">Tools <a class="header-anchor" href="#tools">#</a></h2>
@@ -557,10 +555,131 @@ To log out, run the <code>exit</code> command or press <code>Ctrl+D</code>.</
 </ul>
 <h2 id="additional-resources" tabindex="-1">Additional Resources <a class="header-anchor" href="#additional-resources">#</a></h2>
 <ul>
-<li>https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui</li>
-<li>https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/</li>
-<li>https://docs.vultr.com/port-forwarding-and-proxying-using-openssh</li>
+<li><a href="https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui">https://learn.microsoft.com/en-us/windows-server/administration/openssh/openssh_install_firstuse?tabs=gui</a></li>
+<li><a href="https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/">https://docs.bitnami.com/aws/faq/get-started/access-ssh-tunnel/</a></li>
+<li><a href="https://docs.vultr.com/port-forwarding-and-proxying-using-openssh">https://docs.vultr.com/port-forwarding-and-proxying-using-openssh</a></li>
 </ul>
+<h2 id="managing-ssh-keys-with-openssh-and-bitwarden" tabindex="-1">Managing SSH Keys with OpenSSH and Bitwarden <a class="header-anchor" href="#managing-ssh-keys-with-openssh-and-bitwarden">#</a></h2>
+<h3 id="1-set-up-your-environment" tabindex="-1">1. Set up your environment <a class="header-anchor" href="#1-set-up-your-environment">#</a></h3>
+<p>Create the SSH directory if it doesn't exist:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">mkdir <span class="token operator">-</span>p <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh</code></pre>
+<h3 id="2-generate-ssh-key-pair" tabindex="-1">2. Generate SSH Key Pair <a class="header-anchor" href="#2-generate-ssh-key-pair">#</a></h3>
+<ol>
+<li>Open PowerShell and generate an Ed25519 key (recommended):</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh-keygen <span class="token operator">-</span>t ed25519 <span class="token operator">-</span>C <span class="token string">"your_email@example.com"</span></code></pre>
+<p>Or RSA if required:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh-keygen <span class="token operator">-</span>t rsa <span class="token operator">-</span>b 4096 <span class="token operator">-</span>C <span class="token string">"your_email@example.com"</span></code></pre>
+<ol start="2">
+<li>When prompted:
+<ul>
+<li>Save to default location (<code>%USERPROFILE%\.ssh\id_ed25519</code> or <code>id_rsa</code>)</li>
+<li>Set a strong passphrase</li>
+</ul>
+</li>
+</ol>
+<p>This creates two files:</p>
+<ul>
+<li>Private key: <code>id_ed25519</code> (no extension)</li>
+<li>Public key: <code>id_ed25519.pub</code></li>
+</ul>
+<h3 id="3-store-in-bitwarden" tabindex="-1">3. Store in Bitwarden <a class="header-anchor" href="#3-store-in-bitwarden">#</a></h3>
+<ol>
+<li>Open Bitwarden and create a new Secure Note</li>
+<li>Title: &quot;SSH Key - [Purpose]&quot; (e.g., &quot;SSH Key - Work Laptop 2024&quot;)</li>
+<li>Add attachments:
+<ul>
+<li>Browse to <code>%USERPROFILE%\.ssh\</code></li>
+<li>Attach both <code>id_ed25519</code> and <code>id_ed25519.pub</code></li>
+</ul>
+</li>
+<li>Add to notes:</li>
+</ol>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">Server: example.com
+Username: myuser
+Key Type: Ed25519
+Created: [Date]
+Passphrase: [your-passphrase]
+
+Public Key:
+[paste contents of id_ed25519.pub here]
+
+Usage:
+1. Download private key
+2. Save to ~/.ssh/id_ed25519
+3. Set permissions: chmod 600 ~/.ssh/id_ed25519</code></pre>
+<ol start="5">
+<li>Add tags: &quot;ssh&quot;, &quot;credentials&quot;, &quot;work&quot;</li>
+<li>Save</li>
+</ol>
+<h3 id="4-deploy-to-server" tabindex="-1">4. Deploy to Server <a class="header-anchor" href="#4-deploy-to-server">#</a></h3>
+<ol>
+<li>Copy your public key to the server:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token comment"># Method 1: Using ssh-copy-id (if available)</span>
+ssh-<span class="token function">copy-id</span> <span class="token operator">-</span>i ~<span class="token operator">/</span><span class="token punctuation">.</span>ssh/id_ed25519<span class="token punctuation">.</span>pub username@example<span class="token punctuation">.</span>com
+
+<span class="token comment"># Method 2: Manual copy</span>
+<span class="token function">type</span> <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh\id_ed25519<span class="token punctuation">.</span>pub <span class="token punctuation">|</span> ssh username@example<span class="token punctuation">.</span>com <span class="token string">"mkdir -p ~/.ssh &amp;&amp; cat >> ~/.ssh/authorized_keys"</span></code></pre>
+<ol start="2">
+<li>Verify the connection:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh <span class="token operator">-</span>i <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh\id_ed25519 username@example<span class="token punctuation">.</span>com</code></pre>
+<h3 id="5-recovery-process" tabindex="-1">5. Recovery Process <a class="header-anchor" href="#5-recovery-process">#</a></h3>
+<p>If you need to recover access from a new device:</p>
+<ol>
+<li>Install OpenSSH client if not present:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell"><span class="token function">Add-WindowsCapability</span> <span class="token operator">-</span>Online <span class="token operator">-</span>Name OpenSSH<span class="token punctuation">.</span>Client~~~~0<span class="token punctuation">.</span>0<span class="token punctuation">.</span>1<span class="token punctuation">.</span>0</code></pre>
+<ol start="2">
+<li>Create SSH directory:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">mkdir <span class="token operator">-</span>p <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh</code></pre>
+<ol start="3">
+<li>Download private key from Bitwarden</li>
+<li>Save as <code>%USERPROFILE%\.ssh\id_ed25519</code></li>
+<li>Set correct permissions:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">icacls <span class="token string">"%USERPROFILE%\.ssh\id_ed25519"</span> <span class="token operator">/</span>inheritance:r <span class="token operator">/</span>grant:r <span class="token string">"%USERNAME%"</span>:<span class="token string">"F"</span></code></pre>
+<ol start="6">
+<li>Test connection:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh <span class="token operator">-</span>i <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh\id_ed25519 username@example<span class="token punctuation">.</span>com</code></pre>
+<ol start="7">
+<li>After recovery, generate new keys and update servers</li>
+</ol>
+<h3 id="connecting-to-servers-with-ssh-keys" tabindex="-1">Connecting to Servers with SSH Keys <a class="header-anchor" href="#connecting-to-servers-with-ssh-keys">#</a></h3>
+<ol>
+<li>Basic connection with default key location:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh username@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100</code></pre>
+<ol start="2">
+<li>Specify a different port (e.g., 10322):</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh <span class="token operator">-</span>p 10322 username@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100</code></pre>
+<ol start="3">
+<li>Explicitly specify which key to use:</li>
+</ol>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh <span class="token operator">-</span>i <span class="token variable">$env</span>:USERPROFILE\<span class="token punctuation">.</span>ssh\id_ed25519 username@192<span class="token punctuation">.</span>168<span class="token punctuation">.</span>1<span class="token punctuation">.</span>100</code></pre>
+<ol start="4">
+<li>For multiple servers/keys, create a config file at <code>%USERPROFILE%\.ssh\config</code>:</li>
+</ol>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">Host myserver1
+    HostName 192.168.1.100
+    User username
+    Port 22
+    IdentityFile ~/.ssh/id_ed25519
+
+Host myserver2
+    HostName 192.168.1.200
+    User otheruser
+    Port 10322
+    IdentityFile ~/.ssh/id_rsa</code></pre>
+<p>Then connect using the alias:</p>
+<pre class="language-powershell" tabindex="0"><code class="language-powershell">ssh myserver1</code></pre>
+<blockquote>
+<p>💡 Tip: After adding your key to a server, you won't need to enter a password. You'll only need the key's passphrase (if you set one).</p>
+</blockquote>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/rabbitmq-cheatsheet/">RabbitMQ Command Snippets</a></li><li>Next: <a href="/posts/validating-problemdetails-in-aspnetcore-integration-tests/">Testing Error Responses in ASP.NET Core using ProblemDetails</a></li>
 </ul>
@@ -569,7 +688,7 @@ To log out, run the <code>exit</code> command or press <code>Ctrl+D</code>.</
 
 		<footer></footer>
 
-		<!-- This page `/posts/ssh-windows-snippets/` was built on 2025-05-19T20:16:37.644Z -->
+		<!-- This page `/posts/ssh-windows-snippets/` was built on 2025-05-27T08:56:57.479Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

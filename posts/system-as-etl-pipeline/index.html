@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>How I found the same ETL pattern in two different systems</title>
+		<title>The hidden ETL pipeline in your system</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,7 +526,7 @@ h1 {
 
 		<main id="skip">
 			
-<h1>How I found the same ETL pattern in two different systems</h1>
+<h1>The hidden ETL pipeline in your system</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2025-04-23">Apr 23, 2025</time></li>
@@ -536,57 +536,23 @@ h1 {
 		<li><a href="/tags/programming/" class="post-tag">Programming</a></li>
 </ul>
 
-<p>I recently realized that two different systems I've worked on are actually doing the same thing - they're both a style of ETL (Extract, Transform, Load) pipelines.</p>
-<p>For years, I worked on a security system where edge controllers collect data from card readers and door locks and push it to the cloud. These controllers do three main things:</p>
-<ul>
-<li>Extract data from many different hardware types</li>
-<li>Transform the data from many formats into one standard format</li>
-<li>Load the data to cloud services/databases</li>
-</ul>
-<p>I always saw this as just a system with syncing capability. I never thought of that part of the system as an ETL.</p>
-<p>Recently, I was working on a wearable device project with these parts:</p>
-<ul>
-<li>Mobile apps connect to wearables using Bluetooth</li>
-<li>The apps process raw device data from various manufacturers that we need to support</li>
-<li>The apps send the processed data to cloud services</li>
-</ul>
-<p>I was struggling with some design problems in the this project. Then it hit me - this is the same pattern! The mobile app is doing exactly what the edge controller did: Extract, Transform, Load.</p>
-<p>Using what I learned from the security project, I could then see:</p>
-<ul>
-<li>The mobile app is the transformation engine, just like the edge controller was</li>
-<li>Local storage is mainly for making transfers reliable, not for offline use</li>
-<li>The rules for transforming/mapping data formats are the most valuable part</li>
-<li>The data mainly flows one way (device → app → server)</li>
-</ul>
-<p>By applying these ETL concepts from the security system to our wearable project, we are able to focus on improving each part separately: getting better data from devices, creating better rules for transforming/mapping data, and sending data to servers more efficiently.</p>
-<p>This ETL view also clarifies other parts of the system:</p>
-<ol>
-<li>
-<p><strong>Reporting is simpler from the destination</strong>: We don't need complex reporting capabilities on devices or in the mobile app. Reports are much easier to create from the already processed and aggregated data in the backend.</p>
-</li>
-<li>
-<p><strong>Separating ETL from configuration</strong>: Both systems do have some data flowing from cloud servers down to devices (like settings and configurations), but this is a separate concern from the ETL process. Keeping these separate makes both easier to manage.</p>
-</li>
-<li>
-<p><strong>Optimization opportunities</strong>: Seeing this as ETL opens up many ways to improve the pipeline:</p>
-<ul>
-<li>Batching data before sending</li>
-<li>Cleaning up glitches or unnecessary data points</li>
-<li>Removing duplicate data entries</li>
-<li>Compressing data for efficient transfer</li>
-</ul>
-</li>
-</ol>
-<p>Sometimes the best solutions come from seeing the patterns across different projects.</p>
+<p>A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized part of the system was functioning as an ETL pipeline, but it was not originally designed as one.</p>
+<p>This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.</p>
+<p>Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.</p>
+<p>Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.</p>
+<p>It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile apps.</p>
+<p>While both systems sent data back down (settings and configurations), this was separate from the ETL process. Keeping these concerns apart made the design cleaner.</p>
+<p>Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.</p>
+<p>What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/google-sheets-as-a-backend/">Google Sheets API as a Database - Building a Lightweight Backend</a></li><li>Next: <a href="/posts/what-makes-code-unmaintainable/">8 ways to make your code impossible to maintain</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/google-sheets-as-a-backend/">Google Sheets API as a Database - Building a Lightweight Backend</a></li><li>Next: <a href="/posts/what-makes-code-unmaintainable/">8 code patterns that destroy maintainability</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-05-19T20:16:37.645Z -->
+		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-05-27T08:56:57.480Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

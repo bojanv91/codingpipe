@@ -57,7 +57,7 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</loc>
+		<loc>https://codingpipe.com/posts/type-safe-configuration-in-net-core/</loc>
 		<lastmod>2023-01-08</lastmod>
 	</url>
 	
@@ -77,7 +77,7 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/custom-appsettings-configuration-in-aspnet-core-integration-tests/</loc>
+		<loc>https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</loc>
 		<lastmod>2023-08-10</lastmod>
 	</url>
 	
@@ -193,116 +193,116 @@
 	
 	<url>
 		<loc>https://codingpipe.com/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/links/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/net-framework/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/data-access/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/code/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/architecture/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/misc/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/javascript/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/net-core/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/asp-net-core/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/postgres/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/docker/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/testing/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/programming/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/serilog/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/powershell/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/snippets/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/aws/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/problemdetails/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/patterns/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/techniques/</loc>
-		<lastmod>2025-05-19</lastmod>
+		<lastmod>2025-05-27</lastmod>
 	</url>
 </urlset>
