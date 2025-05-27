@@ -32,11 +32,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/snippet-fix-razor-views-compilation/</loc>
-		<lastmod>2017-01-27</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/posts/visual-studio-2017-notes/</loc>
 		<lastmod>2017-03-09</lastmod>
 	</url>
@@ -207,12 +202,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net-framework/</loc>
+		<loc>https://codingpipe.com/tags/c/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/data-access/</loc>
+		<loc>https://codingpipe.com/tags/devops/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
@@ -222,12 +217,17 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/architecture/</loc>
+		<loc>https://codingpipe.com/tags/software-design/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/misc/</loc>
+		<loc>https://codingpipe.com/tags/event/</loc>
+		<lastmod>2025-05-27</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/refactoring/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
@@ -237,7 +237,7 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net-core/</loc>
+		<loc>https://codingpipe.com/tags/data-access/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
@@ -262,21 +262,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/programming/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/serilog/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/tags/powershell/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
@@ -287,22 +272,12 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/aws/</loc>
+		<loc>https://codingpipe.com/tags/productivity/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/problemdetails/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/patterns/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/techniques/</loc>
+		<loc>https://codingpipe.com/tags/architecture/</loc>
 		<lastmod>2025-05-27</lastmod>
 	</url>
 </urlset>

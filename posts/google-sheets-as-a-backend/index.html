@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Google Sheets API as a Database - Building a Lightweight Backend</title>
+		<title>Google sheets as your backend: Preserving business logic instead of rebuilding it</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,94 +526,36 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Google Sheets API as a Database - Building a Lightweight Backend</h1>
+<h1>Google sheets as your backend: Preserving business logic instead of rebuilding it</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2025-04-22">Apr 22, 2025</time></li>
 	<li><span> • </span></li>
 	<li><span>4 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/programming/" class="post-tag">Programming</a></li>
+		<li><a href="/tags/architecture/" class="post-tag">Architecture</a> • </li>
+		<li><a href="/tags/software-design/" class="post-tag">Software Design</a></li>
 </ul>
 
-<p>Many business tools start as spreadsheets with calculations made by finance teams. When more people need to use these tools, companies often rebuild them as custom apps. This works well for many long-term projects.</p>
-<p>But sometimes another approach works better - especially when you need to deliver quickly and let business experts keep managing formulas. This article shows how to use Google Sheets as a calculation engine behind a web app, adding another useful tool to your development options.</p>
-<h2 id="why-consider-google-sheets-as-a-backend" tabindex="-1">Why Consider Google Sheets as a Backend? <a class="header-anchor" href="#why-consider-google-sheets-as-a-backend">#</a></h2>
-<p>This approach offers key benefits:</p>
-<ol>
-<li><strong>Use existing formulas</strong>. No need to rewrite spreadsheet calculations in code</li>
-<li><strong>Keep business users in control</strong>. Let experts update formulas using familiar tools</li>
-<li><strong>Launch faster</strong>. Skip the time needed to recode all formulas</li>
-<li><strong>Easy formula updates</strong>. Business users can change calculations without developers</li>
-<li><strong>Simplify development</strong>. Avoid converting complex Excel logic to code</li>
-</ol>
-<h2 id="how-it-works" tabindex="-1">How It Works <a class="header-anchor" href="#how-it-works">#</a></h2>
-<p>The solution has four main components:</p>
-<ol>
-<li><strong>Template Spreadsheet</strong>. Contains all calculations and reporting layouts</li>
-<li><strong>Web Interface</strong>. Provides user inputs and displays results</li>
-<li><strong>Integration Service</strong>. Communicates with the Google Sheets API to:
-<ul>
-<li>Create template copies for each user session</li>
-<li>Update cells with user data</li>
-<li>Retrieve calculated results</li>
-<li>Generate reports/PDFs</li>
-<li>Clean up temporary spreadsheets</li>
-</ul>
-</li>
-<li><strong>Security Layer</strong>. Handles authentication and permissions</li>
-</ol>
-<h2 id="ideal-use-cases" tabindex="-1">Ideal Use Cases <a class="header-anchor" href="#ideal-use-cases">#</a></h2>
-<p>This approach works particularly well for:</p>
-<ul>
-<li><strong>Financial modeling</strong>. When calculations frequently change based on business conditions</li>
-<li><strong>Pricing engines</strong>. With complex discount structures and approval rules</li>
-<li><strong>Reporting systems</strong>. Where business users need to control calculation methodology</li>
-<li><strong>Risk assessment tools</strong>. With formulas maintained by domain experts</li>
-</ul>
-<h2 id="real-world-example-sales-quoting-tool" tabindex="-1">Real-World Example: Sales Quoting Tool <a class="header-anchor" href="#real-world-example-sales-quoting-tool">#</a></h2>
-<p>I implemented this approach to build a sales quoting tool for a client. The client's organization had already developed complex pricing calculations across 10 different interconnected spreadsheets. These spreadsheets contained years of business expertise and were regularly maintained by the client's finance team.</p>
-<p>The client needed to make these calculations available to their sales agents sooner rather than later, while still allowing their stakeholders to maintain and update the various formulas in the way they knew best - using spreadsheets.</p>
-<p>While a traditional development approach would have eventually delivered a robust solution, we faced some practical considerations:</p>
-<ul>
-<li>The complex calculations would take significant time to translate into code and validate</li>
-<li>The client's stakeholders needed to maintain the ability to quickly adjust pricing formulas</li>
-<li>The client's sales team needed access to this functionality on the web within a tight timeframe</li>
-</ul>
-<p>Our solution used the existing spreadsheet logic while addressing the multi-user needs:</p>
-<ol>
-<li>We kept the client's existing spreadsheets with all pricing formulas intact</li>
-<li>We built an integration layer using the Google Sheets API</li>
-<li>We created a simple web interface for the client's sales agents to login, input deal parameters, and get a quoting report</li>
-</ol>
-<p>The resulting workflow provided the best of both worlds:</p>
-<ul>
-<li>The client's sales agents enter customer requirements via the web interface</li>
-<li>The web API passes this data to a copy of the template spreadsheet (using Google Sheets API)</li>
-<li>The spreadsheet performs all complex pricing calculations automatically</li>
-<li>The system retrieves the calculated results and generates a PDF quote</li>
-<li>The sales agent receives a URL to access the final quote</li>
-</ul>
-<p>Most importantly, the client's finance team could continue to refine pricing rules directly in the template spreadsheet, with changes immediately available to all users. This preserved their autonomy while giving sales agents a streamlined application experience.</p>
-<p>This approach allowed the client to get a working solution much faster than rewiring all the formulas, with the added benefit of keeping calculation maintenance in the hands of their business experts.</p>
-<h2 id="when-this-approach-makes-sense" tabindex="-1">When This Approach Makes Sense <a class="header-anchor" href="#when-this-approach-makes-sense">#</a></h2>
-<p>This approach is particularly valuable when:</p>
-<ul>
-<li>You have complex calculations already built and validated in spreadsheets</li>
-<li>Clients need their business stakeholders to maintain direct control over calculation rules</li>
-<li>The spreadsheet logic spans multiple interconnected calculations</li>
-<li>Business logic evolves frequently based on market conditions</li>
-<li>The traditional change request -&gt; development -&gt; testing -&gt; deployment cycle creates unacceptable delays for the business/sales teams</li>
-</ul>
-<p>Key considerations:</p>
-<ul>
-<li>Google imposes API rate limits</li>
-<li>Each API call adds latency</li>
-<li>Best for moderate user volumes</li>
-<li>Proper template permissions must be set</li>
-</ul>
-<h2 id="conclusion" tabindex="-1">Conclusion <a class="header-anchor" href="#conclusion">#</a></h2>
-<p>The Google Sheets API approach keeps calculations in spreadsheets where business experts can update them directly, while providing end users with a professional application interface. This method cuts development time, enables quicker changes, and works particularly well for projects where rebuilding complex Excel logic in code would create delays.</p>
+<p>Years ago, I worked on a project with interconnected pricing spreadsheets and a tight deadline. The team had spent years perfecting complex calculations across these sheets, updating formulas monthly based on market conditions. The client needed their sales team to access these calculations via a web application to run calculations and generate quotes, but rebuilding all that Excel logic in code would take months.</p>
+<p>Instead of rewriting their spreadsheet calculations, we kept them exactly where they were and built around them. This approach revealed a key insight: <strong>sometimes the fastest path to a working system is preserving existing expertise rather than rebuilding it</strong>.</p>
+<h2 id="the-core-insight-preserve-business-logic-where-it-lives" tabindex="-1">The core insight: Preserve business logic where it lives <a class="header-anchor" href="#the-core-insight-preserve-business-logic-where-it-lives">#</a></h2>
+<p>When business experts have already built and validated complex calculations in spreadsheets, you have two choices: spend weeks translating their work into code, or build a system that uses their existing work directly. The Google Sheets API makes the second option surprisingly practical.</p>
+<p>This approach works because it separates concerns cleanly. Business experts continue managing calculations using tools they know. Developers focus on building user interfaces and data flow. Both teams work in their area of expertise without stepping on each other.</p>
+<h2 id="how-the-architecture-works" tabindex="-1">How the architecture works <a class="header-anchor" href="#how-the-architecture-works">#</a></h2>
+<p>To implement this insight, the solution connects four components. A template spreadsheet contains all calculations and reporting layouts that business users control. A web interface provides user inputs and displays results. An integration service communicates with the Google Sheets API to create template copies for each session, update cells with user data, retrieve calculated results, and clean up temporary spreadsheets. A security layer handles authentication and permissions.</p>
+<p>Each user session gets its own copy of the template, preventing conflicts while preserving the original formulas. The system passes user inputs to the copy, lets the spreadsheet calculate results, then retrieves the output for display or reporting.</p>
+<h2 id="real-world-implementation-sales-quoting-tool" tabindex="-1">Real-world implementation: Sales quoting tool <a class="header-anchor" href="#real-world-implementation-sales-quoting-tool">#</a></h2>
+<p>Our client's pricing spreadsheets contained years of business expertise. Traditional development would have required translating this domain knowledge into code, then building a change management process for future updates.</p>
+<p>Instead, we preserved their existing workflow. The team continued refining pricing rules directly in the template spreadsheet. Sales agents used a streamlined web interface to input deal parameters. The system generated quotes using the same calculations the team had been perfecting for years, with reporting layouts also built in the spreadsheet. The web application exported these reports to PDF, displayed them to users, and sent them via email.</p>
+<p>The key benefit wasn't just faster delivery, it was keeping the calculation maintenance in the hands of the people who understood it best. When market conditions changed, the team could update pricing rules immediately without waiting for development cycles. Sales agents saw changes instantly through the same web interface.</p>
+<h2 id="when-this-approach-makes-sense" tabindex="-1">When this approach makes sense <a class="header-anchor" href="#when-this-approach-makes-sense">#</a></h2>
+<p>This method works best when business experts already own complex calculations that change frequently. If your stakeholders spend significant time maintaining spreadsheet formulas and you need to make those calculations available to more users quickly, this approach can save months of development time.</p>
+<p>Consider this route when the traditional change-request-to-deployment cycle creates unacceptable delays for business teams, when calculations span multiple interconnected sheets, or when domain experts need direct control over business rules.</p>
+<p>Keep in mind the limitations: Google imposes API rate limits, each call adds latency, and this works best for moderate user volumes. You'll also need proper template permissions and authentication.</p>
+<h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
+<p>If your business experts already own the calculations and need to keep iterating them, building around their existing work often delivers faster than rebuilding it. The question isn't whether spreadsheets make good databases, it's whether preserving existing expertise makes more sense than recreating it.</p>
+<p>Sometimes the most elegant architecture is the one that works with human expertise instead of replacing it.</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/power-of-prototyping/">Hours of prototyping can save weeks of problems</a></li><li>Next: <a href="/posts/system-as-etl-pipeline/">The hidden ETL pipeline in your system</a></li>
 </ul>
@@ -622,7 +564,7 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/posts/google-sheets-as-a-backend/` was built on 2025-05-27T08:56:57.479Z -->
+		<!-- This page `/posts/google-sheets-as-a-backend/` was built on 2025-05-27T12:20:56.687Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

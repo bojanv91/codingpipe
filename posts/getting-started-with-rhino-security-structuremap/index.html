@@ -533,7 +533,8 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>8 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-framework/" class="post-tag">.NET Framework</a></li>
+		<li><a href="/tags/c/" class="post-tag">C#</a> • </li>
+		<li><a href="/tags/code/" class="post-tag">Code</a></li>
 </ul>
 
 <p>In this posting I will show you how to configure Rhino Security infrastructure to work with StructureMap IoC container and provide to you database schema (for MSSQL and <a href="http://bojanv91.github.io/2014/12/database-development-guidance/">FluentMigrator</a>) that you will need in order Rhino Security to get working. I've struggled some time before I got everything working, so here are my results. :) <!--excerpt--></p>
@@ -544,7 +545,7 @@ h1 {
 </blockquote>
 </blockquote>
 <p>More details about the architecture and how Rhino Security works behind the scenes can be found <a href="http://ayende.com/blog/2958/a-vision-of-enterprise-platform-security-infrastructure">here</a>, <a href="http://ayende.com/blog/3109/rhino-security-overview-part-i">here</a> and <a href="http://ayende.com/blog/3113/rhino-security-part-ii-discussing-the-implementation">here</a>.</p>
-<h1 id="action-plan" tabindex="-1">Action Plan <a class="header-anchor" href="#action-plan">#</a></h1>
+<h2 id="action-plan" tabindex="-1">Action Plan <a class="header-anchor" href="#action-plan">#</a></h2>
 <ul>
 <li>Installing NuGet packages</li>
 <li>Configuring StructureMap container and registering Rhino.Security into NHibernate</li>
@@ -554,8 +555,8 @@ h1 {
 <li>Usage DEMO (code samples <a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap">https://github.com/bojanv91/RhinoSecurityWithStructureMap</a>)</li>
 </ul>
 <p><img src="/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-01.png" alt="Getting started with Rhino Security and StructureMap"></p>
-<h2 id="installing-nuget-packages" tabindex="-1">Installing NuGet packages <a class="header-anchor" href="#installing-nuget-packages">#</a></h2>
-<pre><code>Install-Package Rhino.Security			
+<h3 id="installing-nuget-packages" tabindex="-1">Installing NuGet packages <a class="header-anchor" href="#installing-nuget-packages">#</a></h3>
+<pre><code>Install-Package Rhino.Security   
 Install-Package NHibernate
 Install-Package FluentNHibernate
 Install-Package StructureMap
@@ -563,213 +564,208 @@ Install-Package CommonServiceLocator
 </code></pre>
 <p>FluentNHibernate provides fluent mapping interface for mapping our domain model entities to table structures via NHibernate.<br>
 CommonServiceLocator provides abstraction over IoC containers and service locators and contains a shared interface for service location. Rhino Security makes use of it, that is why can be used with any IoC container.</p>
-<h2 id="configuring-structuremap-container-and-registering-rhino-security-into-nhibernate" tabindex="-1">Configuring StructureMap container and registering Rhino.Security into NHibernate <a class="header-anchor" href="#configuring-structuremap-container-and-registering-rhino-security-into-nhibernate">#</a></h2>
+<h3 id="configuring-structuremap-container-and-registering-rhino-security-into-nhibernate" tabindex="-1">Configuring StructureMap container and registering Rhino.Security into NHibernate <a class="header-anchor" href="#configuring-structuremap-container-and-registering-rhino-security-into-nhibernate">#</a></h3>
 <p>In the following code snippet I have all configuration stuff in one class, called the Bootstrapper. It's purpose is to provide functionality for booting up our application, the starting point. Explanations about what does what are put in comments. If something is still unclear do write me a comment, I'll happily update that part.</p>
-<pre><code>	using FluentNHibernate.Cfg;
-	using FluentNHibernate.Cfg.Db;
-	using NHibernate;
-	using NHibernate.Cfg;
-	using NHibernate.Context;
-	using Rhino.Security.Interfaces;
-	using Rhino.Security.Services;
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"> <span class="token keyword">using</span> <span class="token namespace">FluentNHibernate<span class="token punctuation">.</span>Cfg</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">FluentNHibernate<span class="token punctuation">.</span>Cfg<span class="token punctuation">.</span>Db</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">NHibernate</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">NHibernate<span class="token punctuation">.</span>Cfg</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">NHibernate<span class="token punctuation">.</span>Context</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>Interfaces</span><span class="token punctuation">;</span>
+ <span class="token keyword">using</span> <span class="token namespace">Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>Services</span><span class="token punctuation">;</span>
 
-	namespace RhinoSecurityWithStructureMap
-	{
-	    public class Bootstrapper
-	    {
-	        public static void Bootstrap(string connectionString)
-	        {
-	            var container = new StructureMap.Container();
-	            container.Configure(cfg =&gt;
-	                {
-	                    //NHibernate configurations 
-	                    cfg.For&lt;ISessionFactory&gt;().Singleton().Use(() =&gt; CreateSessionFactory(connectionString));
-	                    cfg.For&lt;ISession&gt;().Use(context =&gt; GetSession(context));
-	
-	                    //Rhino Security configurations 
-	                    cfg.For&lt;IAuthorizationService&gt;().Use&lt;AuthorizationService&gt;();
-	                    cfg.For&lt;IAuthorizationRepository&gt;().Use&lt;AuthorizationRepository&gt;();
-	                    cfg.For&lt;IPermissionsBuilderService&gt;().Use&lt;PermissionsBuilderService&gt;();
-	                    cfg.For&lt;IPermissionsService&gt;().Use&lt;PermissionsService&gt;();
-	                });
-	
-	            //Setting up StuctureMapServiceLocator as a CommonServiceLocator that Rhino.Security will use for DI
-	            Microsoft.Practices.ServiceLocation.ServiceLocator
-	                .SetLocatorProvider(() =&gt; new StructureMapServiceLocator(container));
-	        }
-	
-	        private static ISessionFactory CreateSessionFactory(string connectionString)
-	        {
-	            FluentConfiguration fluentConfig = Fluently.Configure()
-	                .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connectionString))          //specifying connection string for Microsoft SQL Server 2012 
-	                .Mappings(m =&gt; m.FluentMappings.AddFromAssemblyOf&lt;Bootstrapper&gt;())                  //specifying in which assembly NHibernate should look for entity mappings
-	                .CurrentSessionContext(typeof(ThreadStaticSessionContext).AssemblyQualifiedName)    //specifying the session context lifecycle to be initialized per thread
-	                .ExposeConfiguration(cfg =&gt;
-	                {
-	                    Rhino.Security.Security.Configure&lt;User&gt;(cfg, Rhino.Security.SecurityTableStructure.Prefix);
-	                });
-	
-	            return fluentConfig.BuildSessionFactory();
-	        }
-	
-	        private static ISession GetSession(StructureMap.IContext context)
-	        {
-	            var sessionFactory = context.GetInstance&lt;ISessionFactory&gt;();
-	            return sessionFactory.GetCurrentSession();
-	        }
-	    }
-	}
-</code></pre>
-<h2 id="implementing-commonservicelocator-provider-for-structuremap" tabindex="-1">Implementing CommonServiceLocator provider for StructureMap <a class="header-anchor" href="#implementing-commonservicelocator-provider-for-structuremap">#</a></h2>
+ <span class="token keyword">namespace</span> <span class="token namespace">RhinoSecurityWithStructureMap</span>
+ <span class="token punctuation">{</span>
+     <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Bootstrapper</span>
+     <span class="token punctuation">{</span>
+         <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Bootstrap</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> connectionString<span class="token punctuation">)</span>
+         <span class="token punctuation">{</span>
+             <span class="token class-name"><span class="token keyword">var</span></span> container <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StructureMap<span class="token punctuation">.</span>Container</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             container<span class="token punctuation">.</span><span class="token function">Configure</span><span class="token punctuation">(</span>cfg <span class="token operator">=></span>
+                 <span class="token punctuation">{</span>
+                     <span class="token comment">//NHibernate configurations </span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ISessionFactory<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Singleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">CreateSessionFactory</span><span class="token punctuation">(</span>connectionString<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ISession<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Use</span><span class="token punctuation">(</span>context <span class="token operator">=></span> <span class="token function">GetSession</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+                     <span class="token comment">//Rhino Security configurations </span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IAuthorizationService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Use</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AuthorizationService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IAuthorizationRepository<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Use</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AuthorizationRepository<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IPermissionsBuilderService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Use</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>PermissionsBuilderService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     cfg<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">For</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IPermissionsService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Use</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>PermissionsService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+             <span class="token comment">//Setting up StuctureMapServiceLocator as a CommonServiceLocator that Rhino.Security will use for DI</span>
+             Microsoft<span class="token punctuation">.</span>Practices<span class="token punctuation">.</span>ServiceLocation<span class="token punctuation">.</span>ServiceLocator
+                 <span class="token punctuation">.</span><span class="token function">SetLocatorProvider</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">StructureMapServiceLocator</span><span class="token punctuation">(</span>container<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+ 
+         <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token return-type class-name">ISessionFactory</span> <span class="token function">CreateSessionFactory</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> connectionString<span class="token punctuation">)</span>
+         <span class="token punctuation">{</span>
+             <span class="token class-name">FluentConfiguration</span> fluentConfig <span class="token operator">=</span> Fluently<span class="token punctuation">.</span><span class="token function">Configure</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">Database</span><span class="token punctuation">(</span>MsSqlConfiguration<span class="token punctuation">.</span>MsSql2012<span class="token punctuation">.</span><span class="token function">ConnectionString</span><span class="token punctuation">(</span>connectionString<span class="token punctuation">)</span><span class="token punctuation">)</span>          <span class="token comment">//specifying connection string for Microsoft SQL Server 2012 </span>
+                 <span class="token punctuation">.</span><span class="token function">Mappings</span><span class="token punctuation">(</span>m <span class="token operator">=></span> m<span class="token punctuation">.</span>FluentMappings<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddFromAssemblyOf</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Bootstrapper<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>                  <span class="token comment">//specifying in which assembly NHibernate should look for entity mappings</span>
+                 <span class="token punctuation">.</span><span class="token function">CurrentSessionContext</span><span class="token punctuation">(</span><span class="token keyword">typeof</span><span class="token punctuation">(</span><span class="token type-expression class-name">ThreadStaticSessionContext</span><span class="token punctuation">)</span><span class="token punctuation">.</span>AssemblyQualifiedName<span class="token punctuation">)</span>    <span class="token comment">//specifying the session context lifecycle to be initialized per thread</span>
+                 <span class="token punctuation">.</span><span class="token function">ExposeConfiguration</span><span class="token punctuation">(</span>cfg <span class="token operator">=></span>
+                 <span class="token punctuation">{</span>
+                     Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>Security<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>User<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>SecurityTableStructure<span class="token punctuation">.</span>Prefix<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+             <span class="token keyword">return</span> fluentConfig<span class="token punctuation">.</span><span class="token function">BuildSessionFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+ 
+         <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token return-type class-name">ISession</span> <span class="token function">GetSession</span><span class="token punctuation">(</span><span class="token class-name">StructureMap<span class="token punctuation">.</span>IContext</span> context<span class="token punctuation">)</span>
+         <span class="token punctuation">{</span>
+             <span class="token class-name"><span class="token keyword">var</span></span> sessionFactory <span class="token operator">=</span> context<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>ISessionFactory<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+             <span class="token keyword">return</span> sessionFactory<span class="token punctuation">.</span><span class="token function">GetCurrentSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span></code></pre>
+<h3 id="implementing-commonservicelocator-provider-for-structuremap" tabindex="-1">Implementing CommonServiceLocator provider for StructureMap <a class="header-anchor" href="#implementing-commonservicelocator-provider-for-structuremap">#</a></h3>
 <p>The code is pretty much straightforward. We just implement Microsoft.Practices.ServiceLocation.IServiceLocator interface with the common code that is provided to us by StructureMap IContainer interface, basically this class acts as a wrapper.</p>
-<pre><code>    public class StructureMapServiceLocator : Microsoft.Practices.ServiceLocation.IServiceLocator
-    {
-        private readonly IContainer _container;
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StructureMapServiceLocator</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Microsoft<span class="token punctuation">.</span>Practices<span class="token punctuation">.</span>ServiceLocation<span class="token punctuation">.</span>IServiceLocator</span></span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IContainer</span> _container<span class="token punctuation">;</span>
 
-        public StructureMapServiceLocator(IContainer container)
-        {
-            _container = container;
-        }
+        <span class="token keyword">public</span> <span class="token function">StructureMapServiceLocator</span><span class="token punctuation">(</span><span class="token class-name">IContainer</span> container<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            _container <span class="token operator">=</span> container<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public IEnumerable&lt;TService&gt; GetAllInstances&lt;TService&gt;()
-        {
-            return _container.GetAllInstances&lt;TService&gt;();
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name">IEnumerable<span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span> <span class="token generic-method"><span class="token function">GetAllInstances</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetAllInstances</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public IEnumerable&lt;object&gt; GetAllInstances(Type serviceType)
-        {
-            return (IEnumerable&lt;object&gt;)_container.GetAllInstances(serviceType);
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name">IEnumerable<span class="token punctuation">&lt;</span><span class="token keyword">object</span><span class="token punctuation">></span></span> <span class="token function">GetAllInstances</span><span class="token punctuation">(</span><span class="token class-name">Type</span> serviceType<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span>IEnumerable<span class="token operator">&lt;</span><span class="token keyword">object</span><span class="token operator">></span><span class="token punctuation">)</span>_container<span class="token punctuation">.</span><span class="token function">GetAllInstances</span><span class="token punctuation">(</span>serviceType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public TService GetInstance&lt;TService&gt;(string key)
-        {
-            return _container.GetInstance&lt;TService&gt;(key);
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name">TService</span> <span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> key<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public TService GetInstance&lt;TService&gt;()
-        {
-            return _container.GetInstance&lt;TService&gt;();
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name">TService</span> <span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>TService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public object GetInstance(Type serviceType, string key)
-        {
-            return _container.GetInstance(serviceType, key);
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">object</span></span> <span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token class-name">Type</span> serviceType<span class="token punctuation">,</span> <span class="token class-name"><span class="token keyword">string</span></span> key<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token function">GetInstance</span><span class="token punctuation">(</span>serviceType<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public object GetInstance(Type serviceType)
-        {
-            return _container.GetInstance(serviceType);
-        }
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">object</span></span> <span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token class-name">Type</span> serviceType<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token function">GetInstance</span><span class="token punctuation">(</span>serviceType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public object GetService(Type serviceType)
-        {
-            return _container.GetInstance(serviceType);
-        }
-    }
-</code></pre>
-<h2 id="user-entity-implements-rhino-security-iuser-interface" tabindex="-1">User entity implements Rhino.Security.IUser interface <a class="header-anchor" href="#user-entity-implements-rhino-security-iuser-interface">#</a></h2>
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">object</span></span> <span class="token function">GetService</span><span class="token punctuation">(</span><span class="token class-name">Type</span> serviceType<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> _container<span class="token punctuation">.</span><span class="token function">GetInstance</span><span class="token punctuation">(</span>serviceType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<h3 id="user-entity-implements-rhino-security-iuser-interface" tabindex="-1">User entity implements Rhino.Security.IUser interface <a class="header-anchor" href="#user-entity-implements-rhino-security-iuser-interface">#</a></h3>
 <p>In our domain model we commonly have entity which represents the actual user. Rhino.Security must know which entity is the user entity in order to work. So our User entity must implement Rhino.Security.IUser interface, more precisely only SecurityInfo property from the interface must be implemented.</p>
-<pre><code>	public class User : Rhino.Security.IUser
-	{
-		public virtual int Id { get; protected set; }	    
-		public virtual string Username { get; set; }
-	    public virtual string PasswordHashed { get; set; }
-	
-	    public Rhino.Security.SecurityInfo SecurityInfo
-	    {
-	        get
-	        {
-	            return new Rhino.Security.SecurityInfo(Username, Id);
-	        }
-	    }
-	}
-</code></pre>
-<h2 id="preparing-the-database-schema" tabindex="-1">Preparing the database schema <a class="header-anchor" href="#preparing-the-database-schema">#</a></h2>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"> <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>IUser</span></span>
+ <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">protected</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>     
+  <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> Username <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+     <span class="token keyword">public</span> <span class="token keyword">virtual</span> <span class="token return-type class-name"><span class="token keyword">string</span></span> PasswordHashed <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+ 
+     <span class="token keyword">public</span> <span class="token return-type class-name">Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>SecurityInfo</span> SecurityInfo
+     <span class="token punctuation">{</span>
+         <span class="token keyword">get</span>
+         <span class="token punctuation">{</span>
+             <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Rhino<span class="token punctuation">.</span>Security<span class="token punctuation">.</span>SecurityInfo</span><span class="token punctuation">(</span>Username<span class="token punctuation">,</span> Id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span></code></pre>
+<h3 id="preparing-the-database-schema" tabindex="-1">Preparing the database schema <a class="header-anchor" href="#preparing-the-database-schema">#</a></h3>
 <p>Schema files can be found in the following links:</p>
 <ul>
 <li><a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.sql.sql">SQL dump</a></li>
 <li><a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.cs">Fluent Migrator schema</a> (<a href="http://bojanv91.github.io/2014/12/database-development-guidance/">blogpost about how to use Fluent Migrator</a>)</li>
 </ul>
 <p><img src="/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-02.png" alt="Rhino database schema"></p>
-<h2 id="usage-demo" tabindex="-1">Usage DEMO <a class="header-anchor" href="#usage-demo">#</a></h2>
+<h3 id="usage-demo" tabindex="-1">Usage DEMO <a class="header-anchor" href="#usage-demo">#</a></h3>
 <p>The full code sample can be found in following github repository: <a href="https://github.com/bojanv91/RhinoSecurityWithStructureMap">https://github.com/bojanv91/RhinoSecurityWithStructureMap</a>. Here I provide excerpt code snippets from the actual test code.</p>
 <p>Setting up user groups, operations and permissions:</p>
-<pre><code>	var _authorizationRepository = ServiceLocator.Current.GetInstance&lt;IAuthorizationRepository&gt;();
-	var _authorizationService = ServiceLocator.Current.GetInstance&lt;IAuthorizationService&gt;();
-	var _permissionsBuilderService = ServiceLocator.Current.GetInstance&lt;IPermissionsBuilderService&gt;();
-	var _permissionService = ServiceLocator.Current.GetInstance&lt;IPermissionsService&gt;();
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"> <span class="token class-name"><span class="token keyword">var</span></span> _authorizationRepository <span class="token operator">=</span> ServiceLocator<span class="token punctuation">.</span>Current<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IAuthorizationRepository<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"><span class="token keyword">var</span></span> _authorizationService <span class="token operator">=</span> ServiceLocator<span class="token punctuation">.</span>Current<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IAuthorizationService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"><span class="token keyword">var</span></span> _permissionsBuilderService <span class="token operator">=</span> ServiceLocator<span class="token punctuation">.</span>Current<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IPermissionsBuilderService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token class-name"><span class="token keyword">var</span></span> _permissionService <span class="token operator">=</span> ServiceLocator<span class="token punctuation">.</span>Current<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IPermissionsService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    using (var transaction = _session.BeginTransaction())
-    {
-        //creating user group 'Admin'
-        _authorizationRepository.CreateUsersGroup(&quot;Admin&quot;);
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> transaction <span class="token operator">=</span> _session<span class="token punctuation">.</span><span class="token function">BeginTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">//creating user group 'Admin'</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">CreateUsersGroup</span><span class="token punctuation">(</span><span class="token string">"Admin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        //creating operations
-        _authorizationRepository.CreateOperation(&quot;/Content&quot;);
-        _authorizationRepository.CreateOperation(&quot;/Content/Create&quot;);
-        _authorizationRepository.CreateOperation(&quot;/Content/View&quot;);
-        _authorizationRepository.CreateOperation(&quot;/Content/Delete&quot;);
+        <span class="token comment">//creating operations</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">CreateOperation</span><span class="token punctuation">(</span><span class="token string">"/Content"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">CreateOperation</span><span class="token punctuation">(</span><span class="token string">"/Content/Create"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">CreateOperation</span><span class="token punctuation">(</span><span class="token string">"/Content/View"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">CreateOperation</span><span class="token punctuation">(</span><span class="token string">"/Content/Delete"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        transaction.Commit();
-    }
+        transaction<span class="token punctuation">.</span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    using (var transaction = _session.BeginTransaction())
-    {
-        //adding the LoggedInUser to the 'Admin' users group
-        _authorizationRepository.AssociateUserWith(_loggedInUser, &quot;Admin&quot;);
+    <span class="token keyword">using</span> <span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">var</span></span> transaction <span class="token operator">=</span> _session<span class="token punctuation">.</span><span class="token function">BeginTransaction</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">//adding the LoggedInUser to the 'Admin' users group</span>
+        _authorizationRepository<span class="token punctuation">.</span><span class="token function">AssociateUserWith</span><span class="token punctuation">(</span>_loggedInUser<span class="token punctuation">,</span> <span class="token string">"Admin"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        //Building 'Allow' permissions for the LoggedInUser, 
-        //by default if not defined as allowed, the operation is denied
-        //For the sake of this example, we say the the users that are in 'Admin' users group can
-        //create and view content, but cannot delete content. 
-        _permissionsBuilderService.Allow(&quot;/Content/Create&quot;).For(&quot;Admin&quot;).OnEverything().DefaultLevel().Save();
-        _permissionsBuilderService.Allow(&quot;/Content/View&quot;).For(&quot;Admin&quot;).OnEverything().DefaultLevel().Save();
+        <span class="token comment">//Building 'Allow' permissions for the LoggedInUser, </span>
+        <span class="token comment">//by default if not defined as allowed, the operation is denied</span>
+        <span class="token comment">//For the sake of this example, we say the the users that are in 'Admin' users group can</span>
+        <span class="token comment">//create and view content, but cannot delete content. </span>
+        _permissionsBuilderService<span class="token punctuation">.</span><span class="token function">Allow</span><span class="token punctuation">(</span><span class="token string">"/Content/Create"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">"Admin"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">OnEverything</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">DefaultLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        _permissionsBuilderService<span class="token punctuation">.</span><span class="token function">Allow</span><span class="token punctuation">(</span><span class="token string">"/Content/View"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">For</span><span class="token punctuation">(</span><span class="token string">"Admin"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">OnEverything</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">DefaultLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Save</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        //We can explicitly define 'Deny' permission, but as the default behaviour denies everything 
-        //that is not defined as 'Allow', I am not going to define it. You don't trust me? 
-        //That's why we have tests ;) 
-        //_permissionsBuilderService.Deny(&quot;/Content/Delete&quot;).For(&quot;Admin&quot;).OnEverything().DefaultLevel().Save();
+        <span class="token comment">//We can explicitly define 'Deny' permission, but as the default behaviour denies everything </span>
+        <span class="token comment">//that is not defined as 'Allow', I am not going to define it. You don't trust me? </span>
+        <span class="token comment">//That's why we have tests ;) </span>
+        <span class="token comment">//_permissionsBuilderService.Deny("/Content/Delete").For("Admin").OnEverything().DefaultLevel().Save();</span>
 
-        transaction.Commit();
-    }
-</code></pre>
+        transaction<span class="token punctuation">.</span><span class="token function">Commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
 <p>Test code demonstrating the usage:</p>
-<pre><code>    public class RhinoTests : IUseFixture&lt;TestFixture&gt;
-    {
-        private readonly IAuthorizationService _authorizationService;
-        private readonly User _loggedInUser;
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RhinoTests</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">IUseFixture<span class="token punctuation">&lt;</span>TestFixture<span class="token punctuation">></span></span></span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">IAuthorizationService</span> _authorizationService<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">User</span> _loggedInUser<span class="token punctuation">;</span>
 
-        public RhinoTests() 
-        {
-            _authorizationService = ServiceLocator.Current.GetInstance&lt;IAuthorizationService&gt;();
-            _loggedInUser = TestFixture._loggedInUser;
-        }
+        <span class="token keyword">public</span> <span class="token function">RhinoTests</span><span class="token punctuation">(</span><span class="token punctuation">)</span> 
+        <span class="token punctuation">{</span>
+            _authorizationService <span class="token operator">=</span> ServiceLocator<span class="token punctuation">.</span>Current<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetInstance</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IAuthorizationService<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            _loggedInUser <span class="token operator">=</span> TestFixture<span class="token punctuation">.</span>_loggedInUser<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        [Fact]
-        public void it_should_allow_content_creation()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &quot;/Content/Create&quot;);
-            Assert.True(result);
-        }
+        <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Fact</span></span><span class="token punctuation">]</span>
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">it_should_allow_content_creation</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">bool</span></span> result <span class="token operator">=</span> _authorizationService<span class="token punctuation">.</span><span class="token function">IsAllowed</span><span class="token punctuation">(</span>_loggedInUser<span class="token punctuation">,</span> <span class="token string">"/Content/Create"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Assert<span class="token punctuation">.</span><span class="token function">True</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        [Fact]
-        public void it_should_allow_content_viewing()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &quot;/Content/View&quot;);
-            Assert.True(result);
-        }
+        <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Fact</span></span><span class="token punctuation">]</span>
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">it_should_allow_content_viewing</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">bool</span></span> result <span class="token operator">=</span> _authorizationService<span class="token punctuation">.</span><span class="token function">IsAllowed</span><span class="token punctuation">(</span>_loggedInUser<span class="token punctuation">,</span> <span class="token string">"/Content/View"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Assert<span class="token punctuation">.</span><span class="token function">True</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        [Fact]
-        public void it_should_deny_content_deletition()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &quot;/Content/Delete&quot;);
-            Assert.False(result);
-        }
+        <span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Fact</span></span><span class="token punctuation">]</span>
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">it_should_deny_content_deletition</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">bool</span></span> result <span class="token operator">=</span> _authorizationService<span class="token punctuation">.</span><span class="token function">IsAllowed</span><span class="token punctuation">(</span>_loggedInUser<span class="token punctuation">,</span> <span class="token string">"/Content/Delete"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            Assert<span class="token punctuation">.</span><span class="token function">False</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-        public void SetFixture(TestFixture data) { }
-    }
-</code></pre>
-<p>Happy coding folks! Having questions or concerns? Shoot me a tweet -&gt; @bojanv91</p>
+        <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">SetFixture</span><span class="token punctuation">(</span><span class="token class-name">TestFixture</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>Happy coding folks!</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/">.NET Database Development with FluentMigrator (2014 Edition)</a></li><li>Next: <a href="/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/">How to Refactor Business Rules Using the Specification Pattern</a></li>
 </ul>
@@ -778,7 +774,7 @@ CommonServiceLocator provides abstraction over IoC containers and service locato
 
 		<footer></footer>
 
-		<!-- This page `/posts/getting-started-with-rhino-security-structuremap/` was built on 2025-05-27T08:56:57.475Z -->
+		<!-- This page `/posts/getting-started-with-rhino-security-structuremap/` was built on 2025-05-27T12:20:56.682Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

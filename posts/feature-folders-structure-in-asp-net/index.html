@@ -533,8 +533,7 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>5 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-framework/" class="post-tag">.NET Framework</a> • </li>
-		<li><a href="/tags/architecture/" class="post-tag">Architecture</a></li>
+		<li><a href="/tags/software-design/" class="post-tag">Software Design</a></li>
 </ul>
 
 <p>Structuring your files around <strong>business concerns</strong> is more natural way of handling projects than structuring them around <strong>technical concerns</strong>. The <a href="https://en.wikipedia.org/wiki/Separation_of_concerns">Separation of Concerns</a> is applied in both approaches, but not both of them give the same desired clarity and ease for developers. This blogpost focuses on organizing MVC projects around <strong>feature folders</strong>, which represent the business concerns.<!--excerpt--></p>
@@ -544,7 +543,7 @@ h1 {
 </blockquote>
 <h2 id="horizontal-technical-vs-vertical-business-folder-structure" tabindex="-1">Horizontal (Technical) vs. Vertical (Business) Folder Structure <a class="header-anchor" href="#horizontal-technical-vs-vertical-business-folder-structure">#</a></h2>
 <p>On the left side you can see the common MVC structure. On the right side you can see the feature folders structure of the very same project.</p>
-<pre><code>    Styles
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">    Styles
         Shared.css
         Login.css
     Scripts
@@ -592,10 +591,9 @@ h1 {
             ForgotPassword.cshtml
             Login.cshtml
             Register.cshtml
-    _ViewStart.cshtml
-</code></pre>
+    _ViewStart.cshtml</code></pre>
 <div style=""></div>
-<pre><code>    Features
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">    Features
         Courses
             CoursesController.cs
             Edit.cs
@@ -639,8 +637,7 @@ h1 {
             Login.js
             Register.cs
             Register.cshtml
-    _ViewStart.cshtml
-</code></pre>
+    _ViewStart.cshtml</code></pre>
 <p>When you see this in your IDE (e.g. in Visual Studio), the distinction between the files is even greater, given that there is accompanied file type icon shown besides the filename.</p>
 <p>Now, imagine you scale in amount of features, in addition to the standard N-Layer stuff like repositories, services, handlers, DTOs, etc... You will soon notice that things are starting to get messy in the technical folders organization. In the feature folders organization, each feature can scale on it's own, thus much easier to manage.</p>
 <p>Food for thought:</p>
@@ -650,7 +647,7 @@ h1 {
 <li>Can we develop one feature UI in Angular, another one in React, all other in classic server-side MVC, and stay sane with our overall project structure?</li>
 </ul>
 <p>Example of single feature evolved as Angular application/module:</p>
-<pre><code>    Features
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">    Features
         ...
         ShoppingCart
             Components
@@ -663,8 +660,7 @@ h1 {
             App.css
             Index.cshtml
             ShoppingCartController.cs
-        ...
-</code></pre>
+        ...</code></pre>
 <h2 id="benefits-of-using-feature-folders-over-technical-folder-structure" tabindex="-1">Benefits of using Feature Folders (over technical folder structure) <a class="header-anchor" href="#benefits-of-using-feature-folders-over-technical-folder-structure">#</a></h2>
 <p>Structuring your files by features (business concerns) makes things easier to find and manage.</p>
 <ul>
@@ -677,35 +673,33 @@ h1 {
 </ul>
 <h2 id="implementing-feature-folders-in-asp-net-mvc-5" tabindex="-1">Implementing Feature Folders in ASP.NET MVC 5 <a class="header-anchor" href="#implementing-feature-folders-in-asp-net-mvc-5">#</a></h2>
 <p>To make this work in ASP.NET MVC 5, we should inherit the <code>RazorViewEngine</code> and change the view location parts to ones that fit our new structure.</p>
-<pre><code>    public class FeatureFoldersRazorViewEngine : RazorViewEngine
-    {
-        public FeatureFoldersRazorViewEngine()
-        {
-            var featureFolderViewLocationFormats = new[]
-            {
-                &quot;~/Features/{1}/{0}.cshtml&quot;,
-                &quot;~/Features/{1}/{0}.vbhtml&quot;,
-                &quot;~/Features/Shared/{0}.cshtml&quot;,
-                &quot;~/Features/Shared/{0}.vbhtml&quot;,
-            };
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FeatureFoldersRazorViewEngine</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">RazorViewEngine</span></span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token function">FeatureFoldersRazorViewEngine</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token class-name"><span class="token keyword">var</span></span> featureFolderViewLocationFormats <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">[</span><span class="token punctuation">]</span>
+            <span class="token punctuation">{</span>
+                <span class="token string">"~/Features/{1}/{0}.cshtml"</span><span class="token punctuation">,</span>
+                <span class="token string">"~/Features/{1}/{0}.vbhtml"</span><span class="token punctuation">,</span>
+                <span class="token string">"~/Features/Shared/{0}.cshtml"</span><span class="token punctuation">,</span>
+                <span class="token string">"~/Features/Shared/{0}.vbhtml"</span><span class="token punctuation">,</span>
+            <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
-            ViewLocationFormats = featureFolderViewLocationFormats;
-            MasterLocationFormats = featureFolderViewLocationFormats;
-            PartialViewLocationFormats = featureFolderViewLocationFormats;
-        }
-    }
-</code></pre>
+            ViewLocationFormats <span class="token operator">=</span> featureFolderViewLocationFormats<span class="token punctuation">;</span>
+            MasterLocationFormats <span class="token operator">=</span> featureFolderViewLocationFormats<span class="token punctuation">;</span>
+            PartialViewLocationFormats <span class="token operator">=</span> featureFolderViewLocationFormats<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
 <p>Next, we have to add our newly created <code>FeatureFoldersRazorViewEngine</code> in our application.</p>
-<pre><code>    public class Global : HttpApplication
-    {
-        void Application_Start(object sender, EventArgs e)
-        {
-            // ...
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new FeatureFoldersRazorViewEngine());
-        }
-    }
-</code></pre>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Global</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">HttpApplication</span></span>
+    <span class="token punctuation">{</span>
+        <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Application_Start</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">object</span></span> sender<span class="token punctuation">,</span> <span class="token class-name">EventArgs</span> e<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">// ...</span>
+            ViewEngines<span class="token punctuation">.</span>Engines<span class="token punctuation">.</span><span class="token function">Clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            ViewEngines<span class="token punctuation">.</span>Engines<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token constructor-invocation class-name">FeatureFoldersRazorViewEngine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
 <h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
 <p>Structuring our MVC projects following feature folders approach increases the productivity of our dev teams.</p>
 <p>At our company, we have been using feature folders project structure on over dozens projects for over a year, and due to the high success and productivity boost, it became our default project structure on the presentation layer.</p>
@@ -717,7 +711,7 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/posts/feature-folders-structure-in-asp-net/` was built on 2025-05-27T08:56:57.476Z -->
+		<!-- This page `/posts/feature-folders-structure-in-asp-net/` was built on 2025-05-27T12:20:56.683Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

@@ -62,7 +62,7 @@
 		<link href="https://codingpipe.com/posts/system-as-etl-pipeline/"/>
 		<updated>2025-04-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/system-as-etl-pipeline/</id>
-		<content type="html">&lt;p&gt;A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized part of the system was functioning as an ETL pipeline, but it was not originally designed as one.&lt;/p&gt;
+		<content type="html">&lt;p&gt;A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized one part of the system was functioning as an ETL pipeline, but it was not originally designed as one.&lt;/p&gt;
 &lt;p&gt;This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.&lt;/p&gt;
 &lt;p&gt;Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.&lt;/p&gt;
 &lt;p&gt;Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.&lt;/p&gt;
@@ -74,88 +74,29 @@
 	</entry>
 	
 	<entry>
-		<title>Google Sheets API as a Database - Building a Lightweight Backend</title>
+		<title>Google sheets as your backend: Preserving business logic instead of rebuilding it</title>
 		<link href="https://codingpipe.com/posts/google-sheets-as-a-backend/"/>
 		<updated>2025-04-22T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/google-sheets-as-a-backend/</id>
-		<content type="html">&lt;p&gt;Many business tools start as spreadsheets with calculations made by finance teams. When more people need to use these tools, companies often rebuild them as custom apps. This works well for many long-term projects.&lt;/p&gt;
-&lt;p&gt;But sometimes another approach works better - especially when you need to deliver quickly and let business experts keep managing formulas. This article shows how to use Google Sheets as a calculation engine behind a web app, adding another useful tool to your development options.&lt;/p&gt;
-&lt;h2 id=&quot;why-consider-google-sheets-as-a-backend&quot; tabindex=&quot;-1&quot;&gt;Why Consider Google Sheets as a Backend? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#why-consider-google-sheets-as-a-backend&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;This approach offers key benefits:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Use existing formulas&lt;/strong&gt;. No need to rewrite spreadsheet calculations in code&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Keep business users in control&lt;/strong&gt;. Let experts update formulas using familiar tools&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Launch faster&lt;/strong&gt;. Skip the time needed to recode all formulas&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Easy formula updates&lt;/strong&gt;. Business users can change calculations without developers&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Simplify development&lt;/strong&gt;. Avoid converting complex Excel logic to code&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;how-it-works&quot; tabindex=&quot;-1&quot;&gt;How It Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#how-it-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The solution has four main components:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Template Spreadsheet&lt;/strong&gt;. Contains all calculations and reporting layouts&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Web Interface&lt;/strong&gt;. Provides user inputs and displays results&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Integration Service&lt;/strong&gt;. Communicates with the Google Sheets API to:
-&lt;ul&gt;
-&lt;li&gt;Create template copies for each user session&lt;/li&gt;
-&lt;li&gt;Update cells with user data&lt;/li&gt;
-&lt;li&gt;Retrieve calculated results&lt;/li&gt;
-&lt;li&gt;Generate reports/PDFs&lt;/li&gt;
-&lt;li&gt;Clean up temporary spreadsheets&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Security Layer&lt;/strong&gt;. Handles authentication and permissions&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;ideal-use-cases&quot; tabindex=&quot;-1&quot;&gt;Ideal Use Cases &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#ideal-use-cases&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;This approach works particularly well for:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Financial modeling&lt;/strong&gt;. When calculations frequently change based on business conditions&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Pricing engines&lt;/strong&gt;. With complex discount structures and approval rules&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Reporting systems&lt;/strong&gt;. Where business users need to control calculation methodology&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Risk assessment tools&lt;/strong&gt;. With formulas maintained by domain experts&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;real-world-example-sales-quoting-tool&quot; tabindex=&quot;-1&quot;&gt;Real-World Example: Sales Quoting Tool &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#real-world-example-sales-quoting-tool&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;I implemented this approach to build a sales quoting tool for a client. The client&#39;s organization had already developed complex pricing calculations across 10 different interconnected spreadsheets. These spreadsheets contained years of business expertise and were regularly maintained by the client&#39;s finance team.&lt;/p&gt;
-&lt;p&gt;The client needed to make these calculations available to their sales agents sooner rather than later, while still allowing their stakeholders to maintain and update the various formulas in the way they knew best - using spreadsheets.&lt;/p&gt;
-&lt;p&gt;While a traditional development approach would have eventually delivered a robust solution, we faced some practical considerations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The complex calculations would take significant time to translate into code and validate&lt;/li&gt;
-&lt;li&gt;The client&#39;s stakeholders needed to maintain the ability to quickly adjust pricing formulas&lt;/li&gt;
-&lt;li&gt;The client&#39;s sales team needed access to this functionality on the web within a tight timeframe&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Our solution used the existing spreadsheet logic while addressing the multi-user needs:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;We kept the client&#39;s existing spreadsheets with all pricing formulas intact&lt;/li&gt;
-&lt;li&gt;We built an integration layer using the Google Sheets API&lt;/li&gt;
-&lt;li&gt;We created a simple web interface for the client&#39;s sales agents to login, input deal parameters, and get a quoting report&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The resulting workflow provided the best of both worlds:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;The client&#39;s sales agents enter customer requirements via the web interface&lt;/li&gt;
-&lt;li&gt;The web API passes this data to a copy of the template spreadsheet (using Google Sheets API)&lt;/li&gt;
-&lt;li&gt;The spreadsheet performs all complex pricing calculations automatically&lt;/li&gt;
-&lt;li&gt;The system retrieves the calculated results and generates a PDF quote&lt;/li&gt;
-&lt;li&gt;The sales agent receives a URL to access the final quote&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Most importantly, the client&#39;s finance team could continue to refine pricing rules directly in the template spreadsheet, with changes immediately available to all users. This preserved their autonomy while giving sales agents a streamlined application experience.&lt;/p&gt;
-&lt;p&gt;This approach allowed the client to get a working solution much faster than rewiring all the formulas, with the added benefit of keeping calculation maintenance in the hands of their business experts.&lt;/p&gt;
-&lt;h2 id=&quot;when-this-approach-makes-sense&quot; tabindex=&quot;-1&quot;&gt;When This Approach Makes Sense &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#when-this-approach-makes-sense&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;This approach is particularly valuable when:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;You have complex calculations already built and validated in spreadsheets&lt;/li&gt;
-&lt;li&gt;Clients need their business stakeholders to maintain direct control over calculation rules&lt;/li&gt;
-&lt;li&gt;The spreadsheet logic spans multiple interconnected calculations&lt;/li&gt;
-&lt;li&gt;Business logic evolves frequently based on market conditions&lt;/li&gt;
-&lt;li&gt;The traditional change request -&amp;gt; development -&amp;gt; testing -&amp;gt; deployment cycle creates unacceptable delays for the business/sales teams&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Key considerations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Google imposes API rate limits&lt;/li&gt;
-&lt;li&gt;Each API call adds latency&lt;/li&gt;
-&lt;li&gt;Best for moderate user volumes&lt;/li&gt;
-&lt;li&gt;Proper template permissions must be set&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;conclusion&quot; tabindex=&quot;-1&quot;&gt;Conclusion &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#conclusion&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The Google Sheets API approach keeps calculations in spreadsheets where business experts can update them directly, while providing end users with a professional application interface. This method cuts development time, enables quicker changes, and works particularly well for projects where rebuilding complex Excel logic in code would create delays.&lt;/p&gt;
+		<content type="html">&lt;p&gt;Years ago, I worked on a project with interconnected pricing spreadsheets and a tight deadline. The team had spent years perfecting complex calculations across these sheets, updating formulas monthly based on market conditions. The client needed their sales team to access these calculations via a web application to run calculations and generate quotes, but rebuilding all that Excel logic in code would take months.&lt;/p&gt;
+&lt;p&gt;Instead of rewriting their spreadsheet calculations, we kept them exactly where they were and built around them. This approach revealed a key insight: &lt;strong&gt;sometimes the fastest path to a working system is preserving existing expertise rather than rebuilding it&lt;/strong&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;the-core-insight-preserve-business-logic-where-it-lives&quot; tabindex=&quot;-1&quot;&gt;The core insight: Preserve business logic where it lives &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#the-core-insight-preserve-business-logic-where-it-lives&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;When business experts have already built and validated complex calculations in spreadsheets, you have two choices: spend weeks translating their work into code, or build a system that uses their existing work directly. The Google Sheets API makes the second option surprisingly practical.&lt;/p&gt;
+&lt;p&gt;This approach works because it separates concerns cleanly. Business experts continue managing calculations using tools they know. Developers focus on building user interfaces and data flow. Both teams work in their area of expertise without stepping on each other.&lt;/p&gt;
+&lt;h2 id=&quot;how-the-architecture-works&quot; tabindex=&quot;-1&quot;&gt;How the architecture works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#how-the-architecture-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;To implement this insight, the solution connects four components. A template spreadsheet contains all calculations and reporting layouts that business users control. A web interface provides user inputs and displays results. An integration service communicates with the Google Sheets API to create template copies for each session, update cells with user data, retrieve calculated results, and clean up temporary spreadsheets. A security layer handles authentication and permissions.&lt;/p&gt;
+&lt;p&gt;Each user session gets its own copy of the template, preventing conflicts while preserving the original formulas. The system passes user inputs to the copy, lets the spreadsheet calculate results, then retrieves the output for display or reporting.&lt;/p&gt;
+&lt;h2 id=&quot;real-world-implementation-sales-quoting-tool&quot; tabindex=&quot;-1&quot;&gt;Real-world implementation: Sales quoting tool &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#real-world-implementation-sales-quoting-tool&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Our client&#39;s pricing spreadsheets contained years of business expertise. Traditional development would have required translating this domain knowledge into code, then building a change management process for future updates.&lt;/p&gt;
+&lt;p&gt;Instead, we preserved their existing workflow. The team continued refining pricing rules directly in the template spreadsheet. Sales agents used a streamlined web interface to input deal parameters. The system generated quotes using the same calculations the team had been perfecting for years, with reporting layouts also built in the spreadsheet. The web application exported these reports to PDF, displayed them to users, and sent them via email.&lt;/p&gt;
+&lt;p&gt;The key benefit wasn&#39;t just faster delivery, it was keeping the calculation maintenance in the hands of the people who understood it best. When market conditions changed, the team could update pricing rules immediately without waiting for development cycles. Sales agents saw changes instantly through the same web interface.&lt;/p&gt;
+&lt;h2 id=&quot;when-this-approach-makes-sense&quot; tabindex=&quot;-1&quot;&gt;When this approach makes sense &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#when-this-approach-makes-sense&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This method works best when business experts already own complex calculations that change frequently. If your stakeholders spend significant time maintaining spreadsheet formulas and you need to make those calculations available to more users quickly, this approach can save months of development time.&lt;/p&gt;
+&lt;p&gt;Consider this route when the traditional change-request-to-deployment cycle creates unacceptable delays for business teams, when calculations span multiple interconnected sheets, or when domain experts need direct control over business rules.&lt;/p&gt;
+&lt;p&gt;Keep in mind the limitations: Google imposes API rate limits, each call adds latency, and this works best for moderate user volumes. You&#39;ll also need proper template permissions and authentication.&lt;/p&gt;
+&lt;h2 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/google-sheets-as-a-backend/#summary&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;If your business experts already own the calculations and need to keep iterating them, building around their existing work often delivers faster than rebuilding it. The question isn&#39;t whether spreadsheets make good databases, it&#39;s whether preserving existing expertise makes more sense than recreating it.&lt;/p&gt;
+&lt;p&gt;Sometimes the most elegant architecture is the one that works with human expertise instead of replacing it.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -401,11 +342,11 @@
 &lt;h2 id=&quot;setting-up-the-logger-extension&quot; tabindex=&quot;-1&quot;&gt;Setting Up the Logger Extension &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#setting-up-the-logger-extension&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LoggerExtensions&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
-		&lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
-		&lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;/summary&gt;&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;param name=&quot;baseLogger&quot;&gt;The base logger instance.&amp;lt;/param&gt;&lt;/span&gt;
     &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;returns&gt;A new logger instance with a correlation ID.&amp;lt;/returns&gt;&lt;/span&gt;
@@ -427,7 +368,7 @@
         &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IsCancellationRequested&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;token comment&quot;&gt;// Create a contextual logger from the base logger with a unique&lt;/span&gt;
-						&lt;span class=&quot;token comment&quot;&gt;// correlation ID for this execution cycle&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;// correlation ID for this execution cycle&lt;/span&gt;
             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
             logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting background task cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
@@ -1052,9 +993,9 @@ npm install     &lt;span class=&quot;token comment&quot;&gt;# uses the latest ve
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;additional-resources&quot; tabindex=&quot;-1&quot;&gt;Additional Resources &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/npm-nvm-cheatsheet/#additional-resources&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;https://github.com/coreybutler/nvm-windows&lt;/li&gt;
-&lt;li&gt;https://community.chocolatey.org/packages/nvm&lt;/li&gt;
-&lt;li&gt;https://github.com/nvm-sh/nvm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/coreybutler/nvm-windows&quot;&gt;https://github.com/coreybutler/nvm-windows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://community.chocolatey.org/packages/nvm&quot;&gt;https://community.chocolatey.org/packages/nvm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/nvm-sh/nvm&quot;&gt;https://github.com/nvm-sh/nvm&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </content>
 	</entry>
@@ -1737,7 +1678,7 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
 	</entry>
 	
 	<entry>
-		<title>Mocking Services in ASP.NET Core Tests with ConfigureTestServices()</title>
+		<title>Overriding services ASP.NET Core integration tests using ConfigureTestServices</title>
 		<link href="https://codingpipe.com/posts/overriding-services-in-aspnet-core-integration-tests/"/>
 		<updated>2023-08-11T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/overriding-services-in-aspnet-core-integration-tests/</id>
@@ -1801,7 +1742,7 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
 	</entry>
 	
 	<entry>
-		<title>Test-Specific AppSettings in ASP.NET Core Integration Tests</title>
+		<title>Test-Specific AppSettings Configuration in ASP.NET Core integration tests</title>
 		<link href="https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/"/>
 		<updated>2023-08-10T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</id>
@@ -2153,7 +2094,7 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>Type-Safe Configuration in .NET Core</title>
+		<title>Type-Safe AppSettings Configuration in .NET Core</title>
 		<link href="https://codingpipe.com/posts/type-safe-configuration-in-net-core/"/>
 		<updated>2023-01-08T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/type-safe-configuration-in-net-core/</id>
@@ -2714,44 +2655,6 @@ order&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span clas
 	</entry>
 	
 	<entry>
-		<title>Fixing ASP.NET MVC5 Razor Compilation</title>
-		<link href="https://codingpipe.com/posts/snippet-fix-razor-views-compilation/"/>
-		<updated>2017-01-27T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/snippet-fix-razor-views-compilation/</id>
-		<content type="html">&lt;p&gt;Errors in Razor Views by default are detected and displayed during runtime. In the past this has caused us issues in production where end-clients were hit by these errors instead us detecting them earlier. There is an obvious but inconvenient fix to prevent this from happening. &lt;!--excerpt--&gt;&lt;/p&gt;
-&lt;h2 id=&quot;how-to-fix-the-problem&quot; tabindex=&quot;-1&quot;&gt;How to fix the problem? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/snippet-fix-razor-views-compilation/#how-to-fix-the-problem&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;You need to compile the razor views, so such errors can be detected during compile time instead of runtime.&lt;/p&gt;
-&lt;p&gt;To do that, in &lt;code&gt;.csproj&lt;/code&gt; add following piece of code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    &amp;lt;Project&amp;gt;
-        ..
-        &amp;lt;PropertyGroup&amp;gt;
-            &amp;lt;MvcBuildViews&amp;gt;true&amp;lt;/MvcBuildViews&amp;gt;
-            ..
-        &amp;lt;/PropertyGroup&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;You&#39;ll think this is enough and ASP.NET MVC is smart to do it&#39;s job, but nope, &lt;strong&gt;it will not simply work&lt;/strong&gt;. Why? Read more &lt;a href=&quot;http://stackoverflow.com/questions/4725387/mvcbuildviews-not-working-correctly/4732019#4732019&quot;&gt;here&lt;/a&gt;.
-Short story to working view compilation functionality is to add the following piece of code too in your &lt;code&gt;.csproj&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    &amp;lt;Target Name=&amp;quot;MvcBuildViews&amp;quot; AfterTargets=&amp;quot;AfterBuild&amp;quot; Condition=&amp;quot;&#39;$(MvcBuildViews)&#39;==&#39;true&#39;&amp;quot;&amp;gt;
-        &amp;lt;AspNetCompiler VirtualPath=&amp;quot;temp&amp;quot; PhysicalPath=&amp;quot;$(WebProjectOutputDir)&amp;quot; /&amp;gt;
-    &amp;lt;/Target&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;That&#39;s it. Now it works.&lt;/p&gt;
-&lt;h2 id=&quot;but-it-slows-down-the-build-time&quot; tabindex=&quot;-1&quot;&gt;But it slows down the build time? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/snippet-fix-razor-views-compilation/#but-it-slows-down-the-build-time&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Oh, just to mention that Razor Views compilation is slow process, so you might want to trigger it before making deployments or in CI (&lt;code&gt;Release&lt;/code&gt;), instead of slowing down the whole build process while you are coding (&lt;code&gt;Debug&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;The target conditions are the solution:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    &amp;lt;PropertyGroup Condition=&amp;quot;&#39;$(Configuration)|$(Platform)&#39; == &#39;Debug|AnyCPU&#39;&amp;quot;&amp;gt;
-        ..
-        &amp;lt;MvcBuildViews&amp;gt;false&amp;lt;/MvcBuildViews&amp;gt;
-    &amp;lt;/PropertyGroup&amp;gt;
-    &amp;lt;PropertyGroup Condition=&amp;quot;&#39;$(Configuration)|$(Platform)&#39; == &#39;Release|AnyCPU&#39;&amp;quot;&amp;gt;
-        ..
-        &amp;lt;MvcBuildViews&amp;gt;true&amp;lt;/MvcBuildViews&amp;gt;
-    &amp;lt;/PropertyGroup&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-</content>
-	</entry>
-	
-	<entry>
 		<title>Top Visual Studio 2015 Extensions I Use</title>
 		<link href="https://codingpipe.com/posts/vs2016-extensions/"/>
 		<updated>2016-12-31T00:00:00Z</updated>
@@ -2841,7 +2744,7 @@ Short story to working view compilation functionality is to add the following pi
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;horizontal-technical-vs-vertical-business-folder-structure&quot; tabindex=&quot;-1&quot;&gt;Horizontal (Technical) vs. Vertical (Business) Folder Structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/feature-folders-structure-in-asp-net/#horizontal-technical-vs-vertical-business-folder-structure&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;On the left side you can see the common MVC structure. On the right side you can see the feature folders structure of the very same project.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    Styles
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;    Styles
         Shared.css
         Login.css
     Scripts
@@ -2889,10 +2792,9 @@ Short story to working view compilation functionality is to add the following pi
             ForgotPassword.cshtml
             Login.cshtml
             Register.cshtml
-    _ViewStart.cshtml
-&lt;/code&gt;&lt;/pre&gt;
+    _ViewStart.cshtml&lt;/code&gt;&lt;/pre&gt;
 &lt;div style=&quot;&quot;&gt;&lt;/div&gt;
-&lt;pre&gt;&lt;code&gt;    Features
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;    Features
         Courses
             CoursesController.cs
             Edit.cs
@@ -2936,8 +2838,7 @@ Short story to working view compilation functionality is to add the following pi
             Login.js
             Register.cs
             Register.cshtml
-    _ViewStart.cshtml
-&lt;/code&gt;&lt;/pre&gt;
+    _ViewStart.cshtml&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;When you see this in your IDE (e.g. in Visual Studio), the distinction between the files is even greater, given that there is accompanied file type icon shown besides the filename.&lt;/p&gt;
 &lt;p&gt;Now, imagine you scale in amount of features, in addition to the standard N-Layer stuff like repositories, services, handlers, DTOs, etc... You will soon notice that things are starting to get messy in the technical folders organization. In the feature folders organization, each feature can scale on it&#39;s own, thus much easier to manage.&lt;/p&gt;
 &lt;p&gt;Food for thought:&lt;/p&gt;
@@ -2947,7 +2848,7 @@ Short story to working view compilation functionality is to add the following pi
 &lt;li&gt;Can we develop one feature UI in Angular, another one in React, all other in classic server-side MVC, and stay sane with our overall project structure?&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Example of single feature evolved as Angular application/module:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    Features
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;    Features
         ...
         ShoppingCart
             Components
@@ -2960,8 +2861,7 @@ Short story to working view compilation functionality is to add the following pi
             App.css
             Index.cshtml
             ShoppingCartController.cs
-        ...
-&lt;/code&gt;&lt;/pre&gt;
+        ...&lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;benefits-of-using-feature-folders-over-technical-folder-structure&quot; tabindex=&quot;-1&quot;&gt;Benefits of using Feature Folders (over technical folder structure) &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/feature-folders-structure-in-asp-net/#benefits-of-using-feature-folders-over-technical-folder-structure&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Structuring your files by features (business concerns) makes things easier to find and manage.&lt;/p&gt;
 &lt;ul&gt;
@@ -2974,35 +2874,33 @@ Short story to working view compilation functionality is to add the following pi
 &lt;/ul&gt;
 &lt;h2 id=&quot;implementing-feature-folders-in-asp-net-mvc-5&quot; tabindex=&quot;-1&quot;&gt;Implementing Feature Folders in ASP.NET MVC 5 &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/feature-folders-structure-in-asp-net/#implementing-feature-folders-in-asp-net-mvc-5&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;To make this work in ASP.NET MVC 5, we should inherit the &lt;code&gt;RazorViewEngine&lt;/code&gt; and change the view location parts to ones that fit our new structure.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    public class FeatureFoldersRazorViewEngine : RazorViewEngine
-    {
-        public FeatureFoldersRazorViewEngine()
-        {
-            var featureFolderViewLocationFormats = new[]
-            {
-                &amp;quot;~/Features/{1}/{0}.cshtml&amp;quot;,
-                &amp;quot;~/Features/{1}/{0}.vbhtml&amp;quot;,
-                &amp;quot;~/Features/Shared/{0}.cshtml&amp;quot;,
-                &amp;quot;~/Features/Shared/{0}.vbhtml&amp;quot;,
-            };
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;FeatureFoldersRazorViewEngine&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;RazorViewEngine&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;FeatureFoldersRazorViewEngine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; featureFolderViewLocationFormats &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;token string&quot;&gt;&quot;~/Features/{1}/{0}.cshtml&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;token string&quot;&gt;&quot;~/Features/{1}/{0}.vbhtml&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;token string&quot;&gt;&quot;~/Features/Shared/{0}.cshtml&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                &lt;span class=&quot;token string&quot;&gt;&quot;~/Features/Shared/{0}.vbhtml&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-            ViewLocationFormats = featureFolderViewLocationFormats;
-            MasterLocationFormats = featureFolderViewLocationFormats;
-            PartialViewLocationFormats = featureFolderViewLocationFormats;
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
+            ViewLocationFormats &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; featureFolderViewLocationFormats&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            MasterLocationFormats &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; featureFolderViewLocationFormats&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            PartialViewLocationFormats &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; featureFolderViewLocationFormats&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Next, we have to add our newly created &lt;code&gt;FeatureFoldersRazorViewEngine&lt;/code&gt; in our application.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    public class Global : HttpApplication
-    {
-        void Application_Start(object sender, EventArgs e)
-        {
-            // ...
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new FeatureFoldersRazorViewEngine());
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Global&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;HttpApplication&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Application_Start&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;/span&gt; sender&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;EventArgs&lt;/span&gt; e&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+            ViewEngines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Engines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            ViewEngines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Engines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;FeatureFoldersRazorViewEngine&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/feature-folders-structure-in-asp-net/#summary&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Structuring our MVC projects following feature folders approach increases the productivity of our dev teams.&lt;/p&gt;
 &lt;p&gt;At our company, we have been using feature folders project structure on over dozens projects for over a year, and due to the high success and productivity boost, it became our default project structure on the presentation layer.&lt;/p&gt;
@@ -3016,28 +2914,27 @@ Short story to working view compilation functionality is to add the following pi
 		<id>https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/</id>
 		<content type="html">&lt;p&gt;The other day, one of my colleges asked me for code review on a specific part of code and I said let&#39;s dig a little deeper into the options that we have. In this article, I demonstrate the re-factoring steps in detail that we&#39;ve taken and eventually how we employed the &lt;code&gt;Specification Pattern&lt;/code&gt; &lt;!--excerpt--&gt;. Have in mind that, I choose a very basic example in order to keep things simple and avoid confusion that can be arouse from domain complexity.&lt;!--excerpt--&gt;&lt;/p&gt;
 &lt;p&gt;Here is the original code:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//..
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;//..&lt;/span&gt;
 
-var newCompany = new Company(message.Name, message.CountryId);
-	
-// Query all companies from database 
-var companies = _companyRepository.Query().ToList();
-// Check if the newly created company is unique
-if (companies.Any(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId))
-	throw new Exception(&amp;quot;A company with the same name and country already exists&amp;quot;);
+&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; newCompany &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;Company&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;message&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; message&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CountryId&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ 
+&lt;span class=&quot;token comment&quot;&gt;// Query all companies from database &lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; companies &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _companyRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Query&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ToList&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;// Check if the newly created company is unique&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;companies&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; newCompany&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Name &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CountryId &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; newCompany&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;CountryId&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;A company with the same name and country already exists&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-session.Save(newCompany);
-//..
-&lt;/code&gt;&lt;/pre&gt;
+session&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;newCompany&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;//..&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Here, we can see a few problems. First, all companies are queried from the database, and that can create performance issues. Another problem is too much operations happening in the &lt;code&gt;If&lt;/code&gt; check line; thus, the lengthy line is making the code harder to read. And, the final problem is very plain practice of &lt;code&gt;Exception&lt;/code&gt; throwing. Although, I like expressing explicit guard checks, that code can be better. Let&#39;s tackle these problems, one by one, in a few steps along this article and provide some improvement suggestions.&lt;/p&gt;
 &lt;p&gt;Also, I provide here the &lt;code&gt;tl;dr;&lt;/code&gt; version of the code:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;//..
 
 var newCompany = new Company(message.Name, message.CountryId);
-	
+ 
 var spec = new UniqueCompanySpecification(_companyRepository);
 if (spec.IsSatisfiedBy(newCompany) == false)
-	throw new CompanyAlreadyExistsException();
+ throw new CompanyAlreadyExistsException();
 
 session.Save(newCompany);
 //..
@@ -3045,19 +2942,19 @@ session.Save(newCompany);
 &lt;h1 id=&quot;how-we-get-there&quot; tabindex=&quot;-1&quot;&gt;How we get there? &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#how-we-get-there&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&quot;step-1-solve-the-query-performance-issues&quot; tabindex=&quot;-1&quot;&gt;Step 1 - Solve The Query Performance Issues &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#step-1-solve-the-query-performance-issues&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;var numberOfSameCompanies = _companyRepository.Query()
-	.Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
-	.Count();
+ .Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
+ .Count();
 if (numberOfSameCompanies &amp;gt; 0)
-	throw new Exception(&amp;quot;A company with the same name and country already exists&amp;quot;);
+ throw new Exception(&amp;quot;A company with the same name and country already exists&amp;quot;);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The query above retrieves the number of companies satisfying the given &lt;code&gt;where&lt;/code&gt; condition. Performance issues have been solved.&lt;/p&gt;
 &lt;h2 id=&quot;step-2-make-the-if-condition-check-explicit&quot; tabindex=&quot;-1&quot;&gt;Step 2 - Make The &lt;code&gt;if&lt;/code&gt; Condition Check Explicit &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#step-2-make-the-if-condition-check-explicit&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;pre&gt;&lt;code&gt;var numberOfSameCompanies = _companyRepository.Query()
-	.Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
-	.Count();
+ .Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
+ .Count();
 var doesCompanyAlreadyExists = numberOfSameCompanies &amp;gt; 0;
 if (doesCompanyAlreadyExists)
-	throw new Exception(&amp;quot;A company with the same name and country already exists&amp;quot;);
+ throw new Exception(&amp;quot;A company with the same name and country already exists&amp;quot;);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;By setting some explicit conditions, we gain clear understanding of what the code does.&lt;/p&gt;
 &lt;h2 id=&quot;step-3-make-the-business-rule-violation-explicit&quot; tabindex=&quot;-1&quot;&gt;Step 3 - Make The Business Rule Violation Explicit &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#step-3-make-the-business-rule-violation-explicit&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
@@ -3080,49 +2977,49 @@ if (doesCompanyAlreadyExists)
 &lt;h2 id=&quot;step-4-encapsulate-the-business-rule-check-by-employing-the-specification-pattern&quot; tabindex=&quot;-1&quot;&gt;Step 4 - Encapsulate The Business Rule Check By Employing &#39;The Specification Pattern&#39; &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#step-4-encapsulate-the-business-rule-check-by-employing-the-specification-pattern&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The &#39;Specification Pattern&#39; is a tactical design pattern presented in Eric Evans’ book Domain Driven Design. The &lt;code&gt;Specification Pattern&lt;/code&gt; is a way of encapsulating business rule(s) and testing it against a candidate object to see if that object satisfies all requirements expressed in a specification. This pattern fits very good with the Single-Responsibility-Principle (SRP), which states that one class should have only one reason to change. Furthermore, this specification object can be easily unit tested and reused.&lt;/p&gt;
 &lt;p&gt;Here, you can see how it is used:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	var spec = new UniqueCompanySpecification(_companyRepository);
-	if (spec.IsSatisfiedBy(newCompany) == false)
-		throw new CompanyAlreadyExistsException();
+&lt;pre&gt;&lt;code&gt; var spec = new UniqueCompanySpecification(_companyRepository);
+ if (spec.IsSatisfiedBy(newCompany) == false)
+  throw new CompanyAlreadyExistsException();
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And the implementation details:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	public class UniqueCompanySpecification : ISpecification&amp;lt;Company&amp;gt;
-	{
-		readonly ICompanyRepository _companyRepository;
+&lt;pre&gt;&lt;code&gt; public class UniqueCompanySpecification : ISpecification&amp;lt;Company&amp;gt;
+ {
+  readonly ICompanyRepository _companyRepository;
 
-		public UniqueCompanySpecification(ICompanyRepository companyRepository)
-		{
-			_companyRepository = companyRepository;
-		}
+  public UniqueCompanySpecification(ICompanyRepository companyRepository)
+  {
+   _companyRepository = companyRepository;
+  }
 
-		public bool IsSatisfiedBy(Company candidate)
-		{
-			var numberOfSameCompanies = _companyRepository.Query()
-				.Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
-				.Count();
-			bool isUnique = numberOfSameCompanies == 0;
-			return isUnique;
-		}
-	}
+  public bool IsSatisfiedBy(Company candidate)
+  {
+   var numberOfSameCompanies = _companyRepository.Query()
+    .Where(x =&amp;gt; x.Name == newCompany.Name &amp;amp;&amp;amp; x.CountryId == newCompany.CountryId)
+    .Count();
+   bool isUnique = numberOfSameCompanies == 0;
+   return isUnique;
+  }
+ }
 
-	public interface ISpecification&amp;lt;T&amp;gt;
-	{
-		bool IsSatisfiedBy(T candidate);
-	} 
+ public interface ISpecification&amp;lt;T&amp;gt;
+ {
+  bool IsSatisfiedBy(T candidate);
+ } 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;After all re-factoring steps, the final code is as following:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	//..
+&lt;pre&gt;&lt;code&gt; //..
 
-	var newCompany = new Company(message.Name, message.CountryId);
-	
-	var spec = new UniqueCompanySpecification(_companyRepository);
-	if (spec.IsSatisfiedBy(newCompany) == false)
-		throw new CompanyAlreadyExistsException();
+ var newCompany = new Company(message.Name, message.CountryId);
+ 
+ var spec = new UniqueCompanySpecification(_companyRepository);
+ if (spec.IsSatisfiedBy(newCompany) == false)
+  throw new CompanyAlreadyExistsException();
 
-	session.Save(newCompany);
-	//..
+ session.Save(newCompany);
+ //..
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&quot;summary&quot; tabindex=&quot;-1&quot;&gt;Summary &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/#summary&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
-&lt;p&gt;In this article, I&#39;ve shown a re-factoring process and usage of the Specification Pattern in order to satisfy an explicit business rule.&lt;br&gt;
+&lt;p&gt;In this article, I&#39;ve shown a re-factoring process and usage of the Specification Pattern in order to satisfy an explicit business rule.
 The re-factoring steps we took:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Solve the query performance issues&lt;/li&gt;
@@ -3153,7 +3050,7 @@ The re-factoring steps we took:&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;More details about the architecture and how Rhino Security works behind the scenes can be found &lt;a href=&quot;http://ayende.com/blog/2958/a-vision-of-enterprise-platform-security-infrastructure&quot;&gt;here&lt;/a&gt;, &lt;a href=&quot;http://ayende.com/blog/3109/rhino-security-overview-part-i&quot;&gt;here&lt;/a&gt; and &lt;a href=&quot;http://ayende.com/blog/3113/rhino-security-part-ii-discussing-the-implementation&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h1 id=&quot;action-plan&quot; tabindex=&quot;-1&quot;&gt;Action Plan &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#action-plan&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;action-plan&quot; tabindex=&quot;-1&quot;&gt;Action Plan &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#action-plan&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Installing NuGet packages&lt;/li&gt;
 &lt;li&gt;Configuring StructureMap container and registering Rhino.Security into NHibernate&lt;/li&gt;
@@ -3163,8 +3060,8 @@ The re-factoring steps we took:&lt;/p&gt;
 &lt;li&gt;Usage DEMO (code samples &lt;a href=&quot;https://github.com/bojanv91/RhinoSecurityWithStructureMap&quot;&gt;https://github.com/bojanv91/RhinoSecurityWithStructureMap&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-01.png&quot; alt=&quot;Getting started with Rhino Security and StructureMap&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;installing-nuget-packages&quot; tabindex=&quot;-1&quot;&gt;Installing NuGet packages &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#installing-nuget-packages&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;Install-Package Rhino.Security			
+&lt;h3 id=&quot;installing-nuget-packages&quot; tabindex=&quot;-1&quot;&gt;Installing NuGet packages &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#installing-nuget-packages&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;Install-Package Rhino.Security   
 Install-Package NHibernate
 Install-Package FluentNHibernate
 Install-Package StructureMap
@@ -3172,213 +3069,208 @@ Install-Package CommonServiceLocator
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;FluentNHibernate provides fluent mapping interface for mapping our domain model entities to table structures via NHibernate.&lt;br&gt;
 CommonServiceLocator provides abstraction over IoC containers and service locators and contains a shared interface for service location. Rhino Security makes use of it, that is why can be used with any IoC container.&lt;/p&gt;
-&lt;h2 id=&quot;configuring-structuremap-container-and-registering-rhino-security-into-nhibernate&quot; tabindex=&quot;-1&quot;&gt;Configuring StructureMap container and registering Rhino.Security into NHibernate &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#configuring-structuremap-container-and-registering-rhino-security-into-nhibernate&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;configuring-structuremap-container-and-registering-rhino-security-into-nhibernate&quot; tabindex=&quot;-1&quot;&gt;Configuring StructureMap container and registering Rhino.Security into NHibernate &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#configuring-structuremap-container-and-registering-rhino-security-into-nhibernate&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;In the following code snippet I have all configuration stuff in one class, called the Bootstrapper. It&#39;s purpose is to provide functionality for booting up our application, the starting point. Explanations about what does what are put in comments. If something is still unclear do write me a comment, I&#39;ll happily update that part.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	using FluentNHibernate.Cfg;
-	using FluentNHibernate.Cfg.Db;
-	using NHibernate;
-	using NHibernate.Cfg;
-	using NHibernate.Context;
-	using Rhino.Security.Interfaces;
-	using Rhino.Security.Services;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt; &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;FluentNHibernate&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Cfg&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;FluentNHibernate&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Db&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;NHibernate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;NHibernate&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Cfg&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;NHibernate&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Context&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Interfaces&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-	namespace RhinoSecurityWithStructureMap
-	{
-	    public class Bootstrapper
-	    {
-	        public static void Bootstrap(string connectionString)
-	        {
-	            var container = new StructureMap.Container();
-	            container.Configure(cfg =&amp;gt;
-	                {
-	                    //NHibernate configurations 
-	                    cfg.For&amp;lt;ISessionFactory&amp;gt;().Singleton().Use(() =&amp;gt; CreateSessionFactory(connectionString));
-	                    cfg.For&amp;lt;ISession&amp;gt;().Use(context =&amp;gt; GetSession(context));
-	
-	                    //Rhino Security configurations 
-	                    cfg.For&amp;lt;IAuthorizationService&amp;gt;().Use&amp;lt;AuthorizationService&amp;gt;();
-	                    cfg.For&amp;lt;IAuthorizationRepository&amp;gt;().Use&amp;lt;AuthorizationRepository&amp;gt;();
-	                    cfg.For&amp;lt;IPermissionsBuilderService&amp;gt;().Use&amp;lt;PermissionsBuilderService&amp;gt;();
-	                    cfg.For&amp;lt;IPermissionsService&amp;gt;().Use&amp;lt;PermissionsService&amp;gt;();
-	                });
-	
-	            //Setting up StuctureMapServiceLocator as a CommonServiceLocator that Rhino.Security will use for DI
-	            Microsoft.Practices.ServiceLocation.ServiceLocator
-	                .SetLocatorProvider(() =&amp;gt; new StructureMapServiceLocator(container));
-	        }
-	
-	        private static ISessionFactory CreateSessionFactory(string connectionString)
-	        {
-	            FluentConfiguration fluentConfig = Fluently.Configure()
-	                .Database(MsSqlConfiguration.MsSql2012.ConnectionString(connectionString))          //specifying connection string for Microsoft SQL Server 2012 
-	                .Mappings(m =&amp;gt; m.FluentMappings.AddFromAssemblyOf&amp;lt;Bootstrapper&amp;gt;())                  //specifying in which assembly NHibernate should look for entity mappings
-	                .CurrentSessionContext(typeof(ThreadStaticSessionContext).AssemblyQualifiedName)    //specifying the session context lifecycle to be initialized per thread
-	                .ExposeConfiguration(cfg =&amp;gt;
-	                {
-	                    Rhino.Security.Security.Configure&amp;lt;User&amp;gt;(cfg, Rhino.Security.SecurityTableStructure.Prefix);
-	                });
-	
-	            return fluentConfig.BuildSessionFactory();
-	        }
-	
-	        private static ISession GetSession(StructureMap.IContext context)
-	        {
-	            var sessionFactory = context.GetInstance&amp;lt;ISessionFactory&amp;gt;();
-	            return sessionFactory.GetCurrentSession();
-	        }
-	    }
-	}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;implementing-commonservicelocator-provider-for-structuremap&quot; tabindex=&quot;-1&quot;&gt;Implementing CommonServiceLocator provider for StructureMap &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#implementing-commonservicelocator-provider-for-structuremap&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+ &lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;RhinoSecurityWithStructureMap&lt;/span&gt;
+ &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Bootstrapper&lt;/span&gt;
+     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Bootstrap&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; connectionString&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; container &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;StructureMap&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Container&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+             container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cfg &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                     &lt;span class=&quot;token comment&quot;&gt;//NHibernate configurations &lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ISessionFactory&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Singleton&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;CreateSessionFactory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;connectionString&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ISession&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ 
+                     &lt;span class=&quot;token comment&quot;&gt;//Rhino Security configurations &lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IAuthorizationService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AuthorizationService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IAuthorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AuthorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IPermissionsBuilderService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PermissionsBuilderService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                     cfg&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IPermissionsService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Use&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PermissionsService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ 
+             &lt;span class=&quot;token comment&quot;&gt;//Setting up StuctureMapServiceLocator as a CommonServiceLocator that Rhino.Security will use for DI&lt;/span&gt;
+             Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Practices&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ServiceLocation&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ServiceLocator
+                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetLocatorProvider&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;StructureMapServiceLocator&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;container&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ 
+         &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;ISessionFactory&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;CreateSessionFactory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; connectionString&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;token class-name&quot;&gt;FluentConfiguration&lt;/span&gt; fluentConfig &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Fluently&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Database&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;MsSqlConfiguration&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;MsSql2012&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConnectionString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;connectionString&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;          &lt;span class=&quot;token comment&quot;&gt;//specifying connection string for Microsoft SQL Server 2012 &lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Mappings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;m &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; m&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;FluentMappings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;AddFromAssemblyOf&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Bootstrapper&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;                  &lt;span class=&quot;token comment&quot;&gt;//specifying in which assembly NHibernate should look for entity mappings&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CurrentSessionContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;typeof&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token type-expression class-name&quot;&gt;ThreadStaticSessionContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AssemblyQualifiedName&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;token comment&quot;&gt;//specifying the session context lifecycle to be initialized per thread&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ExposeConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cfg &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+                     Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;User&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;cfg&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;SecurityTableStructure&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Prefix&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+                 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ 
+             &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; fluentConfig&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;BuildSessionFactory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ 
+         &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;ISession&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;StructureMap&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IContext&lt;/span&gt; context&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; sessionFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; context&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ISessionFactory&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+             &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; sessionFactory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetCurrentSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;implementing-commonservicelocator-provider-for-structuremap&quot; tabindex=&quot;-1&quot;&gt;Implementing CommonServiceLocator provider for StructureMap &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#implementing-commonservicelocator-provider-for-structuremap&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;The code is pretty much straightforward. We just implement Microsoft.Practices.ServiceLocation.IServiceLocator interface with the common code that is provided to us by StructureMap IContainer interface, basically this class acts as a wrapper.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    public class StructureMapServiceLocator : Microsoft.Practices.ServiceLocation.IServiceLocator
-    {
-        private readonly IContainer _container;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;StructureMapServiceLocator&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Practices&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ServiceLocation&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IServiceLocator&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IContainer&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        public StructureMapServiceLocator(IContainer container)
-        {
-            _container = container;
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;StructureMapServiceLocator&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;IContainer&lt;/span&gt; container&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            _container &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; container&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public IEnumerable&amp;lt;TService&amp;gt; GetAllInstances&amp;lt;TService&amp;gt;()
-        {
-            return _container.GetAllInstances&amp;lt;TService&amp;gt;();
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;IEnumerable&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetAllInstances&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetAllInstances&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public IEnumerable&amp;lt;object&amp;gt; GetAllInstances(Type serviceType)
-        {
-            return (IEnumerable&amp;lt;object&amp;gt;)_container.GetAllInstances(serviceType);
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;IEnumerable&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetAllInstances&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Type&lt;/span&gt; serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;IEnumerable&lt;span class=&quot;token operator&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;_container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetAllInstances&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public TService GetInstance&amp;lt;TService&amp;gt;(string key)
-        {
-            return _container.GetInstance&amp;lt;TService&amp;gt;(key);
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;TService&lt;/span&gt; &lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; key&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;key&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public TService GetInstance&amp;lt;TService&amp;gt;()
-        {
-            return _container.GetInstance&amp;lt;TService&amp;gt;();
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;TService&lt;/span&gt; &lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public object GetInstance(Type serviceType, string key)
-        {
-            return _container.GetInstance(serviceType, key);
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Type&lt;/span&gt; serviceType&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; key&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;serviceType&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; key&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public object GetInstance(Type serviceType)
-        {
-            return _container.GetInstance(serviceType);
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Type&lt;/span&gt; serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public object GetService(Type serviceType)
-        {
-            return _container.GetInstance(serviceType);
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;user-entity-implements-rhino-security-iuser-interface&quot; tabindex=&quot;-1&quot;&gt;User entity implements Rhino.Security.IUser interface &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#user-entity-implements-rhino-security-iuser-interface&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;object&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Type&lt;/span&gt; serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; _container&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;serviceType&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;user-entity-implements-rhino-security-iuser-interface&quot; tabindex=&quot;-1&quot;&gt;User entity implements Rhino.Security.IUser interface &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#user-entity-implements-rhino-security-iuser-interface&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;In our domain model we commonly have entity which represents the actual user. Rhino.Security must know which entity is the user entity in order to work. So our User entity must implement Rhino.Security.IUser interface, more precisely only SecurityInfo property from the interface must be implemented.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	public class User : Rhino.Security.IUser
-	{
-		public virtual int Id { get; protected set; }	    
-		public virtual string Username { get; set; }
-	    public virtual string PasswordHashed { get; set; }
-	
-	    public Rhino.Security.SecurityInfo SecurityInfo
-	    {
-	        get
-	        {
-	            return new Rhino.Security.SecurityInfo(Username, Id);
-	        }
-	    }
-	}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;preparing-the-database-schema&quot; tabindex=&quot;-1&quot;&gt;Preparing the database schema &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#preparing-the-database-schema&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt; &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IUser&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;int&lt;/span&gt;&lt;/span&gt; Id &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;     
+  &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; Username &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;virtual&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; PasswordHashed &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ 
+     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;SecurityInfo&lt;/span&gt; SecurityInfo
+     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+             &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;Rhino&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Security&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;SecurityInfo&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Username&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Id&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+ &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;preparing-the-database-schema&quot; tabindex=&quot;-1&quot;&gt;Preparing the database schema &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#preparing-the-database-schema&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Schema files can be found in the following links:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.sql.sql&quot;&gt;SQL dump&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://github.com/bojanv91/RhinoSecurityWithStructureMap/blob/master/RhinoSecurityWithStructureMap/DatabaseScripts/rhino_security_and_basic_user.cs&quot;&gt;Fluent Migrator schema&lt;/a&gt; (&lt;a href=&quot;http://bojanv91.github.io/2014/12/database-development-guidance/&quot;&gt;blogpost about how to use Fluent Migrator&lt;/a&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2015-01-11-getting-started-with-rhino-security-structuremap/rhino-02.png&quot; alt=&quot;Rhino database schema&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;usage-demo&quot; tabindex=&quot;-1&quot;&gt;Usage DEMO &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#usage-demo&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;usage-demo&quot; tabindex=&quot;-1&quot;&gt;Usage DEMO &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/#usage-demo&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;The full code sample can be found in following github repository: &lt;a href=&quot;https://github.com/bojanv91/RhinoSecurityWithStructureMap&quot;&gt;https://github.com/bojanv91/RhinoSecurityWithStructureMap&lt;/a&gt;. Here I provide excerpt code snippets from the actual test code.&lt;/p&gt;
 &lt;p&gt;Setting up user groups, operations and permissions:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;	var _authorizationRepository = ServiceLocator.Current.GetInstance&amp;lt;IAuthorizationRepository&amp;gt;();
-	var _authorizationService = ServiceLocator.Current.GetInstance&amp;lt;IAuthorizationService&amp;gt;();
-	var _permissionsBuilderService = ServiceLocator.Current.GetInstance&amp;lt;IPermissionsBuilderService&amp;gt;();
-	var _permissionService = ServiceLocator.Current.GetInstance&amp;lt;IPermissionsService&amp;gt;();
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; _authorizationRepository &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ServiceLocator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IAuthorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; _authorizationService &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ServiceLocator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IAuthorizationService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; _permissionsBuilderService &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ServiceLocator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IPermissionsBuilderService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; _permissionService &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ServiceLocator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IPermissionsService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-    using (var transaction = _session.BeginTransaction())
-    {
-        //creating user group &#39;Admin&#39;
-        _authorizationRepository.CreateUsersGroup(&amp;quot;Admin&amp;quot;);
+    &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; transaction &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _session&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;BeginTransaction&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//creating user group &#39;Admin&#39;&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateUsersGroup&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        //creating operations
-        _authorizationRepository.CreateOperation(&amp;quot;/Content&amp;quot;);
-        _authorizationRepository.CreateOperation(&amp;quot;/Content/Create&amp;quot;);
-        _authorizationRepository.CreateOperation(&amp;quot;/Content/View&amp;quot;);
-        _authorizationRepository.CreateOperation(&amp;quot;/Content/Delete&amp;quot;);
+        &lt;span class=&quot;token comment&quot;&gt;//creating operations&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateOperation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateOperation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content/Create&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateOperation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content/View&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateOperation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content/Delete&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        transaction.Commit();
-    }
+        transaction&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Commit&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-    using (var transaction = _session.BeginTransaction())
-    {
-        //adding the LoggedInUser to the &#39;Admin&#39; users group
-        _authorizationRepository.AssociateUserWith(_loggedInUser, &amp;quot;Admin&amp;quot;);
+    &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; transaction &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _session&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;BeginTransaction&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//adding the LoggedInUser to the &#39;Admin&#39; users group&lt;/span&gt;
+        _authorizationRepository&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AssociateUserWith&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        //Building &#39;Allow&#39; permissions for the LoggedInUser, 
-        //by default if not defined as allowed, the operation is denied
-        //For the sake of this example, we say the the users that are in &#39;Admin&#39; users group can
-        //create and view content, but cannot delete content. 
-        _permissionsBuilderService.Allow(&amp;quot;/Content/Create&amp;quot;).For(&amp;quot;Admin&amp;quot;).OnEverything().DefaultLevel().Save();
-        _permissionsBuilderService.Allow(&amp;quot;/Content/View&amp;quot;).For(&amp;quot;Admin&amp;quot;).OnEverything().DefaultLevel().Save();
+        &lt;span class=&quot;token comment&quot;&gt;//Building &#39;Allow&#39; permissions for the LoggedInUser, &lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//by default if not defined as allowed, the operation is denied&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//For the sake of this example, we say the the users that are in &#39;Admin&#39; users group can&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//create and view content, but cannot delete content. &lt;/span&gt;
+        _permissionsBuilderService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Allow&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content/Create&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;OnEverything&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;DefaultLevel&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        _permissionsBuilderService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Allow&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/Content/View&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;For&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Admin&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;OnEverything&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;DefaultLevel&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Save&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        //We can explicitly define &#39;Deny&#39; permission, but as the default behaviour denies everything 
-        //that is not defined as &#39;Allow&#39;, I am not going to define it. You don&#39;t trust me? 
-        //That&#39;s why we have tests ;) 
-        //_permissionsBuilderService.Deny(&amp;quot;/Content/Delete&amp;quot;).For(&amp;quot;Admin&amp;quot;).OnEverything().DefaultLevel().Save();
+        &lt;span class=&quot;token comment&quot;&gt;//We can explicitly define &#39;Deny&#39; permission, but as the default behaviour denies everything &lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//that is not defined as &#39;Allow&#39;, I am not going to define it. You don&#39;t trust me? &lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//That&#39;s why we have tests ;) &lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;//_permissionsBuilderService.Deny(&quot;/Content/Delete&quot;).For(&quot;Admin&quot;).OnEverything().DefaultLevel().Save();&lt;/span&gt;
 
-        transaction.Commit();
-    }
-&lt;/code&gt;&lt;/pre&gt;
+        transaction&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Commit&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Test code demonstrating the usage:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;    public class RhinoTests : IUseFixture&amp;lt;TestFixture&amp;gt;
-    {
-        private readonly IAuthorizationService _authorizationService;
-        private readonly User _loggedInUser;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;RhinoTests&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IUseFixture&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;TestFixture&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IAuthorizationService&lt;/span&gt; _authorizationService&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;User&lt;/span&gt; _loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        public RhinoTests() 
-        {
-            _authorizationService = ServiceLocator.Current.GetInstance&amp;lt;IAuthorizationService&amp;gt;();
-            _loggedInUser = TestFixture._loggedInUser;
-        }
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;RhinoTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            _authorizationService &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ServiceLocator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetInstance&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IAuthorizationService&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            _loggedInUser &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; TestFixture&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        [Fact]
-        public void it_should_allow_content_creation()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &amp;quot;/Content/Create&amp;quot;);
-            Assert.True(result);
-        }
+        &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;it_should_allow_content_creation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _authorizationService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;IsAllowed&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;/Content/Create&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        [Fact]
-        public void it_should_allow_content_viewing()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &amp;quot;/Content/View&amp;quot;);
-            Assert.True(result);
-        }
+        &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;it_should_allow_content_viewing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _authorizationService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;IsAllowed&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;/Content/View&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        [Fact]
-        public void it_should_deny_content_deletition()
-        {
-            bool result = _authorizationService.IsAllowed(_loggedInUser, &amp;quot;/Content/Delete&amp;quot;);
-            Assert.False(result);
-        }
+        &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Fact&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;it_should_deny_content_deletition&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;bool&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _authorizationService&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;IsAllowed&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_loggedInUser&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;/Content/Delete&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-        public void SetFixture(TestFixture data) { }
-    }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Happy coding folks! Having questions or concerns? Shoot me a tweet -&amp;gt; @bojanv91&lt;/p&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;SetFixture&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;TestFixture&lt;/span&gt; data&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Happy coding folks!&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -3388,7 +3280,7 @@ CommonServiceLocator provides abstraction over IoC containers and service locato
 		<updated>2014-12-12T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/</id>
 		<content type="html">&lt;p&gt;I have been thinking a lot lately about how properly and simply to implement database versioning strategy. These years I&#39;ve experienced working with different types of database setup and furthermore researched and analyzed some more approaches and tools regarding this topic. In this posting I write about my findings and why I like Fluent Migrator as a help tool in order to get the job done. But first, let&#39;s talk about the &lt;em&gt;goals&lt;/em&gt; we try to achieve. &lt;!--excerpt--&gt;&lt;/p&gt;
-&lt;h1 id=&quot;goals&quot; tabindex=&quot;-1&quot;&gt;Goals &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#goals&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;goals&quot; tabindex=&quot;-1&quot;&gt;Goals &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#goals&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Auditing schema changes&lt;/li&gt;
 &lt;li&gt;Auditing test data changes&lt;/li&gt;
@@ -3400,118 +3292,113 @@ CommonServiceLocator provides abstraction over IoC containers and service locato
 &lt;/ul&gt;
 &lt;p&gt;Links to &lt;a href=&quot;https://github.com/schambers/fluentmigrator/wiki&quot;&gt;Fluent Migrator&lt;/a&gt; and &lt;a href=&quot;https://github.com/bojanv91/DatabaseMigrationsExample&quot;&gt;this guide&#39;s project&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In the end - all you just need to do is run MSBuildMigrator.Migrate.bat file and watch your database being deployed, upgraded, downgraded...it will figure out ;) .&lt;/p&gt;
-&lt;h1 id=&quot;step-by-step-guide&quot; tabindex=&quot;-1&quot;&gt;Step by step guide &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#step-by-step-guide&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
-&lt;h2 id=&quot;1-open-visual-studio-and-create-new-class-library-project&quot; tabindex=&quot;-1&quot;&gt;1. Open Visual Studio and create New Class Library Project &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#1-open-visual-studio-and-create-new-class-library-project&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;step-by-step-guide&quot; tabindex=&quot;-1&quot;&gt;Step by step guide &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#step-by-step-guide&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;1-open-visual-studio-and-create-new-class-library-project&quot; tabindex=&quot;-1&quot;&gt;1. Open Visual Studio and create New Class Library Project &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#1-open-visual-studio-and-create-new-class-library-project&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img01.png&quot; alt=&quot;Open Visual Studio and create New Class Library Project&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;2-install-package-fluentmigrator&quot; tabindex=&quot;-1&quot;&gt;2. Install-Package FluentMigrator &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#2-install-package-fluentmigrator&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;2-install-package-fluentmigrator&quot; tabindex=&quot;-1&quot;&gt;2. Install-Package FluentMigrator &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#2-install-package-fluentmigrator&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img02.png&quot; alt=&quot;Install-Package FluentMigrator&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files&quot; tabindex=&quot;-1&quot;&gt;3. Create new folder &amp;quot;Migrations&amp;quot; to project - here we are going to store migration files &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files&quot; tabindex=&quot;-1&quot;&gt;3. Create new folder &amp;quot;Migrations&amp;quot; to project - here we are going to store migration files &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img03.png&quot; alt=&quot;Create new folder &amp;quot;Migrations&amp;quot; to project - here we are going to store migration files&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;4-now-lets-create-database-tables-with-migration-files&quot; tabindex=&quot;-1&quot;&gt;4. Now, let&#39;s create database tables with migration files &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#4-now-lets-create-database-tables-with-migration-files&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;[FluentMigrator.Migration(0)]
-public class Baseline : FluentMigrator.Migration
-{
-    public override void Up()
-    {
-        Create.Table(&amp;quot;Category&amp;quot;)
-            .WithColumn(&amp;quot;Id&amp;quot;).AsGuid().NotNullable().PrimaryKey()
-            .WithColumn(&amp;quot;Name&amp;quot;).AsString(255);
+&lt;h3 id=&quot;4-now-lets-create-database-tables-with-migration-files&quot; tabindex=&quot;-1&quot;&gt;4. Now, let&#39;s create database tables with migration files &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#4-now-lets-create-database-tables-with-migration-files&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;FluentMigrator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Migration&lt;/span&gt;&lt;span class=&quot;token attribute-arguments&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Baseline&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;FluentMigrator&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Migration&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Up&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        Create&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Category&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Id&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NotNullable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;PrimaryKey&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
-        Create.Table(&amp;quot;Product&amp;quot;)
-            .WithColumn(&amp;quot;Id&amp;quot;).AsGuid().NotNullable().PrimaryKey()
-            .WithColumn(&amp;quot;CategoryId&amp;quot;).AsGuid().ForeignKey(&amp;quot;Category&amp;quot;, &amp;quot;Id&amp;quot;)
-            .WithColumn(&amp;quot;Name&amp;quot;).AsString(255)
-            .WithColumn(&amp;quot;Price&amp;quot;).AsDecimal();
-    }
+        Create&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Product&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Id&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NotNullable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;PrimaryKey&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CategoryId&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForeignKey&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Category&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Id&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Price&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsDecimal&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-    public override void Down()
-    {
-        Delete.Table(&amp;quot;Product&amp;quot;);
-        Delete.Table(&amp;quot;Category&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Down&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        Delete&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Product&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        Delete&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Category&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;That is all what is needed. In essence a migration is a class which drives from &lt;strong&gt;Migration abstract class&lt;/strong&gt;  and implements &lt;strong&gt;&#39;Up&#39;&lt;/strong&gt; and &lt;strong&gt;&#39;Down&#39;&lt;/strong&gt; methods. Additionally you will also need to define &lt;strong&gt;Migration Attribute&lt;/strong&gt; with unique identifier in order the migration runner to know the order of migration files. I like it how FM API is designed, it really follows the SQL language and how I would write this script in plain SQL.
 Read further &lt;a href=&quot;https://github.com/schambers/fluentmigrator/wiki/Migration&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Just for providing more examples I have added one more migration file for adding one more column to Product table for storing image URL.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[Migration(201411131100)]
-public class M201411131100_Product_added_column_for_storing_image_url : Migration
-{
-    public override void Up()
-    {
-        Alter.Table(&amp;quot;Product&amp;quot;)
-            .AddColumn(&amp;quot;ImageUrl&amp;quot;).AsString(255);
-    }
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token attribute&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Migration&lt;/span&gt;&lt;span class=&quot;token attribute-arguments&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;201411131100&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;M201411131100_Product_added_column_for_storing_image_url&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;Migration&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Up&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        Alter&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Table&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Product&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddColumn&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ImageUrl&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AsString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-    public override void Down()
-    {
-        Delete.Column(&amp;quot;ImageUrl&amp;quot;).FromTable(&amp;quot;Product&amp;quot;);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Down&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        Delete&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Column&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ImageUrl&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;FromTable&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Product&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now this is how everything looks in my solution.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img04.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Next, let&#39;s initialize the database with our script.&lt;/p&gt;
-&lt;h2 id=&quot;5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config&quot; tabindex=&quot;-1&quot;&gt;5. Creating Migration Runner (MSBuild), Migrator (.BAT) and ConnectionStrings (.CONFIG) &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config&quot; tabindex=&quot;-1&quot;&gt;5. Creating Migration Runner (MSBuild), Migrator (.BAT) and ConnectionStrings (.CONFIG) &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img05.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1-msbuildmigrationrunner-proj&quot; tabindex=&quot;-1&quot;&gt;1. MSBuildMigrationRunner.proj &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#1-msbuildmigrationrunner-proj&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
-&amp;lt;Project xmlns=&amp;quot;http://schemas.microsoft.com/developer/msbuild/2003&amp;quot; DefaultTargets=&amp;quot;Migrate&amp;quot;&amp;gt;
-	&amp;lt;PropertyGroup&amp;gt;
-		&amp;lt;DatabaseProvider&amp;gt;&amp;lt;/DatabaseProvider&amp;gt;
-		&amp;lt;ConnectionStringConfigPath&amp;gt;&amp;lt;/ConnectionStringConfigPath&amp;gt;
-		&amp;lt;ConnectionStringName&amp;gt;&amp;lt;/ConnectionStringName&amp;gt;
-		&amp;lt;DataMigrationProjectName&amp;gt;DatabaseMigrationsExample&amp;lt;/DataMigrationProjectName&amp;gt;
-		&amp;lt;DataMigrationProjectRootPath&amp;gt;$(MSBuildProjectDirectory)&amp;lt;/DataMigrationProjectRootPath&amp;gt;
-		&amp;lt;MigratorTasksDirectory&amp;gt;&amp;lt;/MigratorTasksDirectory&amp;gt;
-				
-		&amp;lt;DataMigrationProjectBuildDLL&amp;gt;$(DataMigrationProjectRootPath)&#92;bin&#92;Debug&#92;$(DataMigrationProjectName).dll&amp;lt;/DataMigrationProjectBuildDLL&amp;gt;
-		&amp;lt;DataMigrationProjectCsproj&amp;gt;$(DataMigrationProjectRootPath)&#92;$(DataMigrationProjectName).csproj&amp;lt;/DataMigrationProjectCsproj&amp;gt;
-	&amp;lt;/PropertyGroup&amp;gt;
-		
-	&amp;lt;UsingTask TaskName=&amp;quot;FluentMigrator.MSBuild.Migrate&amp;quot; AssemblyFile=&amp;quot;$(MigratorTasksDirectory)FluentMigrator.MSBuild.dll&amp;quot;/&amp;gt;
-			
-	&amp;lt;Target Name=&amp;quot;Build&amp;quot;&amp;gt;
-		&amp;lt;MSBuild Projects=&amp;quot;$(DataMigrationProjectCsproj)&amp;quot; Properties=&amp;quot;Configuration=Debug&amp;quot;/&amp;gt;
-	&amp;lt;/Target&amp;gt;
-			
-	&amp;lt;Target Name=&amp;quot;Migrate&amp;quot; DependsOnTargets=&amp;quot;Build&amp;quot;&amp;gt;
-		&amp;lt;Message Text=&amp;quot;Starting FluentMigrator Migration&amp;quot;/&amp;gt;
-		&amp;lt;Migrate Database=&amp;quot;$(DatabaseProvider)&amp;quot;
-					Connection=&amp;quot;$(ConnectionStringName)&amp;quot;
-					ConnectionStringConfigPath=&amp;quot;$(ConnectionStringConfigPath)&amp;quot;
-					Target=&amp;quot;$(DataMigrationProjectBuildDLL)&amp;quot;
-					Output=&amp;quot;True&amp;quot;
-					Verbose=&amp;quot;True&amp;quot;&amp;gt;
-		&amp;lt;/Migrate&amp;gt;
-	&amp;lt;/Target&amp;gt;
-		
-	&amp;lt;Target Name=&amp;quot;MigratePreview&amp;quot; DependsOnTargets=&amp;quot;Build&amp;quot;&amp;gt;
-		&amp;lt;Message Text=&amp;quot;Previewing FluentMigrator Migration&amp;quot;/&amp;gt;
-		&amp;lt;Migrate Database=&amp;quot;$(DatabaseProvider)&amp;quot;
-					Connection=&amp;quot;$(ConnectionStringName)&amp;quot;
-					ConnectionStringConfigPath=&amp;quot;$(ConnectionStringConfigPath)&amp;quot;
-					Target=&amp;quot;$(DataMigrationProjectBuildDLL)&amp;quot;
-					Output=&amp;quot;True&amp;quot;
-					Verbose=&amp;quot;True&amp;quot;
-					PreviewOnly=&amp;quot;True&amp;quot;&amp;gt;
-		&amp;lt;/Migrate&amp;gt;
-	&amp;lt;/Target&amp;gt;
-&amp;lt;/Project&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;2-connectionstrings-config&quot; tabindex=&quot;-1&quot;&gt;2. ConnectionStrings.config &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#2-connectionstrings-config&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot; ?&amp;gt;
-&amp;lt;configuration&amp;gt;
-	&amp;lt;connectionStrings&amp;gt;
-		&amp;lt;clear /&amp;gt;
-		&amp;lt;add name=&amp;quot;Default&amp;quot; connectionString=&amp;quot;Server=###;User ID=###;Password=###;Database=###;&amp;quot;/&amp;gt;
-	&amp;lt;/connectionStrings&amp;gt;
-&amp;lt;/configuration&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;3-msbuildmigrator-migrate-bat&quot; tabindex=&quot;-1&quot;&gt;3. MSBuildMigrator.Migrate.bat &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#3-msbuildmigrator-migrate-bat&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;C:&#92;Windows&#92;Microsoft.NET&#92;Framework&#92;v4.0.30319&#92;MSBuild.exe MSBuildMigrationRunner.proj /t:Migrate /p:DatabaseProvider=SqlServer2012 /p:ConnectionStringConfigPath=ConnectionStrings.config /p:ConnectionStringName=Default /p:DataMigrationProjectName=DatabaseMigrationsExample /p:DataMigrationProjectRootPath=. /p:MigratorTasksDirectory=..&#92;packages&#92;FluentMigrator.1.3.1.0&#92;tools&#92;
-pause
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;1-msbuildmigrationrunner-proj&quot; tabindex=&quot;-1&quot;&gt;1. MSBuildMigrationRunner.proj &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#1-msbuildmigrationrunner-proj&quot;&gt;#&lt;/a&gt;&lt;/h4&gt;
+&lt;pre class=&quot;language-xml&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-xml&quot;&gt;&lt;span class=&quot;token prolog&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot;?&gt;&lt;/span&gt;
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Project&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;xmlns&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;http://schemas.microsoft.com/developer/msbuild/2003&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;DefaultTargets&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Migrate&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PropertyGroup&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;DatabaseProvider&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;DatabaseProvider&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ConnectionStringConfigPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;ConnectionStringConfigPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;ConnectionStringName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;ConnectionStringName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;DataMigrationProjectName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;DatabaseMigrationsExample&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;DataMigrationProjectName&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;DataMigrationProjectRootPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;$(MSBuildProjectDirectory)&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;DataMigrationProjectRootPath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;MigratorTasksDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;MigratorTasksDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+    
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;DataMigrationProjectBuildDLL&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;$(DataMigrationProjectRootPath)&#92;bin&#92;Debug&#92;$(DataMigrationProjectName).dll&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;DataMigrationProjectBuildDLL&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;DataMigrationProjectCsproj&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;$(DataMigrationProjectRootPath)&#92;$(DataMigrationProjectName).csproj&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;DataMigrationProjectCsproj&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;PropertyGroup&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;UsingTask&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;TaskName&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;FluentMigrator.MSBuild.Migrate&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;AssemblyFile&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(MigratorTasksDirectory)FluentMigrator.MSBuild.dll&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+   
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Target&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Build&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;MSBuild&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Projects&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(DataMigrationProjectCsproj)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Properties&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Configuration=Debug&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Target&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+   
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Target&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Migrate&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;DependsOnTargets&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Build&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Message&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Starting FluentMigrator Migration&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Migrate&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Database&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(DatabaseProvider)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(ConnectionStringName)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;ConnectionStringConfigPath&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(ConnectionStringConfigPath)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Target&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(DataMigrationProjectBuildDLL)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Output&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;True&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Verbose&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;True&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Migrate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Target&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Target&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;MigratePreview&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;DependsOnTargets&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Build&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Message&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Text&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Previewing FluentMigrator Migration&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Migrate&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;Database&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(DatabaseProvider)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(ConnectionStringName)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;ConnectionStringConfigPath&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(ConnectionStringConfigPath)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Target&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;$(DataMigrationProjectBuildDLL)&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Output&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;True&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;Verbose&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;True&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+     &lt;span class=&quot;token attr-name&quot;&gt;PreviewOnly&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;True&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Migrate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Target&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;Project&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;2-connectionstrings-config&quot; tabindex=&quot;-1&quot;&gt;2. ConnectionStrings.config &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#2-connectionstrings-config&quot;&gt;#&lt;/a&gt;&lt;/h4&gt;
+&lt;pre class=&quot;language-xml&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-xml&quot;&gt;&lt;span class=&quot;token prolog&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;&lt;/span&gt;
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;connectionStrings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;clear&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;add&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Default&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;connectionString&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation attr-equals&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;Server=###;User ID=###;Password=###;Database=###;&lt;span class=&quot;token punctuation&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;/&gt;&lt;/span&gt;&lt;/span&gt;
+ &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;connectionStrings&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;/&lt;/span&gt;configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;3-msbuildmigrator-migrate-bat&quot; tabindex=&quot;-1&quot;&gt;3. MSBuildMigrator.Migrate.bat &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#3-msbuildmigrator-migrate-bat&quot;&gt;#&lt;/a&gt;&lt;/h4&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;C:&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;Windows&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;Microsoft.NET&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;Framework&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;v4.0.30319&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;MSBuild.exe MSBuildMigrationRunner.proj /t:Migrate /p:DatabaseProvider&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;SqlServer2012 /p:ConnectionStringConfigPath&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;ConnectionStrings.config /p:ConnectionStringName&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;Default /p:DataMigrationProjectName&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;DatabaseMigrationsExample /p:DataMigrationProjectRootPath&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;. /p:MigratorTasksDirectory&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;packages&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;FluentMigrator.1.3.1.0&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;tools&lt;span class=&quot;token punctuation&quot;&gt;&#92;&lt;/span&gt;
+pause&lt;/code&gt;&lt;/pre&gt;
 &lt;ul&gt;
 &lt;li&gt;/t:Migrate - performs Migration&lt;/li&gt;
 &lt;li&gt;/t:MigratePreview - performs previewing of what would happen when migration is called&lt;/li&gt;
@@ -3523,7 +3410,7 @@ pause
 &lt;li&gt;/p:MigratorTasksDirectory=? - path to FluentMigrator tools folder&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Viola, this is all you need to do. For your project you will need to put the connection string to your database and make changes where needed in the .BAT file, such as database provider and project name as an essential changes. Other config stuff should be pretty common, but if you have different structure than mine, you have full power and control with the flexibility provided here.&lt;/p&gt;
-&lt;h2 id=&quot;5-run-your-msbuildmigrator-migrate-bat-file&quot; tabindex=&quot;-1&quot;&gt;5. Run your MSBuildMigrator.Migrate.bat file &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#5-run-your-msbuildmigrator-migrate-bat-file&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;5-run-your-msbuildmigrator-migrate-bat-file&quot; tabindex=&quot;-1&quot;&gt;5. Run your MSBuildMigrator.Migrate.bat file &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#5-run-your-msbuildmigrator-migrate-bat-file&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img06.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;Table VersionInfo is used for storing migration metadata.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img07.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
@@ -3531,10 +3418,10 @@ pause
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img08.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;In VersionInfo table you can see the &amp;quot;commits&amp;quot;.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://codingpipe.com/img/2014-12-12-database-development-guidance/img09.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;rules-of-thumb&quot; tabindex=&quot;-1&quot;&gt;Rules of Thumb &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#rules-of-thumb&quot;&gt;#&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&quot;rules-of-thumb&quot; tabindex=&quot;-1&quot;&gt;Rules of Thumb &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/#rules-of-thumb&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;First migration is always called &amp;quot;BaseLine&amp;quot; with migration ID: 0. Everything starts from there.&lt;/li&gt;
-&lt;li&gt;Migration unique identification number is composed of current datetime when the migration is being created in format #yyyyMMddhhmm#&lt;br&gt;
+&lt;li&gt;Migration unique identification number is composed of current datetime when the migration is being created in format #yyyyMMddhhmm##&lt;br&gt;
 (example: now is 2014-11-13 10:15, so migration ID would be 201411131015)&lt;/li&gt;
 &lt;li&gt;Migration filename should explain what is being changed - just like how you would write a commit message - in format &#39;M#yyyyMMddhhmm#_Message.cs&#39;&lt;br&gt;
 (example: M201411131015_created_all_initial_tables)&lt;/li&gt;

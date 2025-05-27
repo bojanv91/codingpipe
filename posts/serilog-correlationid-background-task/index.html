@@ -534,19 +534,18 @@ h1 {
 	<li><span>4 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a> • </li>
-		<li><a href="/tags/serilog/" class="post-tag">Serilog</a> • </li>
-		<li><a href="/tags/logging/" class="post-tag">Logging</a></li>
+		<li><a href="/tags/c/" class="post-tag">C#</a></li>
 </ul>
 
 <p>Background tasks in ASP.NET Core applications run independently of the HTTP pipeline, which means they don't have access to the HTTP request X-Correlation-Id header that's typically used for correlating logs in web applications. As a result, the correlation ID for background tasks is always null by default. To solve this problem, we should create a unique correlation ID for each background task execution cycle, allowing us to correlate all logs from a single execution run.</p>
 <h2 id="setting-up-the-logger-extension" tabindex="-1">Setting Up the Logger Extension <a class="header-anchor" href="#setting-up-the-logger-extension">#</a></h2>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">LoggerExtensions</span>
 <span class="token punctuation">{</span>
-    <span class="token comment">/// &lt;summary></span>
-    <span class="token comment">/// Creates a new logger instance with a unique correlation ID.</span>
-    <span class="token comment">/// Usage:</span>
-		<span class="token comment">///   var serviceLogger = Log.ForContext&lt;MyService>();</span>
-		<span class="token comment">///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID</span>
+  <span class="token comment">/// &lt;summary></span>
+  <span class="token comment">/// Creates a new logger instance with a unique correlation ID.</span>
+  <span class="token comment">/// Usage:</span>
+  <span class="token comment">///   var serviceLogger = Log.ForContext&lt;MyService>();</span>
+  <span class="token comment">///   var contextLogger = serviceLogger.ForCorrelationIdContext(); // this one has a unique correlation ID</span>
     <span class="token comment">/// &lt;/summary></span>
     <span class="token comment">/// &lt;param name="baseLogger">The base logger instance.&lt;/param></span>
     <span class="token comment">/// &lt;returns>A new logger instance with a correlation ID.&lt;/returns></span>
@@ -568,7 +567,7 @@ h1 {
         <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>stoppingToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
         <span class="token punctuation">{</span>
             <span class="token comment">// Create a contextual logger from the base logger with a unique</span>
-						<span class="token comment">// correlation ID for this execution cycle</span>
+      <span class="token comment">// correlation ID for this execution cycle</span>
             <span class="token class-name"><span class="token keyword">var</span></span> logger <span class="token operator">=</span> _serviceLogger<span class="token punctuation">.</span><span class="token function">ForCorrelationIdContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             logger<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Starting background task cycle"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -647,7 +646,7 @@ h1 {
 
 		<footer></footer>
 
-		<!-- This page `/posts/serilog-correlationid-background-task/` was built on 2025-05-27T08:56:57.479Z -->
+		<!-- This page `/posts/serilog-correlationid-background-task/` was built on 2025-05-27T12:20:56.687Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

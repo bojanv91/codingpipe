@@ -533,10 +533,11 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/programming/" class="post-tag">Programming</a></li>
+		<li><a href="/tags/architecture/" class="post-tag">Architecture</a> • </li>
+		<li><a href="/tags/software-design/" class="post-tag">Software Design</a></li>
 </ul>
 
-<p>A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized part of the system was functioning as an ETL pipeline, but it was not originally designed as one.</p>
+<p>A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized one part of the system was functioning as an ETL pipeline, but it was not originally designed as one.</p>
 <p>This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.</p>
 <p>Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.</p>
 <p>Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.</p>
@@ -545,14 +546,14 @@ h1 {
 <p>Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.</p>
 <p>What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/google-sheets-as-a-backend/">Google Sheets API as a Database - Building a Lightweight Backend</a></li><li>Next: <a href="/posts/what-makes-code-unmaintainable/">8 code patterns that destroy maintainability</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/google-sheets-as-a-backend/">Google sheets as your backend: Preserving business logic instead of rebuilding it</a></li><li>Next: <a href="/posts/what-makes-code-unmaintainable/">8 code patterns that destroy maintainability</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-05-27T08:56:57.480Z -->
+		<!-- This page `/posts/system-as-etl-pipeline/` was built on 2025-05-27T12:20:56.687Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

@@ -533,12 +533,13 @@ h1 {
 	<li><span> • </span></li>
 	<li><span>7 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/net-framework/" class="post-tag">.NET Framework</a> • </li>
-		<li><a href="/tags/data-access/" class="post-tag">Data Access</a></li>
+		<li><a href="/tags/c/" class="post-tag">C#</a> • </li>
+		<li><a href="/tags/devops/" class="post-tag">DevOps</a> • </li>
+		<li><a href="/tags/code/" class="post-tag">Code</a></li>
 </ul>
 
 <p>I have been thinking a lot lately about how properly and simply to implement database versioning strategy. These years I've experienced working with different types of database setup and furthermore researched and analyzed some more approaches and tools regarding this topic. In this posting I write about my findings and why I like Fluent Migrator as a help tool in order to get the job done. But first, let's talk about the <em>goals</em> we try to achieve. <!--excerpt--></p>
-<h1 id="goals" tabindex="-1">Goals <a class="header-anchor" href="#goals">#</a></h1>
+<h2 id="goals" tabindex="-1">Goals <a class="header-anchor" href="#goals">#</a></h2>
 <ul>
 <li>Auditing schema changes</li>
 <li>Auditing test data changes</li>
@@ -550,118 +551,113 @@ h1 {
 </ul>
 <p>Links to <a href="https://github.com/schambers/fluentmigrator/wiki">Fluent Migrator</a> and <a href="https://github.com/bojanv91/DatabaseMigrationsExample">this guide's project</a>.</p>
 <p>In the end - all you just need to do is run MSBuildMigrator.Migrate.bat file and watch your database being deployed, upgraded, downgraded...it will figure out ;) .</p>
-<h1 id="step-by-step-guide" tabindex="-1">Step by step guide <a class="header-anchor" href="#step-by-step-guide">#</a></h1>
-<h2 id="1-open-visual-studio-and-create-new-class-library-project" tabindex="-1">1. Open Visual Studio and create New Class Library Project <a class="header-anchor" href="#1-open-visual-studio-and-create-new-class-library-project">#</a></h2>
+<h2 id="step-by-step-guide" tabindex="-1">Step by step guide <a class="header-anchor" href="#step-by-step-guide">#</a></h2>
+<h3 id="1-open-visual-studio-and-create-new-class-library-project" tabindex="-1">1. Open Visual Studio and create New Class Library Project <a class="header-anchor" href="#1-open-visual-studio-and-create-new-class-library-project">#</a></h3>
 <p><img src="/img/2014-12-12-database-development-guidance/img01.png" alt="Open Visual Studio and create New Class Library Project"></p>
-<h2 id="2-install-package-fluentmigrator" tabindex="-1">2. Install-Package FluentMigrator <a class="header-anchor" href="#2-install-package-fluentmigrator">#</a></h2>
+<h3 id="2-install-package-fluentmigrator" tabindex="-1">2. Install-Package FluentMigrator <a class="header-anchor" href="#2-install-package-fluentmigrator">#</a></h3>
 <p><img src="/img/2014-12-12-database-development-guidance/img02.png" alt="Install-Package FluentMigrator"></p>
-<h2 id="3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files" tabindex="-1">3. Create new folder &quot;Migrations&quot; to project - here we are going to store migration files <a class="header-anchor" href="#3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files">#</a></h2>
+<h3 id="3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files" tabindex="-1">3. Create new folder &quot;Migrations&quot; to project - here we are going to store migration files <a class="header-anchor" href="#3-create-new-folder-migrations-to-project-here-we-are-going-to-store-migration-files">#</a></h3>
 <p><img src="/img/2014-12-12-database-development-guidance/img03.png" alt="Create new folder &quot;Migrations&quot; to project - here we are going to store migration files"></p>
-<h2 id="4-now-lets-create-database-tables-with-migration-files" tabindex="-1">4. Now, let's create database tables with migration files <a class="header-anchor" href="#4-now-lets-create-database-tables-with-migration-files">#</a></h2>
-<pre><code>[FluentMigrator.Migration(0)]
-public class Baseline : FluentMigrator.Migration
-{
-    public override void Up()
-    {
-        Create.Table(&quot;Category&quot;)
-            .WithColumn(&quot;Id&quot;).AsGuid().NotNullable().PrimaryKey()
-            .WithColumn(&quot;Name&quot;).AsString(255);
+<h3 id="4-now-lets-create-database-tables-with-migration-files" tabindex="-1">4. Now, let's create database tables with migration files <a class="header-anchor" href="#4-now-lets-create-database-tables-with-migration-files">#</a></h3>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">FluentMigrator<span class="token punctuation">.</span>Migration</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Baseline</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">FluentMigrator<span class="token punctuation">.</span>Migration</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Up</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        Create<span class="token punctuation">.</span><span class="token function">Table</span><span class="token punctuation">(</span><span class="token string">"Category"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"Id"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">NotNullable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">PrimaryKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"Name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsString</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-        Create.Table(&quot;Product&quot;)
-            .WithColumn(&quot;Id&quot;).AsGuid().NotNullable().PrimaryKey()
-            .WithColumn(&quot;CategoryId&quot;).AsGuid().ForeignKey(&quot;Category&quot;, &quot;Id&quot;)
-            .WithColumn(&quot;Name&quot;).AsString(255)
-            .WithColumn(&quot;Price&quot;).AsDecimal();
-    }
+        Create<span class="token punctuation">.</span><span class="token function">Table</span><span class="token punctuation">(</span><span class="token string">"Product"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"Id"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">NotNullable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">PrimaryKey</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"CategoryId"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsGuid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ForeignKey</span><span class="token punctuation">(</span><span class="token string">"Category"</span><span class="token punctuation">,</span> <span class="token string">"Id"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"Name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsString</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">WithColumn</span><span class="token punctuation">(</span><span class="token string">"Price"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsDecimal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public override void Down()
-    {
-        Delete.Table(&quot;Product&quot;);
-        Delete.Table(&quot;Category&quot;);
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Down</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        Delete<span class="token punctuation">.</span><span class="token function">Table</span><span class="token punctuation">(</span><span class="token string">"Product"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Delete<span class="token punctuation">.</span><span class="token function">Table</span><span class="token punctuation">(</span><span class="token string">"Category"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
 <p>That is all what is needed. In essence a migration is a class which drives from <strong>Migration abstract class</strong>  and implements <strong>'Up'</strong> and <strong>'Down'</strong> methods. Additionally you will also need to define <strong>Migration Attribute</strong> with unique identifier in order the migration runner to know the order of migration files. I like it how FM API is designed, it really follows the SQL language and how I would write this script in plain SQL.
 Read further <a href="https://github.com/schambers/fluentmigrator/wiki/Migration">here</a>.</p>
 <p>Just for providing more examples I have added one more migration file for adding one more column to Product table for storing image URL.</p>
-<pre><code>[Migration(201411131100)]
-public class M201411131100_Product_added_column_for_storing_image_url : Migration
-{
-    public override void Up()
-    {
-        Alter.Table(&quot;Product&quot;)
-            .AddColumn(&quot;ImageUrl&quot;).AsString(255);
-    }
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token punctuation">[</span><span class="token attribute"><span class="token class-name">Migration</span><span class="token attribute-arguments"><span class="token punctuation">(</span><span class="token number">201411131100</span><span class="token punctuation">)</span></span></span><span class="token punctuation">]</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">M201411131100_Product_added_column_for_storing_image_url</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">Migration</span></span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Up</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        Alter<span class="token punctuation">.</span><span class="token function">Table</span><span class="token punctuation">(</span><span class="token string">"Product"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">AddColumn</span><span class="token punctuation">(</span><span class="token string">"ImageUrl"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AsString</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
-    public override void Down()
-    {
-        Delete.Column(&quot;ImageUrl&quot;).FromTable(&quot;Product&quot;);
-    }
-}
-</code></pre>
+    <span class="token keyword">public</span> <span class="token keyword">override</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Down</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        Delete<span class="token punctuation">.</span><span class="token function">Column</span><span class="token punctuation">(</span><span class="token string">"ImageUrl"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">FromTable</span><span class="token punctuation">(</span><span class="token string">"Product"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
 <p>Now this is how everything looks in my solution.</p>
 <p><img src="/img/2014-12-12-database-development-guidance/img04.png" alt=""></p>
 <p>Next, let's initialize the database with our script.</p>
-<h2 id="5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config" tabindex="-1">5. Creating Migration Runner (MSBuild), Migrator (.BAT) and ConnectionStrings (.CONFIG) <a class="header-anchor" href="#5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config">#</a></h2>
+<h3 id="5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config" tabindex="-1">5. Creating Migration Runner (MSBuild), Migrator (.BAT) and ConnectionStrings (.CONFIG) <a class="header-anchor" href="#5-creating-migration-runner-msbuild-migrator-bat-and-connectionstrings-config">#</a></h3>
 <p><img src="/img/2014-12-12-database-development-guidance/img05.png" alt=""></p>
-<h3 id="1-msbuildmigrationrunner-proj" tabindex="-1">1. MSBuildMigrationRunner.proj <a class="header-anchor" href="#1-msbuildmigrationrunner-proj">#</a></h3>
-<pre><code>&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;Project xmlns=&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot; DefaultTargets=&quot;Migrate&quot;&gt;
-	&lt;PropertyGroup&gt;
-		&lt;DatabaseProvider&gt;&lt;/DatabaseProvider&gt;
-		&lt;ConnectionStringConfigPath&gt;&lt;/ConnectionStringConfigPath&gt;
-		&lt;ConnectionStringName&gt;&lt;/ConnectionStringName&gt;
-		&lt;DataMigrationProjectName&gt;DatabaseMigrationsExample&lt;/DataMigrationProjectName&gt;
-		&lt;DataMigrationProjectRootPath&gt;$(MSBuildProjectDirectory)&lt;/DataMigrationProjectRootPath&gt;
-		&lt;MigratorTasksDirectory&gt;&lt;/MigratorTasksDirectory&gt;
-				
-		&lt;DataMigrationProjectBuildDLL&gt;$(DataMigrationProjectRootPath)\bin\Debug\$(DataMigrationProjectName).dll&lt;/DataMigrationProjectBuildDLL&gt;
-		&lt;DataMigrationProjectCsproj&gt;$(DataMigrationProjectRootPath)\$(DataMigrationProjectName).csproj&lt;/DataMigrationProjectCsproj&gt;
-	&lt;/PropertyGroup&gt;
-		
-	&lt;UsingTask TaskName=&quot;FluentMigrator.MSBuild.Migrate&quot; AssemblyFile=&quot;$(MigratorTasksDirectory)FluentMigrator.MSBuild.dll&quot;/&gt;
-			
-	&lt;Target Name=&quot;Build&quot;&gt;
-		&lt;MSBuild Projects=&quot;$(DataMigrationProjectCsproj)&quot; Properties=&quot;Configuration=Debug&quot;/&gt;
-	&lt;/Target&gt;
-			
-	&lt;Target Name=&quot;Migrate&quot; DependsOnTargets=&quot;Build&quot;&gt;
-		&lt;Message Text=&quot;Starting FluentMigrator Migration&quot;/&gt;
-		&lt;Migrate Database=&quot;$(DatabaseProvider)&quot;
-					Connection=&quot;$(ConnectionStringName)&quot;
-					ConnectionStringConfigPath=&quot;$(ConnectionStringConfigPath)&quot;
-					Target=&quot;$(DataMigrationProjectBuildDLL)&quot;
-					Output=&quot;True&quot;
-					Verbose=&quot;True&quot;&gt;
-		&lt;/Migrate&gt;
-	&lt;/Target&gt;
-		
-	&lt;Target Name=&quot;MigratePreview&quot; DependsOnTargets=&quot;Build&quot;&gt;
-		&lt;Message Text=&quot;Previewing FluentMigrator Migration&quot;/&gt;
-		&lt;Migrate Database=&quot;$(DatabaseProvider)&quot;
-					Connection=&quot;$(ConnectionStringName)&quot;
-					ConnectionStringConfigPath=&quot;$(ConnectionStringConfigPath)&quot;
-					Target=&quot;$(DataMigrationProjectBuildDLL)&quot;
-					Output=&quot;True&quot;
-					Verbose=&quot;True&quot;
-					PreviewOnly=&quot;True&quot;&gt;
-		&lt;/Migrate&gt;
-	&lt;/Target&gt;
-&lt;/Project&gt;
-</code></pre>
-<h3 id="2-connectionstrings-config" tabindex="-1">2. ConnectionStrings.config <a class="header-anchor" href="#2-connectionstrings-config">#</a></h3>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-&lt;configuration&gt;
-	&lt;connectionStrings&gt;
-		&lt;clear /&gt;
-		&lt;add name=&quot;Default&quot; connectionString=&quot;Server=###;User ID=###;Password=###;Database=###;&quot;/&gt;
-	&lt;/connectionStrings&gt;
-&lt;/configuration&gt;
-</code></pre>
-<h3 id="3-msbuildmigrator-migrate-bat" tabindex="-1">3. MSBuildMigrator.Migrate.bat <a class="header-anchor" href="#3-msbuildmigrator-migrate-bat">#</a></h3>
-<pre><code>C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe MSBuildMigrationRunner.proj /t:Migrate /p:DatabaseProvider=SqlServer2012 /p:ConnectionStringConfigPath=ConnectionStrings.config /p:ConnectionStringName=Default /p:DataMigrationProjectName=DatabaseMigrationsExample /p:DataMigrationProjectRootPath=. /p:MigratorTasksDirectory=..\packages\FluentMigrator.1.3.1.0\tools\
-pause
-</code></pre>
+<h4 id="1-msbuildmigrationrunner-proj" tabindex="-1">1. MSBuildMigrationRunner.proj <a class="header-anchor" href="#1-msbuildmigrationrunner-proj">#</a></h4>
+<pre class="language-xml" tabindex="0"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Project</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>http://schemas.microsoft.com/developer/msbuild/2003<span class="token punctuation">"</span></span> <span class="token attr-name">DefaultTargets</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Migrate<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PropertyGroup</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DatabaseProvider</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DatabaseProvider</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ConnectionStringConfigPath</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ConnectionStringConfigPath</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ConnectionStringName</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ConnectionStringName</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DataMigrationProjectName</span><span class="token punctuation">></span></span>DatabaseMigrationsExample<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DataMigrationProjectName</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DataMigrationProjectRootPath</span><span class="token punctuation">></span></span>$(MSBuildProjectDirectory)<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DataMigrationProjectRootPath</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>MigratorTasksDirectory</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>MigratorTasksDirectory</span><span class="token punctuation">></span></span>
+    
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DataMigrationProjectBuildDLL</span><span class="token punctuation">></span></span>$(DataMigrationProjectRootPath)\bin\Debug\$(DataMigrationProjectName).dll<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DataMigrationProjectBuildDLL</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>DataMigrationProjectCsproj</span><span class="token punctuation">></span></span>$(DataMigrationProjectRootPath)\$(DataMigrationProjectName).csproj<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>DataMigrationProjectCsproj</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>PropertyGroup</span><span class="token punctuation">></span></span>
+  
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>UsingTask</span> <span class="token attr-name">TaskName</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>FluentMigrator.MSBuild.Migrate<span class="token punctuation">"</span></span> <span class="token attr-name">AssemblyFile</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(MigratorTasksDirectory)FluentMigrator.MSBuild.dll<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+   
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Target</span> <span class="token attr-name">Name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Build<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>MSBuild</span> <span class="token attr-name">Projects</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(DataMigrationProjectCsproj)<span class="token punctuation">"</span></span> <span class="token attr-name">Properties</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Configuration=Debug<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Target</span><span class="token punctuation">></span></span>
+   
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Target</span> <span class="token attr-name">Name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Migrate<span class="token punctuation">"</span></span> <span class="token attr-name">DependsOnTargets</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Build<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Message</span> <span class="token attr-name">Text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Starting FluentMigrator Migration<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Migrate</span> <span class="token attr-name">Database</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(DatabaseProvider)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Connection</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(ConnectionStringName)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">ConnectionStringConfigPath</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(ConnectionStringConfigPath)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Target</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(DataMigrationProjectBuildDLL)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Output</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>True<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Verbose</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>True<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Migrate</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Target</span><span class="token punctuation">></span></span>
+  
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Target</span> <span class="token attr-name">Name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>MigratePreview<span class="token punctuation">"</span></span> <span class="token attr-name">DependsOnTargets</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Build<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Message</span> <span class="token attr-name">Text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Previewing FluentMigrator Migration<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Migrate</span> <span class="token attr-name">Database</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(DatabaseProvider)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Connection</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(ConnectionStringName)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">ConnectionStringConfigPath</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(ConnectionStringConfigPath)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Target</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>$(DataMigrationProjectBuildDLL)<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Output</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>True<span class="token punctuation">"</span></span>
+     <span class="token attr-name">Verbose</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>True<span class="token punctuation">"</span></span>
+     <span class="token attr-name">PreviewOnly</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>True<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Migrate</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Target</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>Project</span><span class="token punctuation">></span></span></code></pre>
+<h4 id="2-connectionstrings-config" tabindex="-1">2. ConnectionStrings.config <a class="header-anchor" href="#2-connectionstrings-config">#</a></h4>
+<pre class="language-xml" tabindex="0"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="utf-8" ?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>configuration</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>connectionStrings</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>clear</span> <span class="token punctuation">/></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>add</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Default<span class="token punctuation">"</span></span> <span class="token attr-name">connectionString</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Server=###;User ID=###;Password=###;Database=###;<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>connectionStrings</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span></code></pre>
+<h4 id="3-msbuildmigrator-migrate-bat" tabindex="-1">3. MSBuildMigrator.Migrate.bat <a class="header-anchor" href="#3-msbuildmigrator-migrate-bat">#</a></h4>
+<pre class="language-bash" tabindex="0"><code class="language-bash">C:<span class="token punctuation">\</span>Windows<span class="token punctuation">\</span>Microsoft.NET<span class="token punctuation">\</span>Framework<span class="token punctuation">\</span>v4.0.30319<span class="token punctuation">\</span>MSBuild.exe MSBuildMigrationRunner.proj /t:Migrate /p:DatabaseProvider<span class="token operator">=</span>SqlServer2012 /p:ConnectionStringConfigPath<span class="token operator">=</span>ConnectionStrings.config /p:ConnectionStringName<span class="token operator">=</span>Default /p:DataMigrationProjectName<span class="token operator">=</span>DatabaseMigrationsExample /p:DataMigrationProjectRootPath<span class="token operator">=</span>. /p:MigratorTasksDirectory<span class="token operator">=</span><span class="token punctuation">..</span><span class="token punctuation">\</span>packages<span class="token punctuation">\</span>FluentMigrator.1.3.1.0<span class="token punctuation">\</span>tools<span class="token punctuation">\</span>
+pause</code></pre>
 <ul>
 <li>/t:Migrate - performs Migration</li>
 <li>/t:MigratePreview - performs previewing of what would happen when migration is called</li>
@@ -673,7 +669,7 @@ pause
 <li>/p:MigratorTasksDirectory=? - path to FluentMigrator tools folder</li>
 </ul>
 <p>Viola, this is all you need to do. For your project you will need to put the connection string to your database and make changes where needed in the .BAT file, such as database provider and project name as an essential changes. Other config stuff should be pretty common, but if you have different structure than mine, you have full power and control with the flexibility provided here.</p>
-<h2 id="5-run-your-msbuildmigrator-migrate-bat-file" tabindex="-1">5. Run your MSBuildMigrator.Migrate.bat file <a class="header-anchor" href="#5-run-your-msbuildmigrator-migrate-bat-file">#</a></h2>
+<h3 id="5-run-your-msbuildmigrator-migrate-bat-file" tabindex="-1">5. Run your MSBuildMigrator.Migrate.bat file <a class="header-anchor" href="#5-run-your-msbuildmigrator-migrate-bat-file">#</a></h3>
 <p><img src="/img/2014-12-12-database-development-guidance/img06.png" alt=""></p>
 <p>Table VersionInfo is used for storing migration metadata.</p>
 <p><img src="/img/2014-12-12-database-development-guidance/img07.png" alt=""></p>
@@ -681,10 +677,10 @@ pause
 <p><img src="/img/2014-12-12-database-development-guidance/img08.png" alt=""></p>
 <p>In VersionInfo table you can see the &quot;commits&quot;.</p>
 <p><img src="/img/2014-12-12-database-development-guidance/img09.png" alt=""></p>
-<h1 id="rules-of-thumb" tabindex="-1">Rules of Thumb <a class="header-anchor" href="#rules-of-thumb">#</a></h1>
+<h2 id="rules-of-thumb" tabindex="-1">Rules of Thumb <a class="header-anchor" href="#rules-of-thumb">#</a></h2>
 <ul>
 <li>First migration is always called &quot;BaseLine&quot; with migration ID: 0. Everything starts from there.</li>
-<li>Migration unique identification number is composed of current datetime when the migration is being created in format #yyyyMMddhhmm#<br>
+<li>Migration unique identification number is composed of current datetime when the migration is being created in format #yyyyMMddhhmm##<br>
 (example: now is 2014-11-13 10:15, so migration ID would be 201411131015)</li>
 <li>Migration filename should explain what is being changed - just like how you would write a commit message - in format 'M#yyyyMMddhhmm#_Message.cs'<br>
 (example: M201411131015_created_all_initial_tables)</li>
@@ -702,7 +698,7 @@ pause
 
 		<footer></footer>
 
-		<!-- This page `/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/` was built on 2025-05-27T08:56:57.475Z -->
+		<!-- This page `/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/` was built on 2025-05-27T12:20:56.682Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
