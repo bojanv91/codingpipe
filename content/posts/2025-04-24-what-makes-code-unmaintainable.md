@@ -8,7 +8,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality. 
+Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.
 
 ## 8 factors that make code unmaintainable
 
