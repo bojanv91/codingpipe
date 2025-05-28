@@ -92,11 +92,6 @@
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/building-windows-service-applications-in-net-core/</loc>
-		<lastmod>2023-08-16</lastmod>
-	</url>
-	
-	<url>
 		<loc>https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</loc>
 		<lastmod>2023-08-18</lastmod>
 	</url>
@@ -104,11 +99,6 @@
 	<url>
 		<loc>https://codingpipe.com/posts/powershell-snippets/</loc>
 		<lastmod>2023-12-05</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/posts/what-to-log/</loc>
-		<lastmod>2024-01-07</lastmod>
 	</url>
 	
 	<url>
@@ -183,106 +173,111 @@
 	
 	<url>
 		<loc>https://codingpipe.com/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/links/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/c/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/devops/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/code/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/software-design/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/event/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/refactoring/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/javascript/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/data-access/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/asp-net-core/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/postgres/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/docker/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/testing/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/powershell/</loc>
-		<lastmod>2025-05-27</lastmod>
-	</url>
-	
-	<url>
-		<loc>https://codingpipe.com/tags/snippets/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<loc>https://codingpipe.com/tags/code-snippet/</loc>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/serilog/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/logging/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/powershell/</loc>
+		<lastmod>2025-05-28</lastmod>
+	</url>
+	
+	<url>
+		<loc>https://codingpipe.com/tags/snippets/</loc>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/productivity/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 	
 	<url>
 		<loc>https://codingpipe.com/tags/architecture/</loc>
-		<lastmod>2025-05-27</lastmod>
+		<lastmod>2025-05-28</lastmod>
 	</url>
 </urlset>

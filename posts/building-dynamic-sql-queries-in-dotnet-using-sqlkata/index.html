@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Building dynamic SQL queries: string concatenation vs SqlKata</title>
+		<title>Dynamic SQL queries: string concatenation vs SqlKata</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,7 +526,7 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Building dynamic SQL queries: string concatenation vs SqlKata</h1>
+<h1>Dynamic SQL queries: string concatenation vs SqlKata</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-01-23">Jan 23, 2023</time></li>
@@ -537,11 +537,10 @@ h1 {
 		<li><a href="/tags/data-access/" class="post-tag">Data Access</a></li>
 </ul>
 
-<p>There are two common approaches to building dynamic SQL queries in C# application code. One uses string concatenation and executes the query using libraries such as <a href="https://github.com/DapperLib/Dapper/blob/main/Readme.md">Dapper</a>. The other uses expressions-based query builder libraries such as <a href="https://sqlkata.com/">SqlKata</a>.</p>
-<p>In this post, we'll build a typical search query that can filter by any optional search parameters. Then, it'll return paginated results with a total count. We'll attach parameter-based filter conditions in the &quot;where&quot; clause only when valid values are passed for those parameters. We'll exclude <code>NULL</code> or empty array parameters since those values are invalid for our filter criteria.</p>
-<p>Let's look at the typical implementations written in .NET application code.</p>
+<p>When building search features with multiple optional filters, you need dynamic SQL queries that adapt based on user input. I've encountered this requirement countless times - users want to search by name, filter by department, select multiple instructors, or combine any of these criteria.</p>
+<p>Two approaches are commonly used: string concatenation with libraries like <a href="https://github.com/DapperLib/Dapper/blob/main/Readme.md">Dapper</a>, and expression-based builders like <a href="https://sqlkata.com/">SqlKata</a>. Here's how both approaches handle a typical search scenario with pagination and filtering.</p>
 <h2 id="query-building-with-string-concatenation" tabindex="-1">Query building with string concatenation <a class="header-anchor" href="#query-building-with-string-concatenation">#</a></h2>
-<p>In this example, we're building a base query from which we'll build the list and count queries. Finally, we're using Dapper to execute both queries. We use <a href="https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/complex-data-model/_static/diagram.png?view=aspnetcore-7.0">ContosoUniversity</a> database as a referenced database example.</p>
+<p>I'll start with the string concatenation approach using Dapper. We're building a search query that filters courses by optional parameters and returns paginated results with a total count:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// This is the filter request object that the user passes to the query</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">QueryRequest</span>
 <span class="token punctuation">{</span>
@@ -607,16 +606,9 @@ Instructor.LastName as InstructorName "</span>
     TotalCount <span class="token operator">=</span> totalCount
   <span class="token punctuation">}</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Here are a couple of things we're keeping an eye on while building such queries:</p>
-<ul>
-<li>making sure we're placing whitespaces in the correct places before and after concatenating the strings; it's easy to mess this up if not careful;</li>
-<li>opting in for using the <code>WHERE 1 = 1</code> pattern to which we are attaching parameter-based filter conditions with ease, instead of using the other common alternative option with <code>AND (@Param is NULL or Name = @Param)</code></li>
-<li>making sure we're adding SQL parameters in the SQL query string (e.g.,<code>&quot; and Name = @Param&quot;</code>), and we're not adding the parameter's values into the string with concatenation (not like this: <code>$&quot; and Name = '{request.Name}'&quot;</code>) which opens our code to SQL injection.</li>
-</ul>
+<p>I've learned to watch for several things when building queries this way: proper whitespace placement around concatenated strings, using <code>WHERE 1 = 1</code> pattern for cleaner conditional logic, and always using parameterized queries instead of string interpolation to prevent SQL injection.</p>
 <h2 id="query-building-with-sqlkata" tabindex="-1">Query building with SqlKata <a class="header-anchor" href="#query-building-with-sqlkata">#</a></h2>
-<p>This example builds on top of the string concatenation example - you can view it as a rewritten version of it only by using only <a href="https://sqlkata.com/">SqlKata</a>.</p>
-<p>SqlKata is an expression-based query-building library for C#. I've used it in many projects with great success. Use cases vary, from building ad-hoc dynamic SQL queries for reports and charts, to advanced user-generated reports and dashboard builders.</p>
-<p>Let's look at the SqlKata-version of our search query.</p>
+<p><a href="https://sqlkata.com/">SqlKata</a> provides a fluent, expression-based approach. I've used it successfully across many projects for everything from simple search queries to complex report builders:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token return-type class-name">QueryResponse</span> <span class="token function">QueryCoursesSqlKata</span><span class="token punctuation">(</span><span class="token class-name">QueryRequest</span> request<span class="token punctuation">,</span> <span class="token class-name">QueryFactory</span> dbQueryFactory<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token comment">// Build the base query that tries to search by all optional parameters if provided,</span>
@@ -636,7 +628,7 @@ Instructor.LastName as InstructorName "</span>
   <span class="token keyword">if</span> <span class="token punctuation">(</span>request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">?.</span><span class="token function">Any</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
     query<span class="token punctuation">.</span><span class="token function">WhereIn</span><span class="token punctuation">(</span><span class="token string">"Instructor.ID"</span><span class="token punctuation">,</span> request<span class="token punctuation">.</span>InstructorIds<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-  <span class="token comment">// Built and execute the list query with pagination on top of the base query.</span>
+  <span class="token comment">// Build and execute the list query with pagination on top of the base query.</span>
   <span class="token class-name"><span class="token keyword">var</span></span> items <span class="token operator">=</span> query<span class="token punctuation">.</span><span class="token function">Clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span>
       <span class="token string">"Course.Title as CourseTitle"</span><span class="token punctuation">,</span>
@@ -656,10 +648,14 @@ Instructor.LastName as InstructorName "</span>
     TotalCount <span class="token operator">=</span> totalCount
   <span class="token punctuation">}</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<p>SqlKata's <code>Query</code> instances are mutable. So, we have to remember to use <code>.Clone()</code> before we change a query for usage in many queries built on top of the original query. Just like how we've used it in our example above.</p>
+<p>Remember that SqlKata <code>Query</code> instances are mutable, so use <code>.Clone()</code> before modifying a query that you'll reuse for different purposes.</p>
+<h2 id="when-to-use-each-approach" tabindex="-1">When to use each approach <a class="header-anchor" href="#when-to-use-each-approach">#</a></h2>
+<p>The main advantage of SqlKata is eliminating string concatenation errors, providing better IntelliSense support, and making complex conditional logic more readable. String concatenation requires careful attention to whitespace placement and can become unwieldy with complex dynamic conditions.</p>
+<p>However, string concatenation gives you direct control over the generated SQL, which can be useful when you need to fine-tune specific query optimizations or use database-specific features that the query builder doesn't support.</p>
+<p>For most dynamic query scenarios, I prefer SqlKata because it reduces bugs and makes the code more maintainable, especially as query complexity grows.</p>
 <h2 id="sqlkata-usage-references" tabindex="-1">SqlKata usage references <a class="header-anchor" href="#sqlkata-usage-references">#</a></h2>
 <p>SqlKata's <a href="https://sqlkata.com/docs">documentation</a> is rich with examples. There is also a <a href="https://sqlkata.com/playground">SqlKata Playground</a> to quickly try out code samples and see their output for multiple database providers.</p>
-<p><strong>Generating a SQL string from a SqlKata query</strong></p>
+<h3 id="generating-a-sql-string-from-a-sqlkata-query" tabindex="-1">Generating a SQL string from a SqlKata query <a class="header-anchor" href="#generating-a-sql-string-from-a-sqlkata-query">#</a></h3>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"Course"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Published"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Credits"</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -668,12 +664,12 @@ Instructor.LastName as InstructorName "</span>
 <span class="token class-name"><span class="token keyword">string</span></span> sql <span class="token operator">=</span> compiler<span class="token punctuation">.</span><span class="token function">Compile</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">.</span>Sql<span class="token punctuation">;</span>
 <span class="token comment">// returns: SELECT * FROM "Course" WHERE "Published" = @p0 AND "Credits" = @p1</span></code></pre>
 <p>See the <a href="https://sqlkata.com/docs/#compile-only-example">compiler only examples</a> for more details.</p>
-<p><strong>Using <a href="https://sqlkata.com/docs/select#raw">SelectRaw</a> for accessing Postgres JSONB columns</strong></p>
+<h3 id="using-selectraw-for-accessing-postgres-jsonb-columns" tabindex="-1">Using <a href="https://sqlkata.com/docs/select#raw">SelectRaw</a> for accessing Postgres JSONB columns <a class="header-anchor" href="#using-selectraw-for-accessing-postgres-jsonb-columns">#</a></h3>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"User"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">Select</span><span class="token punctuation">(</span><span class="token string">"fullname as Fullname"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">SelectRaw</span><span class="token punctuation">(</span><span class="token string">"data->'BillingAddress'->>'City' as BillingCity"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>There are also similar accompanied methods: <code>WhereRaw</code>, <code>FromRaw</code>, etc.</p>
-<p><strong>Nested conditions in the Where clause</strong></p>
+<h3 id="nested-conditions-in-the-where-clause" tabindex="-1">Nested conditions in the Where clause <a class="header-anchor" href="#nested-conditions-in-the-where-clause">#</a></h3>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name"><span class="token keyword">var</span></span> query <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">Query</span><span class="token punctuation">(</span><span class="token string">"User"</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Enabled"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
   <span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span>q <span class="token operator">=></span> q<span class="token punctuation">.</span><span class="token function">Where</span><span class="token punctuation">(</span><span class="token string">"Role"</span><span class="token punctuation">,</span> <span class="token string">"Manager"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">OrWhere</span><span class="token punctuation">(</span><span class="token string">"Role"</span><span class="token punctuation">,</span> <span class="token string">"Member"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -688,7 +684,7 @@ Instructor.LastName as InstructorName "</span>
 
 		<footer></footer>
 
-		<!-- This page `/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/` was built on 2025-05-27T16:28:32.095Z -->
+		<!-- This page `/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/` was built on 2025-05-28T11:38:24.352Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

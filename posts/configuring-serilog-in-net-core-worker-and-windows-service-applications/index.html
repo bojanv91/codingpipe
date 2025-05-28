@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Serilog Setup for .NET Core Worker Service Project</title>
+		<title>Serilog setup for .NET worker services</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,7 +526,7 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Serilog Setup for .NET Core Worker Service Project</h1>
+<h1>Serilog setup for .NET worker services</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-08-18">Aug 18, 2023</time></li>
@@ -534,120 +534,116 @@ h1 {
 	<li><span>3 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a> • </li>
-		<li><a href="/tags/c/" class="post-tag">C#</a></li>
+		<li><a href="/tags/serilog/" class="post-tag">Serilog</a> • </li>
+		<li><a href="/tags/logging/" class="post-tag">Logging</a></li>
 </ul>
 
-<p><em>NOTE from year 2025</em>: This post is from 2023, and it may contain outdated information. Please verify the information provided here.</p>
-<p>In this post, we'll add and configure the <em>Serilog</em> logger to a Windows Service app. This post assumes you've already <a href="/building-windows-service-applications-in-net-core">built a Windows Service app project</a> and made sure your current app directory path is fixed as described in the referenced post.</p>
-<h2 id="add-and-configure-serilog" tabindex="-1">Add and configure <em>Serilog</em> <a class="header-anchor" href="#add-and-configure-serilog">#</a></h2>
-<p><strong>First,</strong> we need to install the following <em>Serilog</em> NuGet packages into our app:</p>
-<ul>
-<li><em>Serilog</em> - the main package</li>
-<li><em>Serilog.Extensions.Hosting</em> - enables the use of <code>IHostBuilder.UseSerilog()</code></li>
-<li><em>Serilog.Settings.Configuration</em> - enables reading log configuration from <em>appsettings.json</em></li>
-<li><em>Serilog.Sinks.Console</em> - enables writing to the Console</li>
-<li><em>Serilog.Sinks.File</em> - enables writing to log files</li>
-</ul>
-<pre><code>dotnet add package Serilog
-dotnet add package Serilog.Extensions.Hosting
-dotnet add package Serilog.Settings.Configuration
-dotnet add package Serilog.Sinks.Console
-dotnet add package Serilog.Sinks.File
-</code></pre>
-<p><strong>Next</strong>, in the <em>Program.cs</em> file we wrap the startup code in a <code>try</code>/<code>catch</code> block to ensure that any configuration issues will be appropriately logged:</p>
-<pre class="language-diff-cs" tabindex="0"><code class="language-diff-cs">using Serilog;
+<p>Worker services are perfect for executing long-running or time-scheduled operations in the background. Whether running as console applications or deployed as services, proper logging is essential for monitoring and troubleshooting.</p>
+<p>Here's how I set up Serilog with sensible defaults for worker service projects.</p>
+<h2 id="starting-with-the-default-template" tabindex="-1">Starting with the default template <a class="header-anchor" href="#starting-with-the-default-template">#</a></h2>
+<p>The Worker Service template creates this basic structure:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Program.cs</span>
+<span class="token keyword">using</span> <span class="token namespace">WorkerService1</span><span class="token punctuation">;</span>
 
-namespace PlaygroundWorkerService
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+<span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> Host<span class="token punctuation">.</span><span class="token function">CreateApplicationBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-            // The initial bootstrap logger is able to log errors during start-up.
-            // It's fully replaced by the logger configured in `UseSerilog()`.
-+            Log.Logger = new LoggerConfiguration()
-+                .WriteTo.Console()
-+                .CreateBootstrapLogger();
+<span class="token class-name"><span class="token keyword">var</span></span> host <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+host<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Worker.cs</span>
+<span class="token keyword">namespace</span> <span class="token namespace">WorkerService1</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Worker</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BackgroundService</span></span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">readonly</span> <span class="token class-name">ILogger<span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span> _logger<span class="token punctuation">;</span>
 
-            Log.Information("Starting up");
+        <span class="token keyword">public</span> <span class="token function">Worker</span><span class="token punctuation">(</span><span class="token class-name">ILogger<span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span> logger<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            _logger <span class="token operator">=</span> logger<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
 
-            try
-            {
-                IHost host = Host.CreateDefaultBuilder(args)
-                    .ConfigureServices(services =>
-                    {
-                        services.AddHostedService&lt;Worker>();
-                    })
-+                    .UseSerilog((hostingContext, services, loggerConfiguration) => loggerConfiguration
-+                        .ReadFrom.Configuration(hostingContext.Configuration))
-                    .UseWindowsService()
-                    .Build();
-                    
-                host.Run();
+        <span class="token keyword">protected</span> <span class="token keyword">override</span> <span class="token keyword">async</span> <span class="token return-type class-name">Task</span> <span class="token function">ExecuteAsync</span><span class="token punctuation">(</span><span class="token class-name">CancellationToken</span> stoppingToken<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>stoppingToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>_logger<span class="token punctuation">.</span><span class="token function">IsEnabled</span><span class="token punctuation">(</span>LogLevel<span class="token punctuation">.</span>Information<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">{</span>
+                    _logger<span class="token punctuation">.</span><span class="token function">LogInformation</span><span class="token punctuation">(</span><span class="token string">"Worker running at: {time}"</span><span class="token punctuation">,</span> DateTimeOffset<span class="token punctuation">.</span>Now<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+                <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">,</span> stoppingToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="installing-serilog-packages" tabindex="-1">Installing Serilog packages <a class="header-anchor" href="#installing-serilog-packages">#</a></h2>
+<p>Install the essential Serilog packages:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">dotnet <span class="token function">add</span> package Serilog
+dotnet <span class="token function">add</span> package Serilog.Extensions.Hosting
+dotnet <span class="token function">add</span> package Serilog.Settings.Configuration
+dotnet <span class="token function">add</span> package Serilog.Sinks.Console</code></pre>
+<h2 id="configuring-program-cs-with-serilog" tabindex="-1">Configuring Program.cs with Serilog <a class="header-anchor" href="#configuring-program-cs-with-serilog">#</a></h2>
+<p>The key to reliable Serilog setup is using a bootstrap logger during startup, then replacing it with the full configuration:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token comment">// Program.cs</span>
+<span class="token keyword">using</span> <span class="token namespace">Serilog</span><span class="token punctuation">;</span>
+<span class="token keyword">using</span> <span class="token namespace">WorkerService1</span><span class="token punctuation">;</span>
 
-                Log.Information("Stopped cleanly");
+<span class="token comment">// Bootstrap logger captures startup errors before full configuration loads</span>
+Log<span class="token punctuation">.</span>Logger <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">LoggerConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span>WriteTo<span class="token punctuation">.</span><span class="token function">Console</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">CreateBootstrapLogger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "An unhandled exception occured during bootstrapping");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-    }
-}</code></pre>
-<p>The <code>.UseSerilog()</code> call will redirect all log events through your <em>Serilog</em> pipeline.</p>
-<p><strong>Next,</strong> we'll configure the logger using JSON configuration strings placed in the <em>appsettings.json</em>:</p>
+Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Starting up"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> builder <span class="token operator">=</span> Host<span class="token punctuation">.</span><span class="token function">CreateApplicationBuilder</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// This replaces the bootstrap logger with configuration from appsettings.json</span>
+    builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSerilog</span><span class="token punctuation">(</span><span class="token punctuation">(</span>services<span class="token punctuation">,</span> loggerConfiguration<span class="token punctuation">)</span> <span class="token operator">=></span> loggerConfiguration
+        <span class="token punctuation">.</span>ReadFrom<span class="token punctuation">.</span><span class="token function">Configuration</span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">AddHostedService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>Worker<span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token class-name"><span class="token keyword">var</span></span> host <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">Build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    host<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    Log<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Stopped cleanly"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> ex<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    Log<span class="token punctuation">.</span><span class="token function">Fatal</span><span class="token punctuation">(</span>ex<span class="token punctuation">,</span> <span class="token string">"An unhandled exception occurred during bootstrapping"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">finally</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">// Ensures all logs are written before shutdown</span>
+    Log<span class="token punctuation">.</span><span class="token function">CloseAndFlush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="setting-up-appsettings-json" tabindex="-1">Setting up appsettings.json <a class="header-anchor" href="#setting-up-appsettings-json">#</a></h2>
+<p>Configure Serilog through <code>appsettings.json</code>:</p>
 <pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"Serilog"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"Using"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"Serilog.Sinks.Console"</span><span class="token punctuation">,</span> <span class="token string">"Serilog.Sinks.File"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
     <span class="token property">"MinimumLevel"</span><span class="token operator">:</span> <span class="token string">"Information"</span><span class="token punctuation">,</span>
     <span class="token property">"Override"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"Microsoft"</span><span class="token operator">:</span> <span class="token string">"Information"</span><span class="token punctuation">,</span>
+      <span class="token property">"Microsoft"</span><span class="token operator">:</span> <span class="token string">"Warning"</span><span class="token punctuation">,</span>
       <span class="token property">"System"</span><span class="token operator">:</span> <span class="token string">"Warning"</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token property">"WriteTo:Async"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"Async"</span><span class="token punctuation">,</span>
-      <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token property">"configure"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-          <span class="token punctuation">{</span>
-            <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"File"</span><span class="token punctuation">,</span>
-            <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-              <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"logs/log.txt"</span><span class="token punctuation">,</span>
-              <span class="token property">"outputTemplate"</span><span class="token operator">:</span> <span class="token string">"[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}"</span><span class="token punctuation">,</span>
-              <span class="token property">"rollingInterval"</span><span class="token operator">:</span> <span class="token string">"Day"</span><span class="token punctuation">,</span>
-              <span class="token property">"shared"</span><span class="token operator">:</span> <span class="token boolean">true</span>
-            <span class="token punctuation">}</span>
-          <span class="token punctuation">}</span>
-        <span class="token punctuation">]</span>
-      <span class="token punctuation">}</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
     <span class="token property">"WriteTo"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
       <span class="token punctuation">{</span>
         <span class="token property">"Name"</span><span class="token operator">:</span> <span class="token string">"Console"</span><span class="token punctuation">,</span>
         <span class="token property">"Args"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-          <span class="token property">"outputTemplate"</span><span class="token operator">:</span> <span class="token string">"[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}"</span>
+          <span class="token property">"outputTemplate"</span><span class="token operator">:</span> <span class="token string">"[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"</span>
         <span class="token punctuation">}</span>
       <span class="token punctuation">}</span>
     <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"Enrich"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"FromLogContext"</span><span class="token punctuation">,</span> <span class="token string">"WithMachineName"</span><span class="token punctuation">,</span> <span class="token string">"WithThreadId"</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token property">"Properties"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">"Application"</span><span class="token operator">:</span> <span class="token string">"Sample"</span>
-    <span class="token punctuation">}</span>
+    <span class="token property">"Enrich"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"FromLogContext"</span> <span class="token punctuation">]</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p><strong>Finally,</strong> we can start our application and logs will show up in the app's <em>/logs</em> directory, as well in the Console/Terminal if you start it as a console app.</p>
-<h2 id="use-the-serilog-logger" tabindex="-1">Use the <em>Serilog</em> logger <a class="header-anchor" href="#use-the-serilog-logger">#</a></h2>
-<p>Here is how we can use the <em>Serilog</em> logger from our hosted service:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token keyword">using</span> <span class="token namespace">Serilog</span><span class="token punctuation">;</span>
+<h2 id="using-serilog-in-your-worker" tabindex="-1">Using Serilog in your worker <a class="header-anchor" href="#using-serilog-in-your-worker">#</a></h2>
+<p>The Worker class continues to use dependency injection, but now gets Serilog's implementation:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">using</span> <span class="token namespace">Serilog</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token class-name">ILogger</span> <span class="token operator">=</span> <span class="token class-name">Serilog<span class="token punctuation">.</span>ILogger</span><span class="token punctuation">;</span>
 
-<span class="token keyword">namespace</span> <span class="token namespace">PlaygroundWorkerService</span>
+<span class="token keyword">namespace</span> <span class="token namespace">WorkerService1</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Worker</span> <span class="token punctuation">:</span> <span class="token type-list"><span class="token class-name">BackgroundService</span></span>
     <span class="token punctuation">{</span>
@@ -657,26 +653,22 @@ namespace PlaygroundWorkerService
         <span class="token punctuation">{</span>
             <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>stoppingToken<span class="token punctuation">.</span>IsCancellationRequested<span class="token punctuation">)</span>
             <span class="token punctuation">{</span>
-                _logger<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Worker running at: {time}"</span><span class="token punctuation">,</span> DateTimeOffset<span class="token punctuation">.</span>Now<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">,</span> stoppingToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                _logger<span class="token punctuation">.</span><span class="token function">Information</span><span class="token punctuation">(</span><span class="token string">"Worker running at: {Time}"</span><span class="token punctuation">,</span> DateTimeOffset<span class="token punctuation">.</span>Now<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">await</span> Task<span class="token punctuation">.</span><span class="token function">Delay</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">,</span> stoppingToken<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token punctuation">}</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="references" tabindex="-1">References <a class="header-anchor" href="#references">#</a></h2>
-<ul>
-<li>https://github.com/serilog/serilog-extensions-hosting#inline-initialization</li>
-<li>https://github.com/serilog/serilog-settings-configuration</li>
-</ul>
+<p>This setup provides structured console logging with reduced noise from Microsoft and System namespaces. The bootstrap logger ensures startup errors are captured even if the configuration fails to load, while the main configuration provides full logging capabilities once the host is built.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/building-windows-service-applications-in-net-core/">Building .NET Core Windows Services</a></li><li>Next: <a href="/posts/powershell-snippets/">PowerShell Command Snippets</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/a-step-by-step-example-in-pseudocode-driven-programming/">How to Use Pseudocode to Design Better Software - Working Example</a></li><li>Next: <a href="/posts/powershell-snippets/">PowerShell Command Snippets</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/` was built on 2025-05-27T16:28:32.096Z -->
+		<!-- This page `/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/` was built on 2025-05-28T11:38:24.353Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

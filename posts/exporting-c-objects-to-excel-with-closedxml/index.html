@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>How to Export to Excel in C#/.NET Core using ClosedXML</title>
+		<title>Excel exports in .NET Core using ClosedXML</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -526,19 +526,23 @@ h1 {
 
 		<main id="skip">
 			
-<h1>How to Export to Excel in C#/.NET Core using ClosedXML</h1>
+<h1>Excel exports in .NET Core using ClosedXML</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-08-12">Aug 12, 2023</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a></li>
+		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a> • </li>
+		<li><a href="/tags/code-snippet/" class="post-tag">Code Snippet</a></li>
 </ul>
 
-<p>Used library: ClosedXML (<a href="https://docs.closedxml.io">docs site</a>; <a href="https://github.com/ClosedXML/ClosedXML">github</a>)</p>
-<p>The simplest way to export any objects IEnumerable to Excel is by using ClosedXML's <code>IXLTable.InsertTable&lt;T&gt;(IEnumerable&lt;T&gt; data)</code> method.</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token class-name">IEnumerable<span class="token punctuation">&lt;</span>AuthorDto<span class="token punctuation">></span></span> items <span class="token operator">=</span> <span class="token function">GetAuthors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><a href="https://github.com/ClosedXML/ClosedXML">ClosedXML</a> makes Excel exports straightforward in .NET without requiring Excel installation. Perfect for generating reports from any IEnumerable collection.</p>
+<h2 id="install-package" tabindex="-1">Install package <a class="header-anchor" href="#install-package">#</a></h2>
+<pre class="language-bash" tabindex="0"><code class="language-bash">dotnet <span class="token function">add</span> package ClosedXML</code></pre>
+<h2 id="basic-export-to-file" tabindex="-1">Basic export to file <a class="header-anchor" href="#basic-export-to-file">#</a></h2>
+<p>The simplest way to export any objects to Excel using ClosedXML's <code>InsertTable&lt;T&gt;()</code> method:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token class-name">IEnumerable<span class="token punctuation">&lt;</span>AuthorDto<span class="token punctuation">></span></span> items <span class="token operator">=</span> <span class="token function">GetAuthors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> wb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">XLWorkbook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name"><span class="token keyword">var</span></span> ws <span class="token operator">=</span> wb<span class="token punctuation">.</span><span class="token function">AddWorksheet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -552,24 +556,35 @@ ws<span class="token punctuation">.</span><span class="token function">Columns</
 <span class="token comment">// Save to local file system.</span>
 <span class="token class-name"><span class="token keyword">var</span></span> filename <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Export - </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>UtcNow</span><span class="token format-string"><span class="token punctuation">:</span>yyyyMMddHHmmss</span><span class="token punctuation">}</span></span><span class="token string">.xlsx"</span></span><span class="token punctuation">;</span>
 wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>In ASP.NET you can use the following code to return a downloadable Excel file:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token comment">// &lt;-- the above code --></span>
-<span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> stream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MemoryStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> content <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token class-name"><span class="token keyword">var</span></span> contentType <span class="token operator">=</span> <span class="token string">"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> <span class="token function">File</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> contentType<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>The <code>AuthorDto</code> can be any C# class object. Here is this example's class:</p>
-<pre class="language-cs" tabindex="0"><code class="language-cs"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AuthorDto</span>
+<h2 id="asp-net-core-minimal-api-endpoint" tabindex="-1">ASP.NET Core minimal API endpoint <a class="header-anchor" href="#asp-net-core-minimal-api-endpoint">#</a></h2>
+<p>Complete minimal API endpoint that returns a downloadable Excel file:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp">app<span class="token punctuation">.</span><span class="token function">MapGet</span><span class="token punctuation">(</span><span class="token string">"/export/authors"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">IAuthorService</span> authorService<span class="token punctuation">)</span> <span class="token operator">=></span>
+<span class="token punctuation">{</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> authors <span class="token operator">=</span> authorService<span class="token punctuation">.</span><span class="token function">GetAuthors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> wb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">XLWorkbook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> ws <span class="token operator">=</span> wb<span class="token punctuation">.</span><span class="token function">AddWorksheet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ws<span class="token punctuation">.</span><span class="token function">Cell</span><span class="token punctuation">(</span><span class="token string">"A1"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">InsertTable</span><span class="token punctuation">(</span>authors<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ws<span class="token punctuation">.</span><span class="token function">Columns</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">AdjustToContents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">using</span> <span class="token class-name"><span class="token keyword">var</span></span> stream <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">MemoryStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    wb<span class="token punctuation">.</span><span class="token function">SaveAs</span><span class="token punctuation">(</span>stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> content <span class="token operator">=</span> stream<span class="token punctuation">.</span><span class="token function">ToArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> contentType <span class="token operator">=</span> <span class="token string">"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"</span><span class="token punctuation">;</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> filename <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">$"Authors - </span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">DateTime<span class="token punctuation">.</span>UtcNow</span><span class="token format-string"><span class="token punctuation">:</span>yyyyMMddHHmmss</span><span class="token punctuation">}</span></span><span class="token string">.xlsx"</span></span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> Results<span class="token punctuation">.</span><span class="token function">File</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> contentType<span class="token punctuation">,</span> filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2 id="example-class" tabindex="-1">Example class <a class="header-anchor" href="#example-class">#</a></h2>
+<p>The <code>AuthorDto</code> can be any C# class object:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AuthorDto</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">int</span></span> Id <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> FirstName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> LastName <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">string</span><span class="token punctuation">?</span></span> ContactEmail <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">set</span><span class="token punctuation">;</span> <span class="token punctuation">}</span> <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<p>And here is the generated Excel table:</p>
-<p><img src="/img/2023-08-12-exporting-to-excel-with-closedxml-in-dotnet/img01-excel-file-sample-table.png" alt=""></p>
-<p>For further table customization check the <a href="https://docs.closedxml.io/en/latest/features/tables.html">tables feature</a> in the official docs.</p>
+<p>This approach works well for simple exports. For advanced table customization, check the <a href="https://docs.closedxml.io/en/latest/features/tables.html">tables feature</a> in the official docs.</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/overriding-services-in-aspnet-core-integration-tests/">Overriding services ASP.NET Core integration tests using ConfigureTestServices</a></li><li>Next: <a href="/posts/a-step-by-step-example-in-pseudocode-driven-programming/">How to Use Pseudocode to Design Better Software - Working Example</a></li>
 </ul>
@@ -578,7 +593,7 @@ wb<span class="token punctuation">.</span><span class="token function">SaveAs</s
 
 		<footer></footer>
 
-		<!-- This page `/posts/exporting-c-objects-to-excel-with-closedxml/` was built on 2025-05-27T16:28:32.096Z -->
+		<!-- This page `/posts/exporting-c-objects-to-excel-with-closedxml/` was built on 2025-05-28T11:38:24.352Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
