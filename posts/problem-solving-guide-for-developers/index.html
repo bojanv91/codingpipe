@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Type-Safe AppSettings Configuration in .NET Core</title>
+		<title>Problem-solving guide for developers</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -527,75 +527,46 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Type-Safe AppSettings Configuration in .NET Core</h1>
+<h1>Problem-solving guide for developers</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2023-01-08">Jan 8, 2023</time></li>
+	<li><time datetime="2024-02-11">Feb 11, 2024</time></li>
 	<li><span> • </span></li>
 	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a></li>
 </ul>
 
-<p>Working with configuration in .NET applications, I've seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here's how I use strongly-typed configuration classes to catch these issues at compile time.</p>
-<p>Let's create a configuration class that matches our <strong>appsettings.json</strong> structure:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">public</span> required <span class="token return-type class-name">ConnectionStringsConfig</span> ConnectionStrings <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> required <span class="token return-type class-name">LoggingConfig</span> Logging <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<p>Jumping straight into writing code without understanding the problem clearly often leads to wasted time and effort. A structured approach helps avoid this common pitfall.</p>
+<p>A couple of years ago I discovered George Pólya's &quot;How to Solve It.&quot; The ideas from his book helped me categorize and describe a similar process I was already using. Here's the four-step process:</p>
+<ol>
+<li><strong>Analyze</strong> - Understand the problem</li>
+<li><strong>Plan</strong> - Determine how to resolve the problem</li>
+<li><strong>Implement</strong> and test your solution incrementally</li>
+<li><strong>Review</strong> and refine your solution</li>
+</ol>
+<h2 id="step-1-analyze-understand-the-problem" tabindex="-1">Step 1: Analyze - understand the problem <a class="header-anchor" href="#step-1-analyze-understand-the-problem">#</a></h2>
+<p>I start by defining the problem clearly, often rewriting the problem statement until I truly understand it. For complex problems, I break them down into smaller, manageable pieces.</p>
+<p>When dealing with bugs, I focus on reproduction first. Can I reproduce it locally? Is it environment-specific or tied to particular data state? For third-party library issues, I create prototypes and PoCs to reproduce problems in isolation, dive into official documentation and GitHub issues using specific error messages, and leverage Google searches and LLM tools for additional context.</p>
+<p>For new features, I read all related specs and explore the existing codebase in that area. This helps me understand the problem better and ask informed questions.</p>
+<p>The key is knowing when to stop analyzing and avoid analysis paralysis.</p>
+<h2 id="step-2-plan-determine-how-to-resolve-the-problem" tabindex="-1">Step 2: Plan - determine how to resolve the problem <a class="header-anchor" href="#step-2-plan-determine-how-to-resolve-the-problem">#</a></h2>
+<p>I use prototyping (or you may call it spiking, PoC-ing, experimenting, investigating, etc.) as a key tool for learning and determining multiple approaches to find the best solution. I brainstorm possible solutions and involve my team in evaluating each option's pros, cons, and trade-offs within our business context.</p>
+<p>After prototyping and evaluation, I create solution designs (tech specs) or brief implementation plans depending on team maturity and system complexity. Sometimes that's two paragraphs, sometimes a diagram, and sometimes a dozen pages with various diagrams and references.</p>
+<h2 id="step-3-implement-and-test-incrementally" tabindex="-1">Step 3: Implement and test incrementally <a class="header-anchor" href="#step-3-implement-and-test-incrementally">#</a></h2>
+<p>I start with the simplest or most critical piece and write working code. Small, testable changes work better than big rewrites. I test each iteration and use debugging tools, logging, and automated tests to catch issues before QA or users do.</p>
+<p>Communication with the team and adjusting the plan as needed keeps the implementation on track.</p>
+<h2 id="step-4-review-and-refine" tabindex="-1">Step 4: Review and refine <a class="header-anchor" href="#step-4-review-and-refine">#</a></h2>
+<p>I ensure the solution actually solves the original problem, then review the code as if someone else wrote it. I refactor for readability and performance, but stay pragmatic about what needs optimization.</p>
+<p>This process has saved me countless hours of debugging poorly planned solutions. The time invested upfront in understanding and planning pays dividends when the implementation goes smoothly.</p>
 
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConnectionStringsConfig</span>
-    <span class="token punctuation">{</span>
-        <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> DefaultConnection <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LoggingConfig</span>
-    <span class="token punctuation">{</span>
-        <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> LogLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.</p>
-<p>Which matches our <strong>appsettings.json</strong> structure:</p>
-<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
-  <span class="token property">"ConnectionStrings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"DefaultConnection"</span><span class="token operator">:</span> <span class="token string">"Server=myserver;Database=mydb;"</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token property">"Logging"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">"LogLevel"</span><span class="token operator">:</span> <span class="token string">"Information"</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>I prefer this registration approach in <strong>Program.cs</strong> because it gives you both <code>IOptions&lt;T&gt;</code> access and direct injection:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span>
-builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IOptions<span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Use in services:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
-        <span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>ConnectionStrings<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">;</span>
-        <span class="token comment">// ...</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>Use in Blazor SSR Razor file:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">@inject AppSettings appSettings</code></pre>
-<p>Use in minimal APIs:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp">app<span class="token punctuation">.</span><span class="token function">MapGet</span><span class="token punctuation">(</span><span class="token string">"/api/status"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">AppSettings</span> settings<span class="token punctuation">)</span> <span class="token operator">=></span> 
-<span class="token punctuation">{</span>
-    <span class="token comment">// Use settings.ConnectionStrings.DefaultConnection for database operations</span>
-    <span class="token comment">// Use settings.Logging.LogLevel for logging configuration</span>
-    <span class="token keyword">return</span> Results<span class="token punctuation">.</span><span class="token function">Ok</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">{</span> Status <span class="token operator">=</span> <span class="token string">"Healthy"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.</p>
-<p>Using required properties means you'll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.</p>
-
-<ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">Solving the N+1 query problem</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL queries: string concatenation vs SqlKata</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/powershell-snippets/">PowerShell Command Snippets</a></li><li>Next: <a href="/posts/aws-cli-cheatsheet/">AWS CLI Command Snippets</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/type-safe-configuration-in-net-core/` was built on 2025-05-28T20:26:40.932Z -->
+		<!-- This page `/posts/problem-solving-guide-for-developers/` was built on 2025-05-28T20:26:40.933Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
