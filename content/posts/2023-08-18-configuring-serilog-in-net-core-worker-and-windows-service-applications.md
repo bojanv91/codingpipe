@@ -1,142 +1,149 @@
 ---
-title: "Serilog Setup for .NET Core Worker Service Project"
+title: "Serilog setup for .NET worker services"
 date: 2023-08-18
 dateUpdated: Last Modified
 permalink: /posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/
 tags:
   - ASP.NET Core
-  - C#
+  - Serilog
+  - Logging
 layout: layouts/post.njk
 ---
 
-*NOTE from year 2025*: This post is from 2023, and it may contain outdated information. Please verify the information provided here.
+Worker services are perfect for executing long-running or time-scheduled operations in the background. Whether running as console applications or deployed as services, proper logging is essential for monitoring and troubleshooting.
 
-In this post, we'll add and configure the *Serilog* logger to a Windows Service app. This post assumes you've already [built a Windows Service app project](/building-windows-service-applications-in-net-core) and made sure your current app directory path is fixed as described in the referenced post.
+Here's how I set up Serilog with sensible defaults for worker service projects.
 
-## Add and configure *Serilog*
+## Starting with the default template
 
-**First,** we need to install the following *Serilog* NuGet packages into our app:
-- *Serilog* - the main package
-- *Serilog.Extensions.Hosting* - enables the use of `IHostBuilder.UseSerilog()`
-- *Serilog.Settings.Configuration* - enables reading log configuration from *appsettings.json*
-- *Serilog.Sinks.Console* - enables writing to the Console
-- *Serilog.Sinks.File* - enables writing to log files
+The Worker Service template creates this basic structure:
 
-```
-dotnet add package Serilog
-dotnet add package Serilog.Extensions.Hosting
-dotnet add package Serilog.Settings.Configuration
-dotnet add package Serilog.Sinks.Console
-dotnet add package Serilog.Sinks.File
+```csharp
+// Program.cs
+using WorkerService1;
+
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddHostedService<Worker>();
+
+var host = builder.Build();
+host.Run();
 ```
 
-**Next**, in the _Program.cs_ file we wrap the startup code in a `try`/`catch` block to ensure that any configuration issues will be appropriately logged:
-
-```diff-cs
-using Serilog;
-
-namespace PlaygroundWorkerService
+```csharp
+// Worker.cs
+namespace WorkerService1
 {
-    public class Program
+    public class Worker : BackgroundService
     {
-        public static void Main(string[] args)
+        private readonly ILogger<Worker> _logger;
+
+        public Worker(ILogger<Worker> logger)
         {
-            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            _logger = logger;
+        }
 
-            // The initial bootstrap logger is able to log errors during start-up.
-            // It's fully replaced by the logger configured in `UseSerilog()`.
-+            Log.Logger = new LoggerConfiguration()
-+                .WriteTo.Console()
-+                .CreateBootstrapLogger();
-
-            Log.Information("Starting up");
-
-            try
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
             {
-                IHost host = Host.CreateDefaultBuilder(args)
-                    .ConfigureServices(services =>
-                    {
-                        services.AddHostedService<Worker>();
-                    })
-+                    .UseSerilog((hostingContext, services, loggerConfiguration) => loggerConfiguration
-+                        .ReadFrom.Configuration(hostingContext.Configuration))
-                    .UseWindowsService()
-                    .Build();
-                    
-                host.Run();
-
-                Log.Information("Stopped cleanly");
-
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "An unhandled exception occured during bootstrapping");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                }
+                await Task.Delay(1000, stoppingToken);
             }
         }
     }
 }
 ```
 
-The `.UseSerilog()` call will redirect all log events through your *Serilog* pipeline.
+## Installing Serilog packages
 
-**Next,** we'll configure the logger using JSON configuration strings placed in the *appsettings.json*:
+Install the essential Serilog packages:
+
+```bash
+dotnet add package Serilog
+dotnet add package Serilog.Extensions.Hosting
+dotnet add package Serilog.Settings.Configuration
+dotnet add package Serilog.Sinks.Console
+```
+
+## Configuring Program.cs with Serilog
+
+The key to reliable Serilog setup is using a bootstrap logger during startup, then replacing it with the full configuration:
+
+```csharp
+// Program.cs
+using Serilog;
+using WorkerService1;
+
+// Bootstrap logger captures startup errors before full configuration loads
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
+
+Log.Information("Starting up");
+
+try
+{
+    var builder = Host.CreateApplicationBuilder(args);
+    
+    // This replaces the bootstrap logger with configuration from appsettings.json
+    builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfiguration
+        .ReadFrom.Configuration(builder.Configuration));
+    
+    builder.Services.AddHostedService<Worker>();
+
+    var host = builder.Build();
+    host.Run();
+
+    Log.Information("Stopped cleanly");
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "An unhandled exception occurred during bootstrapping");
+}
+finally
+{
+    // Ensures all logs are written before shutdown
+    Log.CloseAndFlush();
+}
+```
+
+## Setting up appsettings.json
+
+Configure Serilog through `appsettings.json`:
 
 ```json
 {
   "Serilog": {
-    "Using": [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
     "MinimumLevel": "Information",
     "Override": {
-      "Microsoft": "Information",
+      "Microsoft": "Warning",
       "System": "Warning"
-    },
-    "WriteTo:Async": {
-      "Name": "Async",
-      "Args": {
-        "configure": [
-          {
-            "Name": "File",
-            "Args": {
-              "path": "logs/log.txt",
-              "outputTemplate": "[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}",
-              "rollingInterval": "Day",
-              "shared": true
-            }
-          }
-        ]
-      }
     },
     "WriteTo": [
       {
         "Name": "Console",
         "Args": {
-          "outputTemplate": "[{Timestamp:u} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+          "outputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}"
         }
       }
     ],
-    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
-    "Properties": {
-      "Application": "Sample"
-    }
+    "Enrich": [ "FromLogContext" ]
   }
 }
 ```
 
-**Finally,** we can start our application and logs will show up in the app's */logs* directory, as well in the Console/Terminal if you start it as a console app.
+## Using Serilog in your worker
 
-## Use the *Serilog* logger
+The Worker class continues to use dependency injection, but now gets Serilog's implementation:
 
-Here is how we can use the *Serilog* logger from our hosted service:
-
-```cs
+```csharp
 using Serilog;
 using ILogger = Serilog.ILogger;
 
-namespace PlaygroundWorkerService
+namespace WorkerService1
 {
     public class Worker : BackgroundService
     {
@@ -146,15 +153,12 @@ namespace PlaygroundWorkerService
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.Information("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(1000, stoppingToken);
+                _logger.Information("Worker running at: {Time}", DateTimeOffset.Now);
+                await Task.Delay(5000, stoppingToken);
             }
         }
     }
 }
 ```
 
-## References
-
-- https://github.com/serilog/serilog-extensions-hosting#inline-initialization
-- https://github.com/serilog/serilog-settings-configuration
+This setup provides structured console logging with reduced noise from Microsoft and System namespaces. The bootstrap logger ensures startup errors are captured even if the configuration fails to load, while the main configuration provides full logging capabilities once the host is built.

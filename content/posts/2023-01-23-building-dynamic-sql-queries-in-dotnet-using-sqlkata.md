@@ -1,5 +1,5 @@
 ---
-title: "Building dynamic SQL queries: string concatenation vs SqlKata"
+title: "Dynamic SQL queries: string concatenation vs SqlKata"
 date: 2023-01-23
 dateUpdated: Last Modified
 permalink: /posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/
@@ -9,15 +9,13 @@ tags:
 layout: layouts/post.njk
 ---
 
-There are two common approaches to building dynamic SQL queries in C# application code. One uses string concatenation and executes the query using libraries such as [Dapper](https://github.com/DapperLib/Dapper/blob/main/Readme.md). The other uses expressions-based query builder libraries such as [SqlKata](https://sqlkata.com/).
+When building search features with multiple optional filters, you need dynamic SQL queries that adapt based on user input. I've encountered this requirement countless times - users want to search by name, filter by department, select multiple instructors, or combine any of these criteria.
 
-In this post, we'll build a typical search query that can filter by any optional search parameters. Then, it'll return paginated results with a total count. We'll attach parameter-based filter conditions in the "where" clause only when valid values are passed for those parameters. We'll exclude `NULL` or empty array parameters since those values are invalid for our filter criteria.
-
-Let's look at the typical implementations written in .NET application code.
+Two approaches are commonly used: string concatenation with libraries like [Dapper](https://github.com/DapperLib/Dapper/blob/main/Readme.md), and expression-based builders like [SqlKata](https://sqlkata.com/). Here's how both approaches handle a typical search scenario with pagination and filtering.
 
 ## Query building with string concatenation
 
-In this example, we're building a base query from which we'll build the list and count queries. Finally, we're using Dapper to execute both queries. We use [ContosoUniversity](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/complex-data-model/_static/diagram.png?view=aspnetcore-7.0) database as a referenced database example.
+I'll start with the string concatenation approach using Dapper. We're building a search query that filters courses by optional parameters and returns paginated results with a total count:
 
 ```csharp
 // This is the filter request object that the user passes to the query
@@ -87,18 +85,11 @@ Instructor.LastName as InstructorName "
 }
 ```
 
-Here are a couple of things we're keeping an eye on while building such queries:
-- making sure we're placing whitespaces in the correct places before and after concatenating the strings; it's easy to mess this up if not careful;
-- opting in for using the `WHERE 1 = 1` pattern to which we are attaching parameter-based filter conditions with ease, instead of using the other common alternative option with `AND (@Param is NULL or Name = @Param)`
-- making sure we're adding SQL parameters in the SQL query string (e.g.,`" and Name = @Param"`), and we're not adding the parameter's values into the string with concatenation (not like this: `$" and Name = '{request.Name}'"`) which opens our code to SQL injection.
+I've learned to watch for several things when building queries this way: proper whitespace placement around concatenated strings, using `WHERE 1 = 1` pattern for cleaner conditional logic, and always using parameterized queries instead of string interpolation to prevent SQL injection.
 
 ## Query building with SqlKata
 
-This example builds on top of the string concatenation example - you can view it as a rewritten version of it only by using only [SqlKata](https://sqlkata.com/).
-
-SqlKata is an expression-based query-building library for C#. I've used it in many projects with great success. Use cases vary, from building ad-hoc dynamic SQL queries for reports and charts, to advanced user-generated reports and dashboard builders.
-
-Let's look at the SqlKata-version of our search query.
+[SqlKata](https://sqlkata.com/) provides a fluent, expression-based approach. I've used it successfully across many projects for everything from simple search queries to complex report builders:
 
 ```csharp
 public QueryResponse QueryCoursesSqlKata(QueryRequest request, QueryFactory dbQueryFactory)
@@ -120,7 +111,7 @@ public QueryResponse QueryCoursesSqlKata(QueryRequest request, QueryFactory dbQu
   if (request.InstructorIds?.Any() == true)
     query.WhereIn("Instructor.ID", request.InstructorIds);
 
-  // Built and execute the list query with pagination on top of the base query.
+  // Build and execute the list query with pagination on top of the base query.
   var items = query.Clone()
     .Select(
       "Course.Title as CourseTitle",
@@ -142,13 +133,22 @@ public QueryResponse QueryCoursesSqlKata(QueryRequest request, QueryFactory dbQu
 }
 ```
 
-SqlKata's `Query` instances are mutable. So, we have to remember to use `.Clone()` before we change a query for usage in many queries built on top of the original query. Just like how we've used it in our example above.
+Remember that SqlKata `Query` instances are mutable, so use `.Clone()` before modifying a query that you'll reuse for different purposes.
+
+## When to use each approach
+
+The main advantage of SqlKata is eliminating string concatenation errors, providing better IntelliSense support, and making complex conditional logic more readable. String concatenation requires careful attention to whitespace placement and can become unwieldy with complex dynamic conditions.
+
+However, string concatenation gives you direct control over the generated SQL, which can be useful when you need to fine-tune specific query optimizations or use database-specific features that the query builder doesn't support.
+
+For most dynamic query scenarios, I prefer SqlKata because it reduces bugs and makes the code more maintainable, especially as query complexity grows.
 
 ## SqlKata usage references
 
 SqlKata's [documentation](https://sqlkata.com/docs) is rich with examples. There is also a [SqlKata Playground](https://sqlkata.com/playground) to quickly try out code samples and see their output for multiple database providers.
 
-**Generating a SQL string from a SqlKata query**
+### Generating a SQL string from a SqlKata query
+
 ```csharp
 var query = new Query("Course")
   .Where("Published", true)
@@ -158,17 +158,21 @@ var compiler = new PostgresCompiler();
 string sql = compiler.Compile(query).Sql;
 // returns: SELECT * FROM "Course" WHERE "Published" = @p0 AND "Credits" = @p1
 ```
+
 See the [compiler only examples](https://sqlkata.com/docs/#compile-only-example) for more details.
 
-**Using [SelectRaw](https://sqlkata.com/docs/select#raw) for accessing Postgres JSONB columns**
+### Using [SelectRaw](https://sqlkata.com/docs/select#raw) for accessing Postgres JSONB columns
+
 ```csharp
 var query = new Query("User")
   .Select("fullname as Fullname")
   .SelectRaw("data->'BillingAddress'->>'City' as BillingCity");
 ```
+
 There are also similar accompanied methods: `WhereRaw`, `FromRaw`, etc.
 
-**Nested conditions in the Where clause**
+### Nested conditions in the Where clause
+
 ```csharp
 var query = new Query("User")
   .Where("Enabled", true)
