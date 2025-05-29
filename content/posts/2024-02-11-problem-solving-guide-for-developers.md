@@ -4,6 +4,8 @@ date: 2024-02-11
 dateUpdated: Last Modified
 permalink: /posts/problem-solving-guide-for-developers/
 layout: layouts/post.njk
+tags:
+  - Productivity
 ---
 
 Jumping straight into writing code without understanding the problem clearly often leads to wasted time and effort. A structured approach helps avoid this common pitfall.
