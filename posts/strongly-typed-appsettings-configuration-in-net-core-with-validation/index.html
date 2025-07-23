@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Type-Safe AppSettings Configuration in .NET Core</title>
+		<title>Type-safe appsettings configuration in .NET Core</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -12,7 +12,7 @@
 		<link rel="manifest" href="/site.webmanifest"></link>
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
-		<meta name="generator" content="Eleventy v3.1.0">
+		<meta name="generator" content="Eleventy v3.1.2">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -515,18 +515,21 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Type-Safe AppSettings Configuration in .NET Core</h1>
+<h1>Type-safe appsettings configuration in .NET Core</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-01-08">Jan 8, 2023</time></li>
 	<li><span> • </span></li>
 	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/asp-net-core/" class="post-tag">ASP.NET Core</a></li>
+		<li><a href="/tags/net/" class="post-tag">.NET</a> • </li>
+		<li><a href="/tags/configuration/" class="post-tag">Configuration</a></li>
 </ul>
 
-<p>Working with configuration in .NET applications, I've seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here's how I use strongly-typed configuration classes to catch these issues at compile time.</p>
-<p>Let's create a configuration class that matches our <strong>appsettings.json</strong> structure:</p>
+<p>Configuration errors have a special way of ruining your day. You deploy to production, everything looks fine, then a specific code path hits and boom - NullReferenceException because <code>appSettings[&quot;SomeKey&quot;]</code> returned null or you mistyped the configuration e.g. <code>appSettings[&quot;Somkey&quot;]</code>.</p>
+<p>I've been burned by this enough times that I now default to strongly-typed configuration classes with required properties. This catches missing configuration at startup rather than runtime, and gives you IntelliSense when accessing values.</p>
+<h2 id="setup" tabindex="-1">Setup <a class="header-anchor" href="#setup">#</a></h2>
+<p>Create a configuration class that mirrors your appsettings.json structure:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppSettings</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">public</span> required <span class="token return-type class-name">ConnectionStringsConfig</span> ConnectionStrings <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
@@ -542,8 +545,7 @@ h1 {
         <span class="token keyword">public</span> required <span class="token return-type class-name"><span class="token keyword">string</span></span> LogLevel <span class="token punctuation">{</span> <span class="token keyword">get</span><span class="token punctuation">;</span> <span class="token keyword">init</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.</p>
-<p>Which matches our <strong>appsettings.json</strong> structure:</p>
+<p>Corresponding appsettings.json:</p>
 <pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"ConnectionStrings"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"DefaultConnection"</span><span class="token operator">:</span> <span class="token string">"Server=myserver;Database=mydb;"</span>
@@ -552,29 +554,30 @@ h1 {
     <span class="token property">"LogLevel"</span><span class="token operator">:</span> <span class="token string">"Information"</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>I prefer this registration approach in <strong>Program.cs</strong> because it gives you both <code>IOptions&lt;T&gt;</code> access and direct injection:</p>
+<p>Register both <code>IOptions&lt;AppSettings&gt;</code> and the settings object directly:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp">builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">Configure</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span></span></span><span class="token punctuation">(</span>builder<span class="token punctuation">.</span>Configuration<span class="token punctuation">)</span><span class="token punctuation">;</span>
 builder<span class="token punctuation">.</span>Services<span class="token punctuation">.</span><span class="token function">AddSingleton</span><span class="token punctuation">(</span>x <span class="token operator">=></span> x<span class="token punctuation">.</span><span class="token generic-method"><span class="token function">GetRequiredService</span><span class="token generic class-name"><span class="token punctuation">&lt;</span>IOptions<span class="token punctuation">&lt;</span>AppSettings<span class="token punctuation">></span><span class="token punctuation">></span></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>Value<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Use in services:</p>
-<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> _appSettings<span class="token punctuation">)</span>
+<p>The dual registration gives you clean injection in most cases, plus <code>IOptions&lt;T&gt;</code> when you need change notifications.</p>
+<h2 id="usage" tabindex="-1">Usage <a class="header-anchor" href="#usage">#</a></h2>
+<p>Constructor injection:</p>
+<pre class="language-csharp" tabindex="0"><code class="language-csharp"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyService</span><span class="token punctuation">(</span><span class="token class-name">AppSettings</span> appSettings<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">DoWork</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token punctuation">{</span>
-        <span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> _appSettings<span class="token punctuation">.</span>ConnectionStrings<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">;</span>
-        <span class="token comment">// ...</span>
+        <span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> appSettings<span class="token punctuation">.</span>ConnectionStrings<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">;</span>
+        <span class="token comment">// IntelliSense works, no magic strings, no null checks needed</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
-<p>Use in Blazor SSR Razor file:</p>
+<p>Blazor pages:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp">@inject AppSettings appSettings</code></pre>
-<p>Use in minimal APIs:</p>
+<p>Minimal APIs:</p>
 <pre class="language-csharp" tabindex="0"><code class="language-csharp">app<span class="token punctuation">.</span><span class="token function">MapGet</span><span class="token punctuation">(</span><span class="token string">"/api/status"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">AppSettings</span> settings<span class="token punctuation">)</span> <span class="token operator">=></span> 
 <span class="token punctuation">{</span>
-    <span class="token comment">// Use settings.ConnectionStrings.DefaultConnection for database operations</span>
-    <span class="token comment">// Use settings.Logging.LogLevel for logging configuration</span>
+    <span class="token class-name"><span class="token keyword">var</span></span> connectionString <span class="token operator">=</span> settings<span class="token punctuation">.</span>ConnectionStrings<span class="token punctuation">.</span>DefaultConnection<span class="token punctuation">;</span>
     <span class="token keyword">return</span> Results<span class="token punctuation">.</span><span class="token function">Ok</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token punctuation">{</span> Status <span class="token operator">=</span> <span class="token string">"Healthy"</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.</p>
-<p>Using required properties means you'll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.</p>
+<h2 id="why-this-works" tabindex="-1">Why this works <a class="header-anchor" href="#why-this-works">#</a></h2>
+<p>Required properties ensure missing configuration fails fast at startup with clear error messages. Nested classes as inner classes keep related settings grouped and make the hierarchy obvious. The compiler catches configuration problems immediately instead of NullReferenceExceptions deep in production code paths. IntelliSense is available, so no typos in magic strings.</p>
 
 <ul class="links-nextprev"><li>Previous: <a href="/posts/select-n-plus-1-problem/">Solving the N+1 query problem</a></li><li>Next: <a href="/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/">Dynamic SQL queries: string concatenation vs SqlKata</a></li>
 </ul>
@@ -583,7 +586,7 @@ builder<span class="token punctuation">.</span>Services<span class="token punctu
 
 		<footer></footer>
 
-		<!-- This page `/posts/type-safe-configuration-in-net-core/` was built on 2025-05-29T07:17:06.968Z -->
+		<!-- This page `/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/` was built on 2025-07-23T15:49:06.430Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

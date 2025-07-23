@@ -4,7 +4,7 @@
 	<subtitle>Random thoughts about programming and software development</subtitle>
 	<link href="https://codingpipe.com/feed/feed.xml" rel="self"/>
 	<link href="https://codingpipe.com/"/>
-	<updated>2025-04-24T00:00:00Z</updated>
+	<updated>2025-07-11T00:00:00Z</updated>
 	<id>https://codingpipe.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
@@ -12,19 +12,49 @@
 	</author>
 	
 	<entry>
-		<title>8 code patterns that destroy maintainability</title>
+		<title>EF Core Migrations Quick Reference</title>
+		<link href="https://codingpipe.com/posts/ef-core-migrations-quick-reference/"/>
+		<updated>2025-07-11T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/ef-core-migrations-quick-reference/</id>
+		<content type="html">&lt;p&gt;EF Core migration commands that I find myself looking up constantly.&lt;/p&gt;
+&lt;p&gt;Run these from the project directory containing your DbContext. Add &lt;code&gt;--project &amp;lt;ProjectName&amp;gt;&lt;/code&gt; if running from solution root. Use &lt;code&gt;--output-dir Data/Migrations&lt;/code&gt; to organize migrations in a specific folder.&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Install EF Core CLI globally&lt;/span&gt;
+dotnet tool install &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;global dotnet-ef
+
+&lt;span class=&quot;token comment&quot;&gt;# Check migration status and list all migrations&lt;/span&gt;
+dotnet ef migrations list
+
+&lt;span class=&quot;token comment&quot;&gt;# Apply pending migrations to database&lt;/span&gt;
+dotnet ef database update
+
+&lt;span class=&quot;token comment&quot;&gt;# Generate new migration with descriptive name&lt;/span&gt;
+dotnet ef migrations add &amp;lt;MigrationName&gt;
+dotnet ef migrations add &amp;lt;MigrationName&gt; &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;output-&lt;span class=&quot;token function&quot;&gt;dir&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;Data&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;Migrations
+
+&lt;span class=&quot;token comment&quot;&gt;# Drop database&lt;/span&gt;
+dotnet ef database drop
+
+&lt;span class=&quot;token comment&quot;&gt;# Remove all migrations&lt;/span&gt;
+dotnet ef migrations remove &lt;span class=&quot;token operator&quot;&gt;--&lt;/span&gt;force
+
+&lt;span class=&quot;token comment&quot;&gt;# View DbContext information and connection details&lt;/span&gt;
+dotnet ef dbcontext info&lt;/code&gt;&lt;/pre&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>8 factors that make code unmaintainable</title>
 		<link href="https://codingpipe.com/posts/what-makes-code-unmaintainable/"/>
 		<updated>2025-04-24T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/what-makes-code-unmaintainable/</id>
 		<content type="html">&lt;p&gt;Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.&lt;/p&gt;
-&lt;h2 id=&quot;8-factors-that-make-code-unmaintainable&quot; tabindex=&quot;-1&quot;&gt;8 factors that make code unmaintainable &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-factors-that-make-code-unmaintainable&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;h3 id=&quot;1-excessive-coupling&quot; tabindex=&quot;-1&quot;&gt;1. Excessive coupling &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#1-excessive-coupling&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;1-excessive-coupling&quot; tabindex=&quot;-1&quot;&gt;1. Excessive coupling &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#1-excessive-coupling&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Code coupled with many dependencies creates a chain reaction of changes. Modifying one class requires changes in other dependent classes, which triggers more changes elsewhere. This &amp;quot;dependency hell&amp;quot; is why simple changes often take days instead of minutes.&lt;/p&gt;
 &lt;p&gt;I&#39;ve seen teams spend entire sprints on what should have been simple configuration changes because they required updates across dozens of tightly coupled components. When you can&#39;t change anything without changing everything, maintenance becomes a nightmare.&lt;/p&gt;
-&lt;h3 id=&quot;2-solving-imaginary-future-problems&quot; tabindex=&quot;-1&quot;&gt;2. Solving imaginary future problems &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#2-solving-imaginary-future-problems&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;2-solving-imaginary-future-problems&quot; tabindex=&quot;-1&quot;&gt;2. Solving imaginary future problems &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#2-solving-imaginary-future-problems&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Code that tries to solve future or speculative problems that haven&#39;t happened yet quickly becomes unmaintainable. We often don&#39;t know what tomorrow&#39;s problems will be, yet many developers build &amp;quot;just in case&amp;quot; features.&lt;/p&gt;
 &lt;p&gt;The key is making things right for today while enabling tomorrow&#39;s changes without implementing them. Follow YAGNI: don&#39;t add functionality until you need it.&lt;/p&gt;
-&lt;h3 id=&quot;3-side-effects-and-unclear-intentions&quot; tabindex=&quot;-1&quot;&gt;3. Side effects and unclear intentions &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#3-side-effects-and-unclear-intentions&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;3-side-effects-and-unclear-intentions&quot; tabindex=&quot;-1&quot;&gt;3. Side effects and unclear intentions &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#3-side-effects-and-unclear-intentions&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Consider this example:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DepositAmount&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Account&lt;/span&gt; account&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;decimal&lt;/span&gt;&lt;/span&gt; amount&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
@@ -34,17 +64,17 @@
     &lt;span class=&quot;token function&quot;&gt;SendPromotionalEmails&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;account&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// Another unexpected side effect!&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;From the method name &amp;quot;DepositAmount&amp;quot;, would you expect it to upgrade the account tier and send emails? Methods should do what their name suggests, nothing more. When code does unexpected things, debugging becomes a puzzle where every method call might trigger hidden behavior across the system.&lt;/p&gt;
-&lt;h3 id=&quot;4-knowledge-duplication&quot; tabindex=&quot;-1&quot;&gt;4. Knowledge duplication &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#4-knowledge-duplication&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;4-knowledge-duplication&quot; tabindex=&quot;-1&quot;&gt;4. Knowledge duplication &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#4-knowledge-duplication&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;When code is duplicated, changing requirements means updating multiple places. Miss one, and you create bugs. Business rules duplicated across the codebase often drift apart over time.&lt;/p&gt;
 &lt;p&gt;I follow the Rule of Three: tolerate duplication twice, but refactor on the third occurrence. Just ensure the duplicated code truly represents the same concept. Sometimes similar-looking code serves different purposes and should remain separate.&lt;/p&gt;
-&lt;h3 id=&quot;5-inconsistent-coding-style&quot; tabindex=&quot;-1&quot;&gt;5. Inconsistent coding style &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#5-inconsistent-coding-style&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;5-inconsistent-coding-style&quot; tabindex=&quot;-1&quot;&gt;5. Inconsistent coding style &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#5-inconsistent-coding-style&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;When code follows different conventions and patterns, developers waste mental energy switching contexts. Inconsistency goes beyond formatting: it includes naming, error handling, and how concepts are represented. The codebase should look like it was written by one person.&lt;/p&gt;
-&lt;h3 id=&quot;6-poor-structure&quot; tabindex=&quot;-1&quot;&gt;6. Poor structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#6-poor-structure&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;6-poor-structure&quot; tabindex=&quot;-1&quot;&gt;6. Poor structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#6-poor-structure&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Code becomes unmaintainable when it&#39;s difficult to find where to make changes. Since developers spend about 10 times more time reading code than writing it, structure matters. The fundamental rule: code that changes together should be placed together. When related functionality is scattered across the codebase, even simple additions require modifying many files, increasing the risk of overlooked side effects.&amp;quot;&lt;/p&gt;
-&lt;h3 id=&quot;7-over-engineering&quot; tabindex=&quot;-1&quot;&gt;7. Over-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#7-over-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;7-over-engineering&quot; tabindex=&quot;-1&quot;&gt;7. Over-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#7-over-engineering&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;The worst over-engineering happens in the name of extensibility. Code designed to handle every possible future scenario often can&#39;t handle the actual changes that occur.&lt;/p&gt;
 &lt;p&gt;Design for changes you&#39;ve already seen. If configuration values changed three times last year, make them configurable. If the core algorithm has been stable for two years, leave it alone. The paradox: &#39;flexible&#39; code often becomes inflexible for real-world changes.&lt;/p&gt;
-&lt;h3 id=&quot;8-under-engineering&quot; tabindex=&quot;-1&quot;&gt;8. Under-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-under-engineering&quot;&gt;#&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&quot;8-under-engineering&quot; tabindex=&quot;-1&quot;&gt;8. Under-engineering &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#8-under-engineering&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Under-engineering creates technical debt through copy-paste coding, magic numbers, missing error handling, and functions doing too much. What seems faster initially slows all future development.&lt;/p&gt;
 &lt;h2 id=&quot;focus-on-what-changes-most-often&quot; tabindex=&quot;-1&quot;&gt;Focus on what changes most often &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/what-makes-code-unmaintainable/#focus-on-what-changes-most-often&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Git can identify your most frequently changed files with:&lt;/p&gt;
@@ -62,11 +92,11 @@
 		<link href="https://codingpipe.com/posts/system-as-etl-pipeline/"/>
 		<updated>2025-04-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/system-as-etl-pipeline/</id>
-		<content type="html">&lt;p&gt;A few months ago, I worked on a connected device project where mobile apps communicated with hardware via Bluetooth, processed raw data from different manufacturers and sent it to cloud services. During development, I realized one part of the system was functioning as an ETL pipeline, but it was not originally designed as one.&lt;/p&gt;
-&lt;p&gt;This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks, then sent it to the cloud. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this as an ETL pipeline.&lt;/p&gt;
-&lt;p&gt;Both systems followed the same pattern: Extract, Transform, Load. The mobile app in our connected device project was performing the exact same role as those edge controllers.&lt;/p&gt;
-&lt;p&gt;Recognizing this pattern opened up opportunities to improve the system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract better data from devices, transform it more efficiently, and optimize the load to servers.&lt;/p&gt;
-&lt;p&gt;It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile apps.&lt;/p&gt;
+		<content type="html">&lt;p&gt;I worked on a connected devices project where mobile app communicated with hardware devices via Bluetooth, processed raw data sent from different device manufacturers and sent it to cloud services in a standardized format. During development, I realized one part of the system was functioning as an ETL pipeline, but it was not originally designed as one.&lt;/p&gt;
+&lt;p&gt;This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks (also from different manufacturers), then sent it to the cloud for storage and real-time reporting. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this sub-system as an ETL pipeline.&lt;/p&gt;
+&lt;p&gt;Both systems followed the same pattern: extract, transform, load. The mobile app in our connected device project was performing the exact same role as those edge controllers.&lt;/p&gt;
+&lt;p&gt;Recognizing this pattern opened up opportunities to improve the existing system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract data from devices reliably, transform it more efficiently, and optimize the load to servers.&lt;/p&gt;
+&lt;p&gt;It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile app.&lt;/p&gt;
 &lt;p&gt;While both systems sent data back down (settings and configurations), this was separate from the ETL process. Keeping these concerns apart made the design cleaner.&lt;/p&gt;
 &lt;p&gt;Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.&lt;/p&gt;
 &lt;p&gt;What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.&lt;/p&gt;
@@ -323,30 +353,22 @@
 	</entry>
 	
 	<entry>
-		<title>Correlation IDs for ASP.NET Core background tasks</title>
+		<title>Serilog Correlation IDs for background tasks in .NET Core</title>
 		<link href="https://codingpipe.com/posts/serilog-correlationid-background-task/"/>
 		<updated>2025-03-23T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/serilog-correlationid-background-task/</id>
-		<content type="html">&lt;p&gt;Correlation IDs enable you to trace related log entries across distributed systems by linking them with a unique identifier. This becomes essential when troubleshooting issues that span multiple services or execution contexts.&lt;/p&gt;
-&lt;p&gt;Background tasks in ASP.NET Core run outside the HTTP pipeline, so they can&#39;t access request correlation IDs, leaving their logs uncorrelated by default. The solution is creating a unique correlation ID for each background task execution cycle, allowing you to trace all logs from a single run.&lt;/p&gt;
-&lt;h2 id=&quot;setting-up-the-logger-extension&quot; tabindex=&quot;-1&quot;&gt;Setting up the logger extension &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#setting-up-the-logger-extension&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+		<content type="html">&lt;p&gt;Background tasks that log without correlation IDs create debugging nightmares. When multiple execution cycles run concurrently, their logs interleave and become impossible to trace.&lt;/p&gt;
+&lt;p&gt;Here&#39;s how to correlate each execution cycle with a unique ID:&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot; tabindex=&quot;-1&quot;&gt;Solution &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#solution&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Create a logger extension for correlation context:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LoggerExtensions&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;summary&gt;&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// Creates a new logger instance with a unique correlation ID.&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// Usage:&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;///   var serviceLogger = Log.ForContext&amp;lt;MyService&gt;();&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;///   var contextLogger = serviceLogger.ForCorrelationIdContext();&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;/summary&gt;&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;param name=&quot;baseLogger&quot;&gt;The base logger instance.&amp;lt;/param&gt;&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;/// &amp;lt;returns&gt;A new logger instance with a correlation ID.&amp;lt;/returns&gt;&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;ILogger&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;ILogger&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ForExecutionContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CorrelationId&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Guid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NewGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ToString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; baseLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;CorrelationId&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; Guid&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;NewGuid&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ToString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;N&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token range operator&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;using-correlation-ids-in-background-services&quot; tabindex=&quot;-1&quot;&gt;Using correlation IDs in background services &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#using-correlation-ids-in-background-services&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Here&#39;s how to implement correlation IDs in a background service:&lt;/p&gt;
+&lt;p&gt;Update your background service:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyBackgroundTask&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;BackgroundService&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; _serviceLogger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;ForContext&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;MyBackgroundTask&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
@@ -357,73 +379,60 @@
 
         &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IsCancellationRequested&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;token comment&quot;&gt;// Create a contextual logger with a unique correlation ID for this execution cycle&lt;/span&gt;
-            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForCorrelationIdContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ForExecutionContext&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
             logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting background task cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
             &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;token comment&quot;&gt;// Perform the actual work with the correlation ID attached to all logs&lt;/span&gt;
                 &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWorkAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;logger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
                 logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Completed background task cycle successfully&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
             &lt;span class=&quot;token keyword&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;Exception&lt;/span&gt; ex&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;token comment&quot;&gt;// All exception logs will include the same correlation ID&lt;/span&gt;
                 logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;ex&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Error executing background task&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
             &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;TimeSpan&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;FromMinutes&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-        _serviceLogger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Warning&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Background service is stopping&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
     &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWorkAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; logger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;token comment&quot;&gt;// This method simulates the work being done by the background task&lt;/span&gt;
         logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Starting to process items&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        
-        &lt;span class=&quot;token comment&quot;&gt;// Simulate some processing time&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        
-        logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Processed 5 items successfully&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        
-        &lt;span class=&quot;token comment&quot;&gt;// More processing&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        
+        logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Information&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Processed {ItemCount} items successfully&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Debug&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Finalizing processing cycle&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;configuring-serilog-in-program-cs&quot; tabindex=&quot;-1&quot;&gt;Configuring Serilog in Program.cs &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#configuring-serilog-in-program-cs&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Ensure Serilog is configured to include correlation IDs:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;UseSerilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; 
-    configuration
-        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ReadFrom&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Enrich&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithCorrelationId&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;WriteTo&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token named-parameter punctuation&quot;&gt;outputTemplate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; 
-            &lt;span class=&quot;token string&quot;&gt;&quot;[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj} {Properties:j}{NewLine}{Exception}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;example-log-output&quot; tabindex=&quot;-1&quot;&gt;Example log output &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#example-log-output&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Here&#39;s what the logs look like in your console:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;HTTP request logs (with correlation ID from HTTP header):&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 HTTP GET /api/products responded 200 in 45.6ms
-[10:15:22 DBG] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Retrieved 10 products from database
-[10:15:22 INF] 7b8d9e1f-c452-4daf-8e61-a9dc3be352a0 Request completed
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;Background task logs (with generated correlation ID):&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[10:20:00 INF] Background service started
-[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting background task cycle
-[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Starting to process items
-[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Processed 5 items successfully
-[10:20:00 DBG] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Finalizing processing cycle
-[10:20:00 INF] 42f1e3a8-5b7d-4c69-8f9a-a3c091e5d742 Completed background task cycle successfully
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Each background task execution gets its own unique correlation ID, and all logs from the same execution cycle share that same ID.&lt;/p&gt;
-&lt;p&gt;For the &lt;code&gt;.Enrich.WithCorrelationId()&lt;/code&gt; extension you need to install:&lt;/p&gt;
-&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog.Enrichers.ClientInfo&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This approach works for any background service where you need to correlate logs within execution cycles. Use it when debugging complex background operations or when you need to trace the flow of long-running processes.&lt;/p&gt;
+&lt;p&gt;Configure your output template to include correlation IDs:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;Serilog&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;WriteTo&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Console&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;Args&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;token property&quot;&gt;&quot;outputTemplate&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[{Timestamp:HH:mm:ss} {Level:u3}] {CorrelationId} {Message:lj}{NewLine}{Exception}&quot;&lt;/span&gt;
+        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;result&quot; tabindex=&quot;-1&quot;&gt;Result &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#result&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Instead of interleaved chaos:&lt;/p&gt;
+&lt;pre class=&quot;language-plain&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plain&quot;&gt;[10:20:00 INF] Starting background task cycle
+[10:20:00 INF] Starting to process items
+[10:20:00 INF] Processed 5 items successfully
+[10:20:00 INF] Starting background task cycle
+[10:20:00 INF] Starting to process items
+[10:20:00 INF] Completed background task cycle successfully&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You get traceable execution cycles:&lt;/p&gt;
+&lt;pre class=&quot;language-plain&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plain&quot;&gt;[10:20:00 INF] a42f1e3a Starting background task cycle
+[10:20:00 INF] a42f1e3a Starting to process items
+[10:20:00 INF] a42f1e3a Processed 5 items successfully
+[10:20:00 INF] 7b2c1e3b Starting background task cycle
+[10:20:00 INF] 7b2c1e3b Starting to process items
+[10:20:00 INF] a42f1e3a Completed background task cycle successfully&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;why-this-works&quot; tabindex=&quot;-1&quot;&gt;Why This Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/serilog-correlationid-background-task/#why-this-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Creating the correlation context at the cycle level (not per method) maintains the trace through the entire execution, including exceptions that bubble up. Short correlation IDs keep logs readable while providing unique identification for each run.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1203,57 +1212,19 @@ choco feature enable &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>Serilog setup for .NET worker services</title>
+		<title>Serilog setup for .NET Core worker services</title>
 		<link href="https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/"/>
 		<updated>2023-08-18T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</id>
-		<content type="html">&lt;p&gt;Worker services are perfect for executing long-running or time-scheduled operations in the background. Whether running as console applications or deployed as services, proper logging is essential for monitoring and troubleshooting.&lt;/p&gt;
-&lt;p&gt;Here&#39;s how I set up Serilog with sensible defaults for worker service projects.&lt;/p&gt;
-&lt;h2 id=&quot;starting-with-the-default-template&quot; tabindex=&quot;-1&quot;&gt;Starting with the default template &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#starting-with-the-default-template&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The Worker Service template creates this basic structure:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Program.cs&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;WorkerService1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; builder &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateApplicationBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;AddHostedService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Worker&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; host &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Worker.cs&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;WorkerService1&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Worker&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;BackgroundService&lt;/span&gt;&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Worker&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _logger&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-        &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Worker&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Worker&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; logger&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-            _logger &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; logger&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;token keyword&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ExecuteAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;CancellationToken&lt;/span&gt; stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;IsCancellationRequested&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;IsEnabled&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;LogLevel&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Information&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-                    _logger&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;LogInformation&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Worker running at: {time}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; DateTimeOffset&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Now&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Delay&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; stoppingToken&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;installing-serilog-packages&quot; tabindex=&quot;-1&quot;&gt;Installing Serilog packages &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#installing-serilog-packages&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Install the essential Serilog packages:&lt;/p&gt;
-&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog
-dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog.Extensions.Hosting
-dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog.Settings.Configuration
-dotnet &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; package Serilog.Sinks.Console&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;configuring-program-cs-with-serilog&quot; tabindex=&quot;-1&quot;&gt;Configuring Program.cs with Serilog &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#configuring-program-cs-with-serilog&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The key to reliable Serilog setup is using a bootstrap logger during startup, then replacing it with the full configuration:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Program.cs&lt;/span&gt;
-&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Serilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+		<content type="html">&lt;p&gt;Worker services that fail during startup often fail silently. The default .NET logging doesn&#39;t capture bootstrap errors, leaving you debugging blind when services won&#39;t start in production.&lt;/p&gt;
+&lt;p&gt;This Serilog setup provides bootstrap logging that captures startup failures and structured logging for runtime operations.&lt;/p&gt;
+&lt;p&gt;Install the essential packages:&lt;/p&gt;
+&lt;pre class=&quot;language-powershell&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-powershell&quot;&gt;dotnet add package Serilog
+dotnet add package Serilog&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Extensions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Hosting
+dotnet add package Serilog&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Settings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration
+dotnet add package Serilog&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Sinks&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Console&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Replace Program.cs with bootstrap logging:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Serilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;WorkerService1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;token comment&quot;&gt;// Bootstrap logger captures startup errors before full configuration loads&lt;/span&gt;
@@ -1267,7 +1238,6 @@ Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; builder &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; Host&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateApplicationBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;args&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     
-    &lt;span class=&quot;token comment&quot;&gt;// This replaces the bootstrap logger with configuration from appsettings.json&lt;/span&gt;
     builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddSerilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;services&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; loggerConfiguration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; loggerConfiguration
         &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ReadFrom&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     
@@ -1284,11 +1254,9 @@ Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;finally&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// Ensures all logs are written before shutdown&lt;/span&gt;
     Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CloseAndFlush&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;setting-up-appsettings-json&quot; tabindex=&quot;-1&quot;&gt;Setting up appsettings.json &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#setting-up-appsettings-json&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;Configure Serilog through &lt;code&gt;appsettings.json&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Configure appsettings.json:&lt;/p&gt;
 &lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token property&quot;&gt;&quot;Serilog&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token property&quot;&gt;&quot;MinimumLevel&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Information&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
@@ -1307,8 +1275,8 @@ Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=
     &lt;span class=&quot;token property&quot;&gt;&quot;Enrich&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;FromLogContext&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;using-serilog-in-your-worker&quot; tabindex=&quot;-1&quot;&gt;Using Serilog in your worker &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#using-serilog-in-your-worker&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;The Worker class continues to use dependency injection, but now gets Serilog&#39;s implementation:&lt;/p&gt;
+&lt;h2 id=&quot;usage&quot; tabindex=&quot;-1&quot;&gt;Usage &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#usage&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Update your worker to use structured logging:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Serilog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ILogger&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Serilog&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ILogger&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
@@ -1328,7 +1296,9 @@ Log&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=
         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This setup provides structured console logging with reduced noise from Microsoft and System namespaces. The bootstrap logger ensures startup errors are captured even if the configuration fails to load, while the main configuration provides full logging capabilities once the host is built.&lt;/p&gt;
+&lt;h2 id=&quot;why-this-works&quot; tabindex=&quot;-1&quot;&gt;Why this works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/#why-this-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Bootstrap logging captures startup failures that would otherwise be invisible. The two-phase approach creates a simple console logger first, then switches to full configuration once the host builds.&lt;/p&gt;
+&lt;p&gt;Microsoft and System logs at Warning level reduce framework noise. &lt;code&gt;Log.ForContext&amp;lt;Worker&amp;gt;()&lt;/code&gt; provides scoped loggers. Structured logging with {Time} creates searchable properties instead of string interpolation.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1514,44 +1484,24 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
 	</entry>
 	
 	<entry>
-		<title>Test-Specific AppSettings Configuration in ASP.NET Core integration tests</title>
+		<title>Test-specific AppSettings configuration in ASP.NET Core integration tests</title>
 		<link href="https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/"/>
 		<updated>2023-08-10T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</id>
-		<content type="html">&lt;p&gt;When writing integration tests for ASP.NET Core applications, I&#39;ve run into a common issue: the TestServer uses the main application&#39;s &lt;code&gt;appsettings.json&lt;/code&gt; files by default. This becomes problematic when tests need different configuration values - like pointing to a test database instead of production.&lt;/p&gt;
-&lt;p&gt;Here&#39;s how I configure integration tests to use their own configuration files.&lt;/p&gt;
-&lt;p&gt;Let&#39;s create a test-specific &lt;code&gt;appsettings.json&lt;/code&gt; file in your integration test project:&lt;/p&gt;
-&lt;pre class=&quot;language-plpaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plpaintext&quot;&gt;Solution/
-├── PlaygroundApi/
-│   ├── appsettings.json          # Main app config
-│   ├── appsettings.Development.json
-│   └── Program.cs
-└── PlaygroundApi.Tests/
-    ├── appsettings.json          # Test-specific config
-    └── IntegrationTests.cs&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Main app appsettings.json:&lt;/p&gt;
-&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Server=localhost;Database=ProductionDb;Trusted_Connection=true;&quot;&lt;/span&gt;
-  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;token property&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;prod-api-key-123&quot;&lt;/span&gt;
-&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Test project appsettings.json:&lt;/p&gt;
+		<content type="html">&lt;p&gt;Integration tests that use production configuration values are accidents waiting to happen. The TestServer defaults to your main application&#39;s &lt;code&gt;appsettings.json&lt;/code&gt;, which means tests might hit production databases or external APIs.&lt;/p&gt;
+&lt;p&gt;Here&#39;s how to configure tests to use their own configuration files.&lt;/p&gt;
+&lt;h2 id=&quot;setup&quot; tabindex=&quot;-1&quot;&gt;Setup &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/#setup&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Create a test-specific &lt;code&gt;appsettings.json&lt;/code&gt; in your test project:&lt;/p&gt;
 &lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Host=localhost;Port=5432;Database=TestDb;Username=postgres;Password=test123&quot;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;token property&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;test-api-key-456&quot;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Add this minimal API endpoint to return the configuration value:&lt;/p&gt;
+&lt;p&gt;Set the file properties to &lt;strong&gt;Build Action: Content&lt;/strong&gt; and &lt;strong&gt;Copy to Output Directory: Copy if newer&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Add this minimal API endpoint to your main app for testing:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;app&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;MapGet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api-token&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;IConfiguration&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ApiToken&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For the test config file, set these properties in Visual Studio:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Build Action&lt;/strong&gt;: Content&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Copy to output directory&lt;/strong&gt;: Copy if newer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;This ensures the configuration file is available in your test output directory.&lt;/p&gt;
-&lt;p&gt;Now configure your &lt;code&gt;WebApplicationFactory&lt;/code&gt; to use the test project&#39;s configuration:&lt;/p&gt;
+&lt;p&gt;Configure your &lt;code&gt;WebApplicationFactory&lt;/code&gt; to use the test configuration:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AspNetCore&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Mvc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Testing&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;token namespace&quot;&gt;Microsoft&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Extensions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
@@ -1559,20 +1509,16 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IntegrationTests&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
         &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;IntegrationTests&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-            _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
                 &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithWebHostBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
                 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
                     builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureAppConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
                     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;token comment&quot;&gt;// Clear existing configuration to avoid conflicts&lt;/span&gt;
                         config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Sources&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Clear&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-                        
-                        &lt;span class=&quot;token comment&quot;&gt;// Set the base path to the integration tests build output directory&lt;/span&gt;
-                        &lt;span class=&quot;token comment&quot;&gt;// where the integration tests&#39; config file will be copied into.&lt;/span&gt;
                         config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetBasePath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                         config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddJsonFile&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;appsettings.json&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
@@ -1583,28 +1529,24 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
         &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ShouldUseTestConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; httpClient &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;CreateClient&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
             &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; result &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; httpClient&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetStringAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api-token&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-
-            &lt;span class=&quot;token comment&quot;&gt;// Assert that the test-specific configuration value is returned&lt;/span&gt;
+            
             Assert&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Equal&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;test-api-key-456&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; result&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I prefer this approach over environment variables or in-memory configuration because it keeps test settings explicit and version-controlled. You can easily see what configuration your tests are using, and different team members will have consistent test behavior.&lt;/p&gt;
-&lt;p&gt;The &lt;code&gt;config.Sources.Clear()&lt;/code&gt; call ensures we don&#39;t inherit any configuration from the main application, and &lt;code&gt;SetBasePath(Directory.GetCurrentDirectory())&lt;/code&gt; tells the configuration system to look in the test project&#39;s output directory.&lt;/p&gt;
-&lt;h2 id=&quot;using-with-testcontainers&quot; tabindex=&quot;-1&quot;&gt;Using with Testcontainers &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/#using-with-testcontainers&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;When using Testcontainers, you can dynamically override the connection string after the container starts:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;IntegrationTestsWithContainer&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IAsyncLifetime&lt;/span&gt;&lt;/span&gt;
+&lt;h2 id=&quot;dynamic-configuration-override&quot; tabindex=&quot;-1&quot;&gt;Dynamic Configuration Override &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/#dynamic-configuration-override&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;For Testcontainers or other runtime configuration needs:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;ContainerizedTests&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token type-list&quot;&gt;&lt;span class=&quot;token class-name&quot;&gt;IAsyncLifetime&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;readonly&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PostgreSqlContainer&lt;/span&gt; _postgreSqlContainer &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;PostgreSqlBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;InitializeAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; _postgreSqlContainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;StartAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
         
-        _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;PlaygroundApi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        _webAppFactory &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;WebApplicationFactory&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;Program&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;WithWebHostBuilder&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
             &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
                 builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;ConfigureAppConfiguration&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; config&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
@@ -1613,7 +1555,7 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
                     config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;SetBasePath&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;Directory&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetCurrentDirectory&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                     config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddJsonFile&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;appsettings.json&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
                     
-                    &lt;span class=&quot;token comment&quot;&gt;// Override connection string with container&#39;s connection string&lt;/span&gt;
+                    &lt;span class=&quot;token comment&quot;&gt;// Override with container connection string&lt;/span&gt;
                     config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddInMemoryCollection&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;Dictionary&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
                     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
                         &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;ConnectionStrings:DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _postgreSqlContainer&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetConnectionString&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
@@ -1636,20 +1578,20 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
         _webAppFactory&lt;span class=&quot;token punctuation&quot;&gt;?.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Dispose&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;why-this-works&quot; tabindex=&quot;-1&quot;&gt;Why This Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/#why-this-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;config.Sources.Clear()&lt;/code&gt; prevents inheriting production configuration. &lt;code&gt;SetBasePath(Directory.GetCurrentDirectory())&lt;/code&gt; points to the test output directory where your test &lt;code&gt;appsettings.json&lt;/code&gt; gets copied. This approach keeps test configuration explicit and version-controlled rather than relying on environment variables or hardcoded values.&lt;/p&gt;
 </content>
 	</entry>
 	
 	<entry>
-		<title>My PostgreSQL development setup with Docker Compose</title>
+		<title>PostgreSQL development setup with Docker Compose</title>
 		<link href="https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/"/>
 		<updated>2023-08-09T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/</id>
-		<content type="html">&lt;p&gt;Docker is a great tool for simplifying the installation of applications and services. As well as isolating them from your machine to avoid potential conflicts with other installations. This is especially useful for development machines where you tend to have many services installed in various versions for various projects.&lt;/p&gt;
-&lt;p&gt;In this post, we&#39;ll install and setup Postgres with Docker Desktop, and we&#39;ll configure data persistence in the Docker container.&lt;/p&gt;
-&lt;p&gt;Prerequisite for this post is to have &lt;a href=&quot;https://www.docker.com/products/docker-desktop/&quot;&gt;Docker Desktop&lt;/a&gt; installed.&lt;/p&gt;
-&lt;p&gt;First, start Docker Desktop.&lt;/p&gt;
-&lt;p&gt;Next, create or choose a folder where your Docker container setup files will be stored. My folder of choice is &lt;code&gt;D:&#92;devops&#92;docker&#92;local_postgres&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Next, inside your chosen folder, create a &lt;code&gt;docker-compose.yml&lt;/code&gt; file and place the following content:&lt;/p&gt;
+		<content type="html">&lt;p&gt;I needed a shared PostgreSQL instance that&#39;s always available for demos, prototypes, and trial projects. Installing Postgres directly means dealing with Windows services, path configurations, and version management across system updates.&lt;/p&gt;
+&lt;p&gt;This Docker Compose setup gives me a persistent development database that&#39;s isolated from my system but accessible to any project. Perfect for when you want to quickly spin up a demo without setting up project-specific database infrastructure.&lt;/p&gt;
+&lt;h2 id=&quot;setup&quot; tabindex=&quot;-1&quot;&gt;Setup &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/#setup&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Choose a permanent folder for your PostgreSQL setup (e.g., &lt;code&gt;D:&#92;devops&#92;docker&#92;local_postgres&lt;/code&gt; or &lt;code&gt;C:&#92;docker&#92;postgres&lt;/code&gt;). Create a &lt;code&gt;docker-compose.yml&lt;/code&gt; file there:&lt;/p&gt;
 &lt;pre class=&quot;language-yml&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-yml&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# docker-compose.yml&lt;/span&gt;
 &lt;span class=&quot;token key atrule&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;3.1&#39;&lt;/span&gt;
 &lt;span class=&quot;token key atrule&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
@@ -1664,19 +1606,16 @@ wb&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&
       &lt;span class=&quot;token key atrule&quot;&gt;POSTGRES_DB&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; postgres
     &lt;span class=&quot;token key atrule&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
        &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; ./postgresql&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;data&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;/var/lib/postgresql/data&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The &lt;code&gt;docker-compose.yml&lt;/code&gt; file will download and install the Postgres image, will set the DB engine with the provided environment variables, will bind the internal port &lt;code&gt;5432&lt;/code&gt; to an external port &lt;code&gt;15432&lt;/code&gt;, and finally will configure an external volume where the Postgres data files be stored and persistent outside of the container. The internal &lt;code&gt;/var/lib/postgresql/data&lt;/code&gt; folder will be mapped to our
-&lt;code&gt;postgres-data&lt;/code&gt; folder on the disk (or the full path: &lt;code&gt;D:&#92;devops&#92;docker&#92;local_postgres&#92;postgres-data&lt;/code&gt;).&lt;/p&gt;
-&lt;p&gt;Next, open the Windows terminal in your folder and run the following command:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;docker-compose up
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The output will show that Docker is working correctly. You can also inspect the status of your container instance in the Docker Desktop app as well.&lt;/p&gt;
-&lt;p&gt;Now you can connect to the container&#39;s Postgres database engine using your DB tool of choice (e.g. DBeaver) with the following connection info:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Host: localhost
+&lt;p&gt;The &lt;code&gt;postgresql-data&lt;/code&gt; folder will be created automatically in the same directory as your &lt;code&gt;docker-compose.yml&lt;/code&gt; file when you first run the container.&lt;/p&gt;
+&lt;p&gt;Run with:&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token function&quot;&gt;docker-compose&lt;/span&gt; up&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Connect using:&lt;/p&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;Host: localhost
 Port: 15432
 Username: postgres
-Password: postgres
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Stopping and restarting the docker container won&#39;t cause data loss due the presence of the volume parameter in docker-compose.&lt;/p&gt;
+Password: postgres&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;why-this-works&quot; tabindex=&quot;-1&quot;&gt;Why This Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/#why-this-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Port 15432 avoids system Postgres conflicts, &lt;code&gt;./postgresql-data&lt;/code&gt; keeps data persistent, and &lt;code&gt;restart: always&lt;/code&gt; survives reboots. One shared development database that&#39;s always available.&lt;/p&gt;
 </content>
 	</entry>
 	
@@ -1862,12 +1801,14 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
 	</entry>
 	
 	<entry>
-		<title>Type-Safe AppSettings Configuration in .NET Core</title>
-		<link href="https://codingpipe.com/posts/type-safe-configuration-in-net-core/"/>
+		<title>Type-safe appsettings configuration in .NET Core</title>
+		<link href="https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/"/>
 		<updated>2023-01-08T00:00:00Z</updated>
-		<id>https://codingpipe.com/posts/type-safe-configuration-in-net-core/</id>
-		<content type="html">&lt;p&gt;Working with configuration in .NET applications, I&#39;ve seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here&#39;s how I use strongly-typed configuration classes to catch these issues at compile time.&lt;/p&gt;
-&lt;p&gt;Let&#39;s create a configuration class that matches our &lt;strong&gt;appsettings.json&lt;/strong&gt; structure:&lt;/p&gt;
+		<id>https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</id>
+		<content type="html">&lt;p&gt;Configuration errors have a special way of ruining your day. You deploy to production, everything looks fine, then a specific code path hits and boom - NullReferenceException because &lt;code&gt;appSettings[&amp;quot;SomeKey&amp;quot;]&lt;/code&gt; returned null or you mistyped the configuration e.g. &lt;code&gt;appSettings[&amp;quot;Somkey&amp;quot;]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;I&#39;ve been burned by this enough times that I now default to strongly-typed configuration classes with required properties. This catches missing configuration at startup rather than runtime, and gives you IntelliSense when accessing values.&lt;/p&gt;
+&lt;h2 id=&quot;setup&quot; tabindex=&quot;-1&quot;&gt;Setup &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/#setup&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Create a configuration class that mirrors your appsettings.json structure:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; required &lt;span class=&quot;token return-type class-name&quot;&gt;ConnectionStringsConfig&lt;/span&gt; ConnectionStrings &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
@@ -1883,8 +1824,7 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; required &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; LogLevel &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.&lt;/p&gt;
-&lt;p&gt;Which matches our &lt;strong&gt;appsettings.json&lt;/strong&gt; structure:&lt;/p&gt;
+&lt;p&gt;Corresponding appsettings.json:&lt;/p&gt;
 &lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token property&quot;&gt;&quot;ConnectionStrings&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token property&quot;&gt;&quot;DefaultConnection&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Server=myserver;Database=mydb;&quot;&lt;/span&gt;
@@ -1893,29 +1833,30 @@ Instructor.LastName as InstructorName &quot;&lt;/span&gt;
     &lt;span class=&quot;token property&quot;&gt;&quot;LogLevel&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Information&quot;&lt;/span&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I prefer this registration approach in &lt;strong&gt;Program.cs&lt;/strong&gt; because it gives you both &lt;code&gt;IOptions&amp;lt;T&amp;gt;&lt;/code&gt; access and direct injection:&lt;/p&gt;
+&lt;p&gt;Register both &lt;code&gt;IOptions&amp;lt;AppSettings&amp;gt;&lt;/code&gt; and the settings object directly:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;Configure&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Configuration&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 builder&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Services&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;AddSingleton&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;x &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token generic-method&quot;&gt;&lt;span class=&quot;token function&quot;&gt;GetRequiredService&lt;/span&gt;&lt;span class=&quot;token generic class-name&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IOptions&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;AppSettings&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Value&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Use in services:&lt;/p&gt;
-&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;p&gt;The dual registration gives you clean injection in most cases, plus &lt;code&gt;IOptions&amp;lt;T&amp;gt;&lt;/code&gt; when you need change notifications.&lt;/p&gt;
+&lt;h2 id=&quot;usage&quot; tabindex=&quot;-1&quot;&gt;Usage &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/#usage&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Constructor injection:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;MyService&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; appSettings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;DoWork&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _appSettings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;token comment&quot;&gt;// ...&lt;/span&gt;
+        &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; appSettings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;// IntelliSense works, no magic strings, no null checks needed&lt;/span&gt;
     &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Use in Blazor SSR Razor file:&lt;/p&gt;
+&lt;p&gt;Blazor pages:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;@inject AppSettings appSettings&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Use in minimal APIs:&lt;/p&gt;
+&lt;p&gt;Minimal APIs:&lt;/p&gt;
 &lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;app&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;MapGet&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/api/status&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;AppSettings&lt;/span&gt; settings&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; 
 &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// Use settings.ConnectionStrings.DefaultConnection for database operations&lt;/span&gt;
-    &lt;span class=&quot;token comment&quot;&gt;// Use settings.Logging.LogLevel for logging configuration&lt;/span&gt;
+    &lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; connectionString &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; settings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectionStrings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;DefaultConnection&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; Results&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Ok&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; Status &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Healthy&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.&lt;/p&gt;
-&lt;p&gt;Using required properties means you&#39;ll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.&lt;/p&gt;
+&lt;h2 id=&quot;why-this-works&quot; tabindex=&quot;-1&quot;&gt;Why this works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/#why-this-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Required properties ensure missing configuration fails fast at startup with clear error messages. Nested classes as inner classes keep related settings grouped and make the hierarchy obvious. The compiler catches configuration problems immediately instead of NullReferenceExceptions deep in production code paths. IntelliSense is available, so no typos in magic strings.&lt;/p&gt;
 </content>
 	</entry>
 	

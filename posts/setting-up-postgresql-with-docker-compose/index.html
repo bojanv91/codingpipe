@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>My PostgreSQL development setup with Docker Compose</title>
+		<title>PostgreSQL development setup with Docker Compose</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -12,7 +12,7 @@
 		<link rel="manifest" href="/site.webmanifest"></link>
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="CodingPipe.com">
 		<link rel="alternate" href="/feed/feed.json" type="application/json" title="CodingPipe.com">
-		<meta name="generator" content="Eleventy v3.1.0">
+		<meta name="generator" content="Eleventy v3.1.2">
 		
 		<style>/**
  * okaidia theme for JavaScript, CSS and HTML
@@ -515,24 +515,22 @@ h1 {
 
 		<main id="skip">
 			
-<h1>My PostgreSQL development setup with Docker Compose</h1>
+<h1>PostgreSQL development setup with Docker Compose</h1>
 
 <ul class="post-metadata">
 	<li><time datetime="2023-08-09">Aug 9, 2023</time></li>
 	<li><span> • </span></li>
-	<li><span>2 min read</span></li>
+	<li><span>1 min read</span></li>
 	<li><span> • </span></li>
 		<li><a href="/tags/postgres/" class="post-tag">Postgres</a> • </li>
 		<li><a href="/tags/docker/" class="post-tag">Docker</a> • </li>
 		<li><a href="/tags/devops/" class="post-tag">DevOps</a></li>
 </ul>
 
-<p>Docker is a great tool for simplifying the installation of applications and services. As well as isolating them from your machine to avoid potential conflicts with other installations. This is especially useful for development machines where you tend to have many services installed in various versions for various projects.</p>
-<p>In this post, we'll install and setup Postgres with Docker Desktop, and we'll configure data persistence in the Docker container.</p>
-<p>Prerequisite for this post is to have <a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> installed.</p>
-<p>First, start Docker Desktop.</p>
-<p>Next, create or choose a folder where your Docker container setup files will be stored. My folder of choice is <code>D:\devops\docker\local_postgres</code>.</p>
-<p>Next, inside your chosen folder, create a <code>docker-compose.yml</code> file and place the following content:</p>
+<p>I needed a shared PostgreSQL instance that's always available for demos, prototypes, and trial projects. Installing Postgres directly means dealing with Windows services, path configurations, and version management across system updates.</p>
+<p>This Docker Compose setup gives me a persistent development database that's isolated from my system but accessible to any project. Perfect for when you want to quickly spin up a demo without setting up project-specific database infrastructure.</p>
+<h2 id="setup" tabindex="-1">Setup <a class="header-anchor" href="#setup">#</a></h2>
+<p>Choose a permanent folder for your PostgreSQL setup (e.g., <code>D:\devops\docker\local_postgres</code> or <code>C:\docker\postgres</code>). Create a <code>docker-compose.yml</code> file there:</p>
 <pre class="language-yml" tabindex="0"><code class="language-yml"><span class="token comment"># docker-compose.yml</span>
 <span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">'3.1'</span>
 <span class="token key atrule">services</span><span class="token punctuation">:</span>
@@ -547,28 +545,25 @@ h1 {
       <span class="token key atrule">POSTGRES_DB</span><span class="token punctuation">:</span> postgres
     <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
        <span class="token punctuation">-</span> ./postgresql<span class="token punctuation">-</span>data<span class="token punctuation">:</span>/var/lib/postgresql/data</code></pre>
-<p>The <code>docker-compose.yml</code> file will download and install the Postgres image, will set the DB engine with the provided environment variables, will bind the internal port <code>5432</code> to an external port <code>15432</code>, and finally will configure an external volume where the Postgres data files be stored and persistent outside of the container. The internal <code>/var/lib/postgresql/data</code> folder will be mapped to our
-<code>postgres-data</code> folder on the disk (or the full path: <code>D:\devops\docker\local_postgres\postgres-data</code>).</p>
-<p>Next, open the Windows terminal in your folder and run the following command:</p>
-<pre><code>docker-compose up
-</code></pre>
-<p>The output will show that Docker is working correctly. You can also inspect the status of your container instance in the Docker Desktop app as well.</p>
-<p>Now you can connect to the container's Postgres database engine using your DB tool of choice (e.g. DBeaver) with the following connection info:</p>
-<pre><code>Host: localhost
+<p>The <code>postgresql-data</code> folder will be created automatically in the same directory as your <code>docker-compose.yml</code> file when you first run the container.</p>
+<p>Run with:</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">docker-compose</span> up</code></pre>
+<p>Connect using:</p>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">Host: localhost
 Port: 15432
 Username: postgres
-Password: postgres
-</code></pre>
-<p>Stopping and restarting the docker container won't cause data loss due the presence of the volume parameter in docker-compose.</p>
+Password: postgres</code></pre>
+<h2 id="why-this-works" tabindex="-1">Why This Works <a class="header-anchor" href="#why-this-works">#</a></h2>
+<p>Port 15432 avoids system Postgres conflicts, <code>./postgresql-data</code> keeps data persistent, and <code>restart: always</code> survives reboots. One shared development database that's always available.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/retry-failed-http-requests-in-dotnet/">HTTP Retry with Flurl and Polly in .NET Core</a></li><li>Next: <a href="/posts/test-specific-appsettings-in-aspnet-core-integration-tests/">Test-Specific AppSettings Configuration in ASP.NET Core integration tests</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/retry-failed-http-requests-in-dotnet/">HTTP Retry with Flurl and Polly in .NET Core</a></li><li>Next: <a href="/posts/test-specific-appsettings-in-aspnet-core-integration-tests/">Test-specific AppSettings configuration in ASP.NET Core integration tests</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/setting-up-postgresql-with-docker-compose/` was built on 2025-05-29T07:17:06.968Z -->
+		<!-- This page `/posts/setting-up-postgresql-with-docker-compose/` was built on 2025-07-23T15:49:06.430Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
