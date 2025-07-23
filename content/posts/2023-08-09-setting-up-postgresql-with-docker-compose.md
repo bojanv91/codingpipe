@@ -1,5 +1,5 @@
 ---
-title: "My PostgreSQL development setup with Docker Compose"
+title: "PostgreSQL development setup with Docker Compose"
 date: 2023-08-09
 dateUpdated: Last Modified
 permalink: /posts/setting-up-postgresql-with-docker-compose/
@@ -10,17 +10,13 @@ tags:
 layout: layouts/post.njk
 ---
 
-Docker is a great tool for simplifying the installation of applications and services. As well as isolating them from your machine to avoid potential conflicts with other installations. This is especially useful for development machines where you tend to have many services installed in various versions for various projects.
+I needed a shared PostgreSQL instance that's always available for demos, prototypes, and trial projects. Installing Postgres directly means dealing with Windows services, path configurations, and version management across system updates.
 
-In this post, we'll install and setup Postgres with Docker Desktop, and we'll configure data persistence in the Docker container.
+This Docker Compose setup gives me a persistent development database that's isolated from my system but accessible to any project. Perfect for when you want to quickly spin up a demo without setting up project-specific database infrastructure.
 
-Prerequisite for this post is to have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+## Setup
 
-First, start Docker Desktop.
-
-Next, create or choose a folder where your Docker container setup files will be stored. My folder of choice is `D:\devops\docker\local_postgres`.
-
-Next, inside your chosen folder, create a `docker-compose.yml` file and place the following content:
+Choose a permanent folder for your PostgreSQL setup (e.g., `D:\devops\docker\local_postgres` or `C:\docker\postgres`). Create a `docker-compose.yml` file there:
 
 ```yml
 # docker-compose.yml
@@ -39,25 +35,23 @@ services:
        - ./postgresql-data:/var/lib/postgresql/data
 ```
 
-The `docker-compose.yml` file will download and install the Postgres image, will set the DB engine with the provided environment variables, will bind the internal port `5432` to an external port `15432`, and finally will configure an external volume where the Postgres data files be stored and persistent outside of the container. The internal `/var/lib/postgresql/data` folder will be mapped to our 
-`postgres-data` folder on the disk (or the full path: `D:\devops\docker\local_postgres\postgres-data`).
+The `postgresql-data` folder will be created automatically in the same directory as your `docker-compose.yml` file when you first run the container.
 
-Next, open the Windows terminal in your folder and run the following command:
+Run with:
 
-```
+```bash
 docker-compose up
 ```
 
-The output will show that Docker is working correctly. You can also inspect the status of your container instance in the Docker Desktop app as well.
+Connect using:
 
-Now you can connect to the container's Postgres database engine using your DB tool of choice (e.g. DBeaver) with the following connection info:
-
-```
+```plaintext
 Host: localhost
 Port: 15432
 Username: postgres
 Password: postgres
 ```
 
-Stopping and restarting the docker container won't cause data loss due the presence of the volume parameter in docker-compose.
+## Why This Works
 
+Port 15432 avoids system Postgres conflicts, `./postgresql-data` keeps data persistent, and `restart: always` survives reboots. One shared development database that's always available.

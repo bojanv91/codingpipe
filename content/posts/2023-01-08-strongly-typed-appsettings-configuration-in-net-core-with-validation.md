@@ -1,16 +1,21 @@
 ---
-title: "Type-Safe AppSettings Configuration in .NET Core"
+title: "Type-safe appsettings configuration in .NET Core"
 date: 2023-01-08
 dateUpdated: Last Modified
-permalink: /posts/type-safe-configuration-in-net-core/
+permalink: /posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/
 tags:
-  - ASP.NET Core
+  - .NET
+  - Configuration
 layout: layouts/post.njk
 ---
 
-Working with configuration in .NET applications, I've seen too many runtime errors caused by typos in configuration keys or missing values that should have been caught earlier. Here's how I use strongly-typed configuration classes to catch these issues at compile time.
+Configuration errors have a special way of ruining your day. You deploy to production, everything looks fine, then a specific code path hits and boom - NullReferenceException because `appSettings["SomeKey"]` returned null or you mistyped the configuration e.g. `appSettings["Somkey"]`.
 
-Let's create a configuration class that matches our **appsettings.json** structure:
+I've been burned by this enough times that I now default to strongly-typed configuration classes with required properties. This catches missing configuration at startup rather than runtime, and gives you IntelliSense when accessing values.
+
+## Setup
+
+Create a configuration class that mirrors your appsettings.json structure:
 
 ```csharp
 public class AppSettings
@@ -30,9 +35,7 @@ public class AppSettings
 }
 ```
 
-In my projects, I structure nested configurations as inner classes like this because it keeps related settings grouped together and makes the configuration hierarchy obvious.
-
-Which matches our **appsettings.json** structure:
+Corresponding appsettings.json:
 
 ```json
 {
@@ -45,43 +48,46 @@ Which matches our **appsettings.json** structure:
 }
 ```
 
-I prefer this registration approach in **Program.cs** because it gives you both `IOptions<T>` access and direct injection:
+Register both `IOptions<AppSettings>` and the settings object directly:
 
 ```csharp
 builder.Services.Configure<AppSettings>(builder.Configuration);
 builder.Services.AddSingleton(x => x.GetRequiredService<IOptions<AppSettings>>().Value);
 ```
 
-Use in services:
+The dual registration gives you clean injection in most cases, plus `IOptions<T>` when you need change notifications.
+
+## Usage
+
+Constructor injection:
 
 ```csharp
-public class MyService(AppSettings _appSettings)
+public class MyService(AppSettings appSettings)
 {
     public void DoWork()
     {
-        var connectionString = _appSettings.ConnectionStrings.DefaultConnection;
-        // ...
+        var connectionString = appSettings.ConnectionStrings.DefaultConnection;
+        // IntelliSense works, no magic strings, no null checks needed
     }
 }
 ```
 
-Use in Blazor SSR Razor file:
+Blazor pages:
 
 ```csharp
 @inject AppSettings appSettings
 ```
 
-Use in minimal APIs:
+Minimal APIs:
 
 ```csharp
 app.MapGet("/api/status", (AppSettings settings) => 
 {
-    // Use settings.ConnectionStrings.DefaultConnection for database operations
-    // Use settings.Logging.LogLevel for logging configuration
+    var connectionString = settings.ConnectionStrings.DefaultConnection;
     return Results.Ok(new { Status = "Healthy" });
 });
 ```
 
-For simple apps with just a few settings, this approach might be overkill. But once you have nested configuration sections or multiple environments, the IntelliSense and compile-time checking become invaluable.
+## Why this works
 
-Using required properties means you'll get a clear error message at startup if configuration is missing, rather than discovering it when that code path executes.
+Required properties ensure missing configuration fails fast at startup with clear error messages. Nested classes as inner classes keep related settings grouped and make the hierarchy obvious. The compiler catches configuration problems immediately instead of NullReferenceExceptions deep in production code paths. IntelliSense is available, so no typos in magic strings.
