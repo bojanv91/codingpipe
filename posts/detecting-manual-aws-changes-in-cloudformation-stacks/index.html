@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Google sheets as your backend: Preserving business logic instead of rebuilding it</title>
+		<title>Detecting Manual AWS Changes in CloudFormation Stacks</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -515,45 +515,75 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Google sheets as your backend: Preserving business logic instead of rebuilding it</h1>
+<h1>Detecting Manual AWS Changes in CloudFormation Stacks</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2025-04-22">Apr 22, 2025</time></li>
+	<li><time datetime="2025-10-13">Oct 13, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>4 min read</span></li>
+	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
-		<li><a href="/tags/architecture/" class="post-tag">Architecture</a> • </li>
-		<li><a href="/tags/software-design/" class="post-tag">Software Design</a></li>
+		<li><a href="/tags/devops/" class="post-tag">DevOps</a></li>
 </ul>
 
-<p>Years ago, I worked on a project with interconnected pricing spreadsheets and a tight deadline. The team had spent years perfecting complex calculations across these sheets, updating formulas monthly based on market conditions. The client needed their sales team to access these calculations via a web application to run calculations and generate quotes, but rebuilding all that Excel logic in code would take months.</p>
-<p>Instead of rewriting their spreadsheet calculations, we kept them exactly where they were and built around them. This approach revealed a key insight: <strong>sometimes the fastest path to a working system is preserving existing expertise rather than rebuilding it</strong>.</p>
-<h2 id="the-core-insight-preserve-business-logic-where-it-lives" tabindex="-1">The core insight: Preserve business logic where it lives <a class="header-anchor" href="#the-core-insight-preserve-business-logic-where-it-lives">#</a></h2>
-<p>When business experts have already built and validated complex calculations in spreadsheets, you have two choices: spend weeks translating their work into code, or build a system that uses their existing work directly. The Google Sheets API makes the second option surprisingly practical.</p>
-<p>This approach works because it separates concerns cleanly. Business experts continue managing calculations using tools they know. Developers focus on building user interfaces and data flow. Both teams work in their area of expertise without stepping on each other.</p>
-<h2 id="how-the-architecture-works" tabindex="-1">How the architecture works <a class="header-anchor" href="#how-the-architecture-works">#</a></h2>
-<p>To implement this insight, the solution connects four components. A template spreadsheet contains all calculations and reporting layouts that business users control. A web interface provides user inputs and displays results. An integration service communicates with the Google Sheets API to create template copies for each session, update cells with user data, retrieve calculated results, and clean up temporary spreadsheets. A security layer handles authentication and permissions.</p>
-<p>Each user session gets its own copy of the template, preventing conflicts while preserving the original formulas. The system passes user inputs to the copy, lets the spreadsheet calculate results, then retrieves the output for display or reporting.</p>
-<h2 id="real-world-implementation-sales-quoting-tool" tabindex="-1">Real-world implementation: Sales quoting tool <a class="header-anchor" href="#real-world-implementation-sales-quoting-tool">#</a></h2>
-<p>Our client's pricing spreadsheets contained years of business expertise. Traditional development would have required translating this domain knowledge into code, then building a change management process for future updates.</p>
-<p>Instead, we preserved their existing workflow. The team continued refining pricing rules directly in the template spreadsheet. Sales agents used a streamlined web interface to input deal parameters. The system generated quotes using the same calculations the team had been perfecting for years, with reporting layouts also built in the spreadsheet. The web application exported these reports to PDF, displayed them to users, and sent them via email.</p>
-<p>The key benefit wasn't just faster delivery, it was keeping the calculation maintenance in the hands of the people who understood it best. When market conditions changed, the team could update pricing rules immediately without waiting for development cycles. Sales agents saw changes instantly through the same web interface.</p>
-<h2 id="when-this-approach-makes-sense" tabindex="-1">When this approach makes sense <a class="header-anchor" href="#when-this-approach-makes-sense">#</a></h2>
-<p>This method works best when business experts already own complex calculations that change frequently. If your stakeholders spend significant time maintaining spreadsheet formulas and you need to make those calculations available to more users quickly, this approach can save months of development time.</p>
-<p>Consider this route when the traditional change-request-to-deployment cycle creates unacceptable delays for business teams, when calculations span multiple interconnected sheets, or when domain experts need direct control over business rules.</p>
-<p>Keep in mind the limitations: Google imposes API rate limits, each call adds latency, and this works best for moderate user volumes. You'll also need proper template permissions and authentication.</p>
-<h2 id="summary" tabindex="-1">Summary <a class="header-anchor" href="#summary">#</a></h2>
-<p>If your business experts already own the calculations and need to keep iterating them, building around their existing work often delivers faster than rebuilding it. The question isn't whether spreadsheets make good databases, it's whether preserving existing expertise makes more sense than recreating it.</p>
-<p>Sometimes the most elegant architecture is the one that works with human expertise instead of replacing it.</p>
+<p>Manual infrastructure changes happen when someone &quot;quickly fixes&quot; something in production through the AWS Console and forgets to update and re-run the CloudFormation code. Someone scales up an RDS instance during an incident. Someone tweaks a security group rule to debug connectivity. Someone changes an environment variable to test a fix.</p>
+<p>The changes work, the immediate problem is solved, and the team forgets. The next day, a routine deployment reverts those undocumented changes. Production breaks, but nobody knows why.</p>
+<p>CloudFormation's drift detection catches these manual changes by comparing your stack template definition against actual resources running in AWS.</p>
+<h2 id="how-drift-detection-works" tabindex="-1">How Drift Detection Works <a class="header-anchor" href="#how-drift-detection-works">#</a></h2>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token comment"># Trigger drift detection</span>
+aws cloudformation detect-stack-drift --stack-name prod-infrastructure
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/power-of-prototyping/">Prototype first, production second</a></li><li>Next: <a href="/posts/system-as-etl-pipeline/">The hidden ETL pipeline in your system</a></li>
+<span class="token comment"># Get the results</span>
+aws cloudformation describe-stack-resource-drifts --stack-name prod-infrastructure</code></pre>
+<p>The first command starts the detection process. The second retrieves the results. For large stacks, detection takes a few seconds to a few minutes.</p>
+<p>When CloudFormation finds drift, the output shows exactly what changed:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"StackResourceDrift"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"StackId"</span><span class="token operator">:</span> <span class="token string">"arn:aws:cloudformation:..."</span><span class="token punctuation">,</span>
+    <span class="token property">"LogicalResourceId"</span><span class="token operator">:</span> <span class="token string">"DatabaseInstance"</span><span class="token punctuation">,</span>
+    <span class="token property">"PhysicalResourceId"</span><span class="token operator">:</span> <span class="token string">"prod-postgres-main"</span><span class="token punctuation">,</span>
+    <span class="token property">"ResourceType"</span><span class="token operator">:</span> <span class="token string">"AWS::RDS::DBInstance"</span><span class="token punctuation">,</span>
+    <span class="token property">"ExpectedProperties"</span><span class="token operator">:</span> <span class="token string">"{\"DBInstanceClass\":\"db.t3.medium\"}"</span><span class="token punctuation">,</span>
+    <span class="token property">"ActualProperties"</span><span class="token operator">:</span> <span class="token string">"{\"DBInstanceClass\":\"db.t3.large\"}"</span><span class="token punctuation">,</span>
+    <span class="token property">"PropertyDifferences"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token property">"PropertyPath"</span><span class="token operator">:</span> <span class="token string">"/DBInstanceClass"</span><span class="token punctuation">,</span>
+        <span class="token property">"ExpectedValue"</span><span class="token operator">:</span> <span class="token string">"db.t3.medium"</span><span class="token punctuation">,</span>
+        <span class="token property">"ActualValue"</span><span class="token operator">:</span> <span class="token string">"db.t3.large"</span><span class="token punctuation">,</span>
+        <span class="token property">"DifferenceType"</span><span class="token operator">:</span> <span class="token string">"NOT_EQUAL"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token property">"StackResourceDriftStatus"</span><span class="token operator">:</span> <span class="token string">"MODIFIED"</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Someone changed the instance class from <code>db.t3.medium</code> to <code>db.t3.large</code>. The code says medium, but AWS is running large.</p>
+<h2 id="what-i-do-with-detected-drift" tabindex="-1">What I Do With Detected Drift <a class="header-anchor" href="#what-i-do-with-detected-drift">#</a></h2>
+<p>Two options when drift is detected:</p>
+<p><strong>Update the code to match reality:</strong> The change was intentional and should be permanent. I update my CloudFormation template to reflect the actual state, commit it, and redeploy.</p>
+<p><strong>Revert the infrastructure:</strong> The change was a temporary fix or a mistake. I redeploy the CloudFormation stack, which reverts the resource to what the template specifies.</p>
+<p>I decide based on why the change happened:</p>
+<ul>
+<li>Performance fix during incident -&gt; update code</li>
+<li>Debug tweak meant to be temporary -&gt; revert infrastructure</li>
+<li>Configuration experiment that worked -&gt; update code</li>
+</ul>
+<h2 id="limitations" tabindex="-1">Limitations <a class="header-anchor" href="#limitations">#</a></h2>
+<p>Drift detection only catches changes to resources CloudFormation manages. If someone creates a new resource outside CloudFormation, drift detection won't find it.</p>
+<hr>
+<p><strong>References:</strong></p>
+<ul>
+<li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html">Detect unmanaged configuration changes to stacks and resources with drift detection - AWS CloudFormation</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html">DetectStackDrift - AWS CloudFormation API Reference</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/detect-drift-stack.html">Detect drift on an entire CloudFormation stack - AWS CloudFormation</a></li>
+</ul>
+
+<ul class="links-nextprev"><li>Previous: <a href="/posts/ef-core-migrations-quick-reference/">EF Core Migrations Quick Reference</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/google-sheets-as-a-backend/` was built on 2025-10-12T22:30:44.530Z -->
+		<!-- This page `/posts/detecting-manual-aws-changes-in-cloudformation-stacks/` was built on 2025-10-12T22:30:44.530Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

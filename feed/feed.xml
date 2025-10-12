@@ -4,12 +4,70 @@
 	<subtitle>Random thoughts about programming and software development</subtitle>
 	<link href="https://codingpipe.com/feed/feed.xml" rel="self"/>
 	<link href="https://codingpipe.com/"/>
-	<updated>2025-07-11T00:00:00Z</updated>
+	<updated>2025-10-13T00:00:00Z</updated>
 	<id>https://codingpipe.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
 		<email>bojanv91+codingpipe@gmail.com</email>
 	</author>
+	
+	<entry>
+		<title>Detecting Manual AWS Changes in CloudFormation Stacks</title>
+		<link href="https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/"/>
+		<updated>2025-10-13T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/</id>
+		<content type="html">&lt;p&gt;Manual infrastructure changes happen when someone &amp;quot;quickly fixes&amp;quot; something in production through the AWS Console and forgets to update and re-run the CloudFormation code. Someone scales up an RDS instance during an incident. Someone tweaks a security group rule to debug connectivity. Someone changes an environment variable to test a fix.&lt;/p&gt;
+&lt;p&gt;The changes work, the immediate problem is solved, and the team forgets. The next day, a routine deployment reverts those undocumented changes. Production breaks, but nobody knows why.&lt;/p&gt;
+&lt;p&gt;CloudFormation&#39;s drift detection catches these manual changes by comparing your stack template definition against actual resources running in AWS.&lt;/p&gt;
+&lt;h2 id=&quot;how-drift-detection-works&quot; tabindex=&quot;-1&quot;&gt;How Drift Detection Works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/#how-drift-detection-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# Trigger drift detection&lt;/span&gt;
+aws cloudformation detect-stack-drift --stack-name prod-infrastructure
+
+&lt;span class=&quot;token comment&quot;&gt;# Get the results&lt;/span&gt;
+aws cloudformation describe-stack-resource-drifts --stack-name prod-infrastructure&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The first command starts the detection process. The second retrieves the results. For large stacks, detection takes a few seconds to a few minutes.&lt;/p&gt;
+&lt;p&gt;When CloudFormation finds drift, the output shows exactly what changed:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;StackResourceDrift&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;StackId&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;arn:aws:cloudformation:...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;LogicalResourceId&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;DatabaseInstance&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;PhysicalResourceId&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;prod-postgres-main&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;ResourceType&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;AWS::RDS::DBInstance&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;ExpectedProperties&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;{&#92;&quot;DBInstanceClass&#92;&quot;:&#92;&quot;db.t3.medium&#92;&quot;}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;ActualProperties&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;{&#92;&quot;DBInstanceClass&#92;&quot;:&#92;&quot;db.t3.large&#92;&quot;}&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;PropertyDifferences&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;PropertyPath&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;/DBInstanceClass&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;ExpectedValue&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;db.t3.medium&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;ActualValue&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;db.t3.large&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;token property&quot;&gt;&quot;DifferenceType&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;NOT_EQUAL&quot;&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;StackResourceDriftStatus&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;MODIFIED&quot;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Someone changed the instance class from &lt;code&gt;db.t3.medium&lt;/code&gt; to &lt;code&gt;db.t3.large&lt;/code&gt;. The code says medium, but AWS is running large.&lt;/p&gt;
+&lt;h2 id=&quot;what-i-do-with-detected-drift&quot; tabindex=&quot;-1&quot;&gt;What I Do With Detected Drift &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/#what-i-do-with-detected-drift&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Two options when drift is detected:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update the code to match reality:&lt;/strong&gt; The change was intentional and should be permanent. I update my CloudFormation template to reflect the actual state, commit it, and redeploy.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Revert the infrastructure:&lt;/strong&gt; The change was a temporary fix or a mistake. I redeploy the CloudFormation stack, which reverts the resource to what the template specifies.&lt;/p&gt;
+&lt;p&gt;I decide based on why the change happened:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Performance fix during incident -&amp;gt; update code&lt;/li&gt;
+&lt;li&gt;Debug tweak meant to be temporary -&amp;gt; revert infrastructure&lt;/li&gt;
+&lt;li&gt;Configuration experiment that worked -&amp;gt; update code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;limitations&quot; tabindex=&quot;-1&quot;&gt;Limitations &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/#limitations&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Drift detection only catches changes to resources CloudFormation manages. If someone creates a new resource outside CloudFormation, drift detection won&#39;t find it.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html&quot;&gt;Detect unmanaged configuration changes to stacks and resources with drift detection - AWS CloudFormation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html&quot;&gt;DetectStackDrift - AWS CloudFormation API Reference&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/detect-drift-stack.html&quot;&gt;Detect drift on an entire CloudFormation stack - AWS CloudFormation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+	</entry>
 	
 	<entry>
 		<title>EF Core Migrations Quick Reference</title>
