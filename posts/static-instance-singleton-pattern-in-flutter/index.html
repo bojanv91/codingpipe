@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Visual Studio 2017 Tips</title>
+		<title>The Static-Instance Singleton Pattern in Flutter</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -515,48 +515,71 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Visual Studio 2017 Tips</h1>
+<h1>The Static-Instance Singleton Pattern in Flutter</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2017-03-09">Mar 9, 2017</time></li>
+	<li><time datetime="2025-10-12">Oct 12, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>2 min read</span></li>
 	<li><span> • </span></li>
+		<li><a href="/tags/flutter/" class="post-tag">Flutter</a> • </li>
+		<li><a href="/tags/software-design/" class="post-tag">Software Design</a></li>
 </ul>
 
-<p>Visual Studio 2017 has shipped. In this post I highlight the top changes from my perspective and the list of all useful extensions I've installed.<!--excerpt--></p>
-<p>For VS2015 extensions, check my <a href="/2016/12/vs2016-extensions/">older post</a>.</p>
-<h2 id="top-5-highlights-from-my-perspective" tabindex="-1">Top 5 Highlights From My Perspective <a class="header-anchor" href="#top-5-highlights-from-my-perspective">#</a></h2>
-<p>To see all new features and changes, check the <a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes">VS2017 release notes</a>. Here is my top list:</p>
+<p>I’ve found a pattern that creates really clean singleton APIs: use static methods for actions that change state, and instance properties for reading data. Session management in mobile apps is a good example of where this shines.</p>
+<h2 id="the-pattern" tabindex="-1">The pattern <a class="header-anchor" href="#the-pattern">#</a></h2>
+<p>Static methods for state changes:</p>
+<pre class="language-dart" tabindex="0"><code class="language-dart"><span class="token keyword">await</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span><span class="token function">login</span><span class="token punctuation">(</span>authToken<span class="token punctuation">:</span> <span class="token string-literal"><span class="token string">'token'</span></span><span class="token punctuation">,</span> username<span class="token punctuation">:</span> <span class="token string-literal"><span class="token string">'user'</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span><span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">await</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span><span class="token function">setDataRegion</span><span class="token punctuation">(</span><span class="token class-name">DataRegion</span><span class="token punctuation">.</span>US<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Instance properties for data access:</p>
+<pre class="language-dart" tabindex="0"><code class="language-dart"><span class="token keyword">final</span> username <span class="token operator">=</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span>username<span class="token punctuation">;</span>
+<span class="token keyword">final</span> isAuth <span class="token operator">=</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span>isAuthenticated<span class="token punctuation">;</span>
+<span class="token keyword">final</span> region <span class="token operator">=</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span>current<span class="token punctuation">.</span>dataRegion<span class="token punctuation">;</span></code></pre>
+<h2 id="why-this-separation-works" tabindex="-1">Why this separation works <a class="header-anchor" href="#why-this-separation-works">#</a></h2>
+<p>I think of it like database operations:</p>
 <ul>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#csharpvb">Support for C# 7</a></li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#coding-convention-support-via-editorconfig">Support for Coding Convention via EditorConfig. Finally!</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#dotnetcore">Stable tools support for .NET Core and ASP.NET Core</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#debug">Improved Exception Helper for Debugging</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#a-idbetternav-aimproved-code-navigation">Improved Code Navigation via &quot;Richer Omnibar&quot;</a>.</li>
+<li>Static methods = Commands (insert, update, delete the singleton)</li>
+<li>Instance properties = Queries (select from current state)</li>
 </ul>
-<h2 id="extensions" tabindex="-1">Extensions <a class="header-anchor" href="#extensions">#</a></h2>
+<h2 id="the-mental-model" tabindex="-1">The mental model <a class="header-anchor" href="#the-mental-model">#</a></h2>
+<p>This distinction makes the API intuitive:</p>
 <ul>
-<li><a href="http://vsrefactoringessentials.com/">Refactoring Essentials</a>. C# analyzers and refactoring proposals.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.AddNewFile">Add New File</a>. Create any type of files via standard templates without touching the mouse. Mapped to Ctrl+Shift+A.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.OpenCommandLine">Open Command Line</a>. Opens CMD in current solution directory. Mapped to Alt+Space.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.PowerCommandsforVisualStudio">PowerCommands is a set of useful extensions for the Visual Studio IDE</a>. Besides the defaults, I've turned on &quot;Format document on save&quot; option.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.TimeStampMargin">Time Stamp Margin</a>. Adds timestamps in the output dialog.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=TomEnglert.ResXManager">ResXManager</a>. Manage localization of all ResX-Based resources in one place. Shows all resources of a solution and let's you edit the strings and their localizations in a well-arranged data grid.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.ProjectFileTools">Project File Tools</a>. Provides Intellisense and other tooling for XML based project files such as .csproj and .vbproj files.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.VuejsPack-18329">Vue.js Pack 2017</a>. Intellisense for Vue.js.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.AureliaPack">Aurelia Pack</a>. A snippet pack to make you more productive working with the Aurelia JavaScript framework.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=frhagn.Typewriter">Typewriter</a>. Typewriter generates TypeScript files from c# code files using TypeScript Templates. This allows you to create fully typed TypeScript representations of server side API that automatically updates when you make changes to your C# code.</li>
+<li>Class-level operations -&gt; Actions that change what the singleton is</li>
+<li>Instance-level access -&gt; Reading what the singleton contains</li>
 </ul>
+<h2 id="implementation" tabindex="-1">Implementation <a class="header-anchor" href="#implementation">#</a></h2>
+<pre class="language-dart" tabindex="0"><code class="language-dart"><span class="token keyword">class</span> <span class="token class-name">UserSession</span> <span class="token punctuation">{</span>
+  <span class="token keyword">static</span> <span class="token class-name">UserSession</span><span class="token operator">?</span> _instance<span class="token punctuation">;</span>
+  
+  <span class="token comment">// ACTIONS: Modify the global singleton</span>
+  <span class="token keyword">static</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token keyword">void</span><span class="token punctuation">></span></span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">{</span>required <span class="token class-name">String</span> authToken<span class="token punctuation">,</span> required <span class="token class-name">String</span> username<span class="token punctuation">}</span><span class="token punctuation">)</span> <span class="token keyword">async</span> <span class="token punctuation">{</span>
+    _instance <span class="token operator">=</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span><span class="token function">_</span><span class="token punctuation">(</span>authToken<span class="token punctuation">:</span> authToken<span class="token punctuation">,</span> username<span class="token punctuation">:</span> username<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">await</span> <span class="token function">_saveToStorage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token keyword">static</span> <span class="token class-name">Future</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token keyword">void</span><span class="token punctuation">></span></span> <span class="token function">logout</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">async</span> <span class="token punctuation">{</span>
+    _instance <span class="token operator">=</span> <span class="token keyword">const</span> <span class="token class-name">UserSession</span><span class="token punctuation">.</span><span class="token function">_empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">await</span> <span class="token function">_clearStorage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  
+  <span class="token comment">// ACCESS: Read from current singleton</span>
+  <span class="token keyword">static</span> <span class="token class-name">UserSession</span><span class="token operator">?</span> <span class="token keyword">get</span> current <span class="token operator">=</span><span class="token operator">></span> _instance<span class="token punctuation">;</span>
+  
+  <span class="token comment">// DATA: Current state properties</span>
+  <span class="token class-name">String</span> <span class="token keyword">get</span> username <span class="token operator">=</span><span class="token operator">></span> <span class="token comment">/* current data */</span><span class="token punctuation">;</span>
+  bool <span class="token keyword">get</span> isAuthenticated <span class="token operator">=</span><span class="token operator">></span> <span class="token comment">/* current status */</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>This pattern creates intuitive APIs where class-level operations change what the singleton is, and instance-level access reads what it contains.</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/vs2016-extensions/">Top Visual Studio 2015 Extensions I Use</a></li><li>Next: <a href="/posts/refactoring-a-feature-envy-code/">Feature envy refactoring - moving methods to their rightful home</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/detecting-manual-aws-changes-in-cloudformation-stacks/">Detecting Manual AWS Changes in CloudFormation Stacks</a></li><li>Next: <a href="/posts/my-cloudformation-template-organization/">My CloudFormation Template Organization</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/visual-studio-2017-notes/` was built on 2025-10-13T20:42:23.715Z -->
+		<!-- This page `/posts/static-instance-singleton-pattern-in-flutter/` was built on 2025-10-13T20:42:23.720Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>

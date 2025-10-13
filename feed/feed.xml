@@ -4,7 +4,7 @@
 	<subtitle>Random thoughts about programming and software development</subtitle>
 	<link href="https://codingpipe.com/feed/feed.xml" rel="self"/>
 	<link href="https://codingpipe.com/"/>
-	<updated>2025-10-13T00:00:00Z</updated>
+	<updated>2025-10-14T00:00:00Z</updated>
 	<id>https://codingpipe.com/</id>
 	<author>
 		<name>Bojan Veljanovski</name>
@@ -12,9 +12,249 @@
 	</author>
 	
 	<entry>
+		<title>Property Getters vs Get Methods: When to Use Which</title>
+		<link href="https://codingpipe.com/posts/property-getters-vs-get-methods-when-to-use-which/"/>
+		<updated>2025-10-14T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/property-getters-vs-get-methods-when-to-use-which/</id>
+		<content type="html">&lt;p&gt;I kept seeing inconsistent patterns in codebases - sometimes &lt;code&gt;obj.property&lt;/code&gt;, sometimes &lt;code&gt;obj.getProperty()&lt;/code&gt;. After refactoring across TypeScript, Dart, and C# projects, here&#39;s the simple rule I follow:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Property getters&lt;/strong&gt; - computed values that feel like properties:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Synchronous computation&lt;/li&gt;
+&lt;li&gt;Pure function (returns the same value for the same state)&lt;/li&gt;
+&lt;li&gt;Feels like accessing a property&lt;/li&gt;
+&lt;li&gt;Fast/instant execution&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Get methods&lt;/strong&gt; - ****operations that do work:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Async operations: needs async/await&lt;/li&gt;
+&lt;li&gt;Might throw exceptions&lt;/li&gt;
+&lt;li&gt;Has side effects (I/O, network, logging, system calls)&lt;/li&gt;
+&lt;li&gt;Can return different values over time&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This pattern keeps my code predictable - if it looks like property access, it acts like one. If it has parentheses, I know it&#39;s doing more work.&lt;/p&gt;
+&lt;h2 id=&quot;examples&quot; tabindex=&quot;-1&quot;&gt;Examples &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/property-getters-vs-get-methods-when-to-use-which/#examples&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Configuration/State Checks:&lt;/p&gt;
+&lt;pre class=&quot;language-tsx&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-tsx&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// TypeScript - frontend config&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppConfig&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;private&lt;/span&gt; _environment&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;isDevelopment&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_environment &lt;span class=&quot;token operator&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;development&#39;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;apiBaseUrl&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;isDevelopment 
+      &lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;http://localhost:3000&#39;&lt;/span&gt; 
+      &lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&#39;https://api.production.com&#39;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// Usage&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; config &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppConfig&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token builtin&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;apiBaseUrl&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;isDevelopment&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;token comment&quot;&gt;// No parentheses&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// Do something&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Async Operations:&lt;/p&gt;
+&lt;pre class=&quot;language-dart&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-dart&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// Dart - platform channels&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppConfig&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;getBuildVersion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; info &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;PackageInfo&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;fromPlatform&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token string-literal&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&#39;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;info&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;version&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;token expression&quot;&gt;info&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;buildNumber&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&#39;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// Usage - must await&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; version &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppConfig&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;getBuildVersion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;setState&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; _buildVersion &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; version&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;File/Network Operations:&lt;/p&gt;
+&lt;pre class=&quot;language-csharp&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-csharp&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// C# - file I/O&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;LogReader&lt;/span&gt; 
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token return-type class-name&quot;&gt;Task&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;IEnumerable&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;FileInfo&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;GetLogFilesAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;string&lt;/span&gt;&lt;/span&gt; directory&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; 
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; Task&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Run&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; 
+            &lt;span class=&quot;token keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;token constructor-invocation class-name&quot;&gt;DirectoryInfo&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;directory&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetFiles&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;*.log&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;OrderByDescending&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;f &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; f&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;LastWriteTime&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// Usage&lt;/span&gt;
+&lt;span class=&quot;token class-name&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt;&lt;/span&gt; logs &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; reader&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GetLogFilesAsync&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;/var/logs&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>My CloudFormation Template Organization</title>
+		<link href="https://codingpipe.com/posts/my-cloudformation-template-organization/"/>
+		<updated>2025-10-13T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/my-cloudformation-template-organization/</id>
+		<content type="html">&lt;p&gt;I needed a repeatable way to deploy web apps on AWS. I developed a baseline structure that works for containerized web apps with a database. Then I modify and tweak it based on specific project requirements.&lt;/p&gt;
+&lt;p&gt;This setup handles VPC networking, ECS Fargate containers, RDS database, and load balancing. It includes ECS auto-scaling configuration and has separate test and prod environments. For my example project, it hosts API, Migrator, and Worker services.&lt;/p&gt;
+&lt;h2 id=&quot;my-template-structure&quot; tabindex=&quot;-1&quot;&gt;My Template Structure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/my-cloudformation-template-organization/#my-template-structure&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-plaintext&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-plaintext&quot;&gt;infrastructure/
+├── cloudformation/
+│   ├── parameters/
+│   │   ├── test.json
+│   │   └── prod.json
+│   ├── 01-base-vpc-networking.json
+│   ├── 02-base-security-groups.json
+│   ├── 03-data-rds.json
+│   ├── 04-compute-ecs-cluster.json
+│   ├── 05-compute-alb.json
+│   └── 06-compute-fargate-scaling.json
+├── ecs/
+│   ├── api-task-definition.json
+│   ├── worker-task-definition.json
+│   └── migrator-task-definition.json
+├── scripts/
+│   ├── deploy-environment.sh
+│   ├── deploy-scaling.sh
+│   ├── setup-secrets.sh
+│   └── resolve-secrets.sh
+└── README.md&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Some notes on the structure:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Traffic flow:&lt;/strong&gt; Internet → ALB (public subnets) → ECS tasks (private subnets) → RDS (private subnets). ECS pulls images from ECR via VPC endpoint. NAT Gateway handles outbound traffic from private subnets.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Numbering enforces deployment order.&lt;/strong&gt; CloudFormation stacks have dependencies. You can&#39;t create an ECS service before the VPC exists. The numbered prefix makes deployment sequence explicit.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;parameters/&lt;/strong&gt; contains environment-specific values, like CIDR blocks, instance sizes, database credentials, anything that differs between test and prod.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ecs/&lt;/strong&gt; contains task definitions for each service (for my project example: API, Worker, Migrator). These define container specs, CPU, memory, env variables, and secrets.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;scripts/&lt;/strong&gt; automates deployment. &lt;code&gt;deploy-environment.sh&lt;/code&gt; deploys stacks 01-05 in sequence. &lt;code&gt;setup-secrets.sh&lt;/code&gt; creates secrets in AWS Secrets Manager during initial setup. &lt;code&gt;resolve-secrets.sh&lt;/code&gt; replaces secret placeholders with actual ARNs before every deployment. &lt;code&gt;deploy-scaling.sh&lt;/code&gt; deploys auto-scaling after services run.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;cloudformation/&lt;/strong&gt; contains the stack templates:
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;01-base-vpc-networking.json&lt;/strong&gt; - VPC, public/private subnets, Internet Gateway, NAT Gateway, VPC endpoints. Exports: VPC ID, subnet IDs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;02-base-security-groups.json&lt;/strong&gt; - Security groups (ALB, ECS, RDS) and IAM roles. Exports: Security group IDs, IAM role ARNs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;03-data-rds.json&lt;/strong&gt; - RDS instance, DB subnet group, Secrets Manager credentials. Exports: Database endpoint&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;04-compute-ecs-cluster.json&lt;/strong&gt; - ECS cluster, ECR repositories, IAM roles, CloudWatch log groups. Exports: Cluster name, ECR URIs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;05-compute-alb.json&lt;/strong&gt; - Application Load Balancer, target groups, SSL certificate, listener rules. Exports: ALB DNS name&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;06-compute-fargate-scaling.json&lt;/strong&gt; - Auto-scaling policies for ECS services. Deploy after services are already running&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;secrets-management&quot; tabindex=&quot;-1&quot;&gt;Secrets Management &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/my-cloudformation-template-organization/#secrets-management&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;setup-secrets.sh&lt;/strong&gt; creates secrets in AWS Secrets Manager during initial setup. Run once per environment.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;resolve-secrets.sh&lt;/strong&gt; replaces secret placeholders with actual ARNs before every deployment. AWS adds random suffixes to secret ARNs:&lt;/p&gt;
+&lt;p&gt;Task definition template:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;secrets&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token property&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ConnectionString&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;token property&quot;&gt;&quot;valueFrom&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;myproject/${ENVIRONMENT}/connection-string&quot;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ECS needs the full ARN including random suffix:&lt;/p&gt;
+&lt;pre class=&quot;language-json&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;secrets&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token property&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ConnectionString&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      &lt;span class=&quot;token property&quot;&gt;&quot;valueFrom&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;arn:aws:secretsmanager:eu-central-1:123456789:secret:myproject/test/connection-string-AbCdEf&quot;&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;resolve-secrets.sh queries AWS for actual ARNs and updates task definitions. Runs automatically in CI/CD.&lt;/p&gt;
+&lt;h2 id=&quot;deploying-the-infrastructure&quot; tabindex=&quot;-1&quot;&gt;Deploying the Infrastructure &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/my-cloudformation-template-organization/#deploying-the-infrastructure&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; infrastructure/scripts
+./deploy-environment.sh &lt;span class=&quot;token builtin class-name&quot;&gt;test&lt;/span&gt; myproject-infra
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The script:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Validates all templates&lt;/li&gt;
+&lt;li&gt;Deploys stacks 01-05 in order, and waits for each stack to complete&lt;/li&gt;
+&lt;li&gt;Uses parameter file from &lt;code&gt;parameters/test.json&lt;/code&gt; or &lt;code&gt;parameters/prod.json&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Outputs DNS configuration info&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After infrastructure deployment:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Run &lt;code&gt;setup-secrets.sh&lt;/code&gt; to create placeholder secrets&lt;/li&gt;
+&lt;li&gt;Update secrets with actual values via AWS CLI or Console&lt;/li&gt;
+&lt;li&gt;Deploy ECS services via GitHub Actions&lt;/li&gt;
+&lt;li&gt;Run &lt;code&gt;deploy-scaling.sh&lt;/code&gt; to configure auto-scaling&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;deploying-the-application&quot; tabindex=&quot;-1&quot;&gt;Deploying the Application &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/my-cloudformation-template-organization/#deploying-the-application&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Application deployment is separate from infrastructure. Infrastructure changes infrequently. Code changes constantly.&lt;/p&gt;
+&lt;p&gt;GitHub Actions workflow:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Build Docker images&lt;/li&gt;
+&lt;li&gt;Push to ECR&lt;/li&gt;
+&lt;li&gt;Run resolve-secrets.sh on task definitions&lt;/li&gt;
+&lt;li&gt;Update ECS task definitions with new image tags&lt;/li&gt;
+&lt;li&gt;Deploy to ECS&lt;/li&gt;
+&lt;li&gt;Wait for deployment completion&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;cleanup&quot; tabindex=&quot;-1&quot;&gt;Cleanup &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/my-cloudformation-template-organization/#cleanup&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Delete stacks in reverse order (06 → 01):&lt;/p&gt;
+&lt;pre class=&quot;language-bash&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;aws cloudformation delete-stack --stack-name myproject-test-compute-fargate-scaling
+aws cloudformation delete-stack --stack-name myproject-test-compute-alb
+aws cloudformation delete-stack --stack-name myproject-test-compute-ecs-cluster
+aws cloudformation delete-stack --stack-name myproject-test-data-rds
+aws cloudformation delete-stack --stack-name myproject-test-base-security-groups
+aws cloudformation delete-stack --stack-name myproject-test-base-vpc-networking
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Manual cleanup needed: S3 buckets (CloudFormation won&#39;t delete non-empty buckets), ECR images, CloudWatch log groups with never-expire retention, Secrets Manager secrets (deletion protection enabled).&lt;/p&gt;
+</content>
+	</entry>
+	
+	<entry>
+		<title>The Static-Instance Singleton Pattern in Flutter</title>
+		<link href="https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/"/>
+		<updated>2025-10-12T00:00:00Z</updated>
+		<id>https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/</id>
+		<content type="html">&lt;p&gt;I’ve found a pattern that creates really clean singleton APIs: use static methods for actions that change state, and instance properties for reading data. Session management in mobile apps is a good example of where this shines.&lt;/p&gt;
+&lt;h2 id=&quot;the-pattern&quot; tabindex=&quot;-1&quot;&gt;The pattern &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/#the-pattern&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Static methods for state changes:&lt;/p&gt;
+&lt;pre class=&quot;language-dart&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-dart&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;authToken&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string-literal&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&#39;token&#39;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; username&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string-literal&quot;&gt;&lt;span class=&quot;token string&quot;&gt;&#39;user&#39;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;setDataRegion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token class-name&quot;&gt;DataRegion&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;US&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Instance properties for data access:&lt;/p&gt;
+&lt;pre class=&quot;language-dart&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-dart&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; username &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;username&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; isAuth &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;isAuthenticated&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;final&lt;/span&gt; region &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;current&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dataRegion&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;why-this-separation-works&quot; tabindex=&quot;-1&quot;&gt;Why this separation works &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/#why-this-separation-works&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I think of it like database operations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Static methods = Commands (insert, update, delete the singleton)&lt;/li&gt;
+&lt;li&gt;Instance properties = Queries (select from current state)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;the-mental-model&quot; tabindex=&quot;-1&quot;&gt;The mental model &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/#the-mental-model&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;This distinction makes the API intuitive:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Class-level operations -&amp;gt; Actions that change what the singleton is&lt;/li&gt;
+&lt;li&gt;Instance-level access -&amp;gt; Reading what the singleton contains&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;implementation&quot; tabindex=&quot;-1&quot;&gt;Implementation &lt;a class=&quot;header-anchor&quot; href=&quot;https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/#implementation&quot;&gt;#&lt;/a&gt;&lt;/h2&gt;
+&lt;pre class=&quot;language-dart&quot; tabindex=&quot;0&quot;&gt;&lt;code class=&quot;language-dart&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; _instance&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;token comment&quot;&gt;// ACTIONS: Modify the global singleton&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;required &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; authToken&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; required &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; username&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    _instance &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;authToken&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; authToken&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; username&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; username&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;_saveToStorage&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;token generics&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    _instance &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;_empty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;_clearStorage&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  
+  &lt;span class=&quot;token comment&quot;&gt;// ACCESS: Read from current singleton&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;UserSession&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt; current &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; _instance&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  
+  &lt;span class=&quot;token comment&quot;&gt;// DATA: Current state properties&lt;/span&gt;
+  &lt;span class=&quot;token class-name&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt; username &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;/* current data */&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  bool &lt;span class=&quot;token keyword&quot;&gt;get&lt;/span&gt; isAuthenticated &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;/* current status */&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This pattern creates intuitive APIs where class-level operations change what the singleton is, and instance-level access reads what it contains.&lt;/p&gt;
+</content>
+	</entry>
+	
+	<entry>
 		<title>Detecting Manual AWS Changes in CloudFormation Stacks</title>
 		<link href="https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/"/>
-		<updated>2025-10-13T00:00:00Z</updated>
+		<updated>2025-10-11T00:00:00Z</updated>
 		<id>https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/</id>
 		<content type="html">&lt;p&gt;Manual infrastructure changes happen when someone &amp;quot;quickly fixes&amp;quot; something in production through the AWS Console and forgets to update and re-run the CloudFormation code. Someone scales up an RDS instance during an incident. Someone tweaks a security group rule to debug connectivity. Someone changes an environment variable to test a fix.&lt;/p&gt;
 &lt;p&gt;The changes work, the immediate problem is solved, and the team forgets. The next day, a routine deployment reverts those undocumented changes. Production breaks, but nobody knows why.&lt;/p&gt;

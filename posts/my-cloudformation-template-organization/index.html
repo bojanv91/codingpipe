@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Visual Studio 2017 Tips</title>
+		<title>My CloudFormation Template Organization</title>
 		<meta name="description" content="Random thoughts about programming and software development">
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"></link>
@@ -515,48 +515,130 @@ h1 {
 
 		<main id="skip">
 			
-<h1>Visual Studio 2017 Tips</h1>
+<h1>My CloudFormation Template Organization</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2017-03-09">Mar 9, 2017</time></li>
+	<li><time datetime="2025-10-13">Oct 13, 2025</time></li>
 	<li><span> • </span></li>
-	<li><span>1 min read</span></li>
+	<li><span>5 min read</span></li>
 	<li><span> • </span></li>
+		<li><a href="/tags/devops/" class="post-tag">DevOps</a></li>
 </ul>
 
-<p>Visual Studio 2017 has shipped. In this post I highlight the top changes from my perspective and the list of all useful extensions I've installed.<!--excerpt--></p>
-<p>For VS2015 extensions, check my <a href="/2016/12/vs2016-extensions/">older post</a>.</p>
-<h2 id="top-5-highlights-from-my-perspective" tabindex="-1">Top 5 Highlights From My Perspective <a class="header-anchor" href="#top-5-highlights-from-my-perspective">#</a></h2>
-<p>To see all new features and changes, check the <a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes">VS2017 release notes</a>. Here is my top list:</p>
+<p>I needed a repeatable way to deploy web apps on AWS. I developed a baseline structure that works for containerized web apps with a database. Then I modify and tweak it based on specific project requirements.</p>
+<p>This setup handles VPC networking, ECS Fargate containers, RDS database, and load balancing. It includes ECS auto-scaling configuration and has separate test and prod environments. For my example project, it hosts API, Migrator, and Worker services.</p>
+<h2 id="my-template-structure" tabindex="-1">My Template Structure <a class="header-anchor" href="#my-template-structure">#</a></h2>
+<pre class="language-plaintext" tabindex="0"><code class="language-plaintext">infrastructure/
+├── cloudformation/
+│   ├── parameters/
+│   │   ├── test.json
+│   │   └── prod.json
+│   ├── 01-base-vpc-networking.json
+│   ├── 02-base-security-groups.json
+│   ├── 03-data-rds.json
+│   ├── 04-compute-ecs-cluster.json
+│   ├── 05-compute-alb.json
+│   └── 06-compute-fargate-scaling.json
+├── ecs/
+│   ├── api-task-definition.json
+│   ├── worker-task-definition.json
+│   └── migrator-task-definition.json
+├── scripts/
+│   ├── deploy-environment.sh
+│   ├── deploy-scaling.sh
+│   ├── setup-secrets.sh
+│   └── resolve-secrets.sh
+└── README.md</code></pre>
+<p>Some notes on the structure:</p>
 <ul>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#csharpvb">Support for C# 7</a></li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#coding-convention-support-via-editorconfig">Support for Coding Convention via EditorConfig. Finally!</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#dotnetcore">Stable tools support for .NET Core and ASP.NET Core</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#debug">Improved Exception Helper for Debugging</a>.</li>
-<li><a href="https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes#a-idbetternav-aimproved-code-navigation">Improved Code Navigation via &quot;Richer Omnibar&quot;</a>.</li>
-</ul>
-<h2 id="extensions" tabindex="-1">Extensions <a class="header-anchor" href="#extensions">#</a></h2>
+<li><strong>Traffic flow:</strong> Internet → ALB (public subnets) → ECS tasks (private subnets) → RDS (private subnets). ECS pulls images from ECR via VPC endpoint. NAT Gateway handles outbound traffic from private subnets.</li>
+<li><strong>Numbering enforces deployment order.</strong> CloudFormation stacks have dependencies. You can't create an ECS service before the VPC exists. The numbered prefix makes deployment sequence explicit.</li>
+<li><strong>parameters/</strong> contains environment-specific values, like CIDR blocks, instance sizes, database credentials, anything that differs between test and prod.</li>
+<li><strong>ecs/</strong> contains task definitions for each service (for my project example: API, Worker, Migrator). These define container specs, CPU, memory, env variables, and secrets.</li>
+<li><strong>scripts/</strong> automates deployment. <code>deploy-environment.sh</code> deploys stacks 01-05 in sequence. <code>setup-secrets.sh</code> creates secrets in AWS Secrets Manager during initial setup. <code>resolve-secrets.sh</code> replaces secret placeholders with actual ARNs before every deployment. <code>deploy-scaling.sh</code> deploys auto-scaling after services run.</li>
+<li><strong>cloudformation/</strong> contains the stack templates:
 <ul>
-<li><a href="http://vsrefactoringessentials.com/">Refactoring Essentials</a>. C# analyzers and refactoring proposals.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.AddNewFile">Add New File</a>. Create any type of files via standard templates without touching the mouse. Mapped to Ctrl+Shift+A.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.OpenCommandLine">Open Command Line</a>. Opens CMD in current solution directory. Mapped to Alt+Space.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.PowerCommandsforVisualStudio">PowerCommands is a set of useful extensions for the Visual Studio IDE</a>. Besides the defaults, I've turned on &quot;Format document on save&quot; option.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.TimeStampMargin">Time Stamp Margin</a>. Adds timestamps in the output dialog.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=TomEnglert.ResXManager">ResXManager</a>. Manage localization of all ResX-Based resources in one place. Shows all resources of a solution and let's you edit the strings and their localizations in a well-arranged data grid.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.ProjectFileTools">Project File Tools</a>. Provides Intellisense and other tooling for XML based project files such as .csproj and .vbproj files.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.VuejsPack-18329">Vue.js Pack 2017</a>. Intellisense for Vue.js.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=MadsKristensen.AureliaPack">Aurelia Pack</a>. A snippet pack to make you more productive working with the Aurelia JavaScript framework.</li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=frhagn.Typewriter">Typewriter</a>. Typewriter generates TypeScript files from c# code files using TypeScript Templates. This allows you to create fully typed TypeScript representations of server side API that automatically updates when you make changes to your C# code.</li>
+<li><strong>01-base-vpc-networking.json</strong> - VPC, public/private subnets, Internet Gateway, NAT Gateway, VPC endpoints. Exports: VPC ID, subnet IDs</li>
+<li><strong>02-base-security-groups.json</strong> - Security groups (ALB, ECS, RDS) and IAM roles. Exports: Security group IDs, IAM role ARNs</li>
+<li><strong>03-data-rds.json</strong> - RDS instance, DB subnet group, Secrets Manager credentials. Exports: Database endpoint</li>
+<li><strong>04-compute-ecs-cluster.json</strong> - ECS cluster, ECR repositories, IAM roles, CloudWatch log groups. Exports: Cluster name, ECR URIs</li>
+<li><strong>05-compute-alb.json</strong> - Application Load Balancer, target groups, SSL certificate, listener rules. Exports: ALB DNS name</li>
+<li><strong>06-compute-fargate-scaling.json</strong> - Auto-scaling policies for ECS services. Deploy after services are already running</li>
 </ul>
+</li>
+</ul>
+<h2 id="secrets-management" tabindex="-1">Secrets Management <a class="header-anchor" href="#secrets-management">#</a></h2>
+<p><strong>setup-secrets.sh</strong> creates secrets in AWS Secrets Manager during initial setup. Run once per environment.</p>
+<p><strong>resolve-secrets.sh</strong> replaces secret placeholders with actual ARNs before every deployment. AWS adds random suffixes to secret ARNs:</p>
+<p>Task definition template:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"secrets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"ConnectionString"</span><span class="token punctuation">,</span>
+      <span class="token property">"valueFrom"</span><span class="token operator">:</span> <span class="token string">"myproject/${ENVIRONMENT}/connection-string"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>ECS needs the full ARN including random suffix:</p>
+<pre class="language-json" tabindex="0"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"secrets"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"ConnectionString"</span><span class="token punctuation">,</span>
+      <span class="token property">"valueFrom"</span><span class="token operator">:</span> <span class="token string">"arn:aws:secretsmanager:eu-central-1:123456789:secret:myproject/test/connection-string-AbCdEf"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>resolve-secrets.sh queries AWS for actual ARNs and updates task definitions. Runs automatically in CI/CD.</p>
+<h2 id="deploying-the-infrastructure" tabindex="-1">Deploying the Infrastructure <a class="header-anchor" href="#deploying-the-infrastructure">#</a></h2>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token builtin class-name">cd</span> infrastructure/scripts
+./deploy-environment.sh <span class="token builtin class-name">test</span> myproject-infra
+</code></pre>
+<p>The script:</p>
+<ul>
+<li>Validates all templates</li>
+<li>Deploys stacks 01-05 in order, and waits for each stack to complete</li>
+<li>Uses parameter file from <code>parameters/test.json</code> or <code>parameters/prod.json</code></li>
+<li>Outputs DNS configuration info</li>
+</ul>
+<p>After infrastructure deployment:</p>
+<ol>
+<li>Run <code>setup-secrets.sh</code> to create placeholder secrets</li>
+<li>Update secrets with actual values via AWS CLI or Console</li>
+<li>Deploy ECS services via GitHub Actions</li>
+<li>Run <code>deploy-scaling.sh</code> to configure auto-scaling</li>
+</ol>
+<h2 id="deploying-the-application" tabindex="-1">Deploying the Application <a class="header-anchor" href="#deploying-the-application">#</a></h2>
+<p>Application deployment is separate from infrastructure. Infrastructure changes infrequently. Code changes constantly.</p>
+<p>GitHub Actions workflow:</p>
+<ol>
+<li>Build Docker images</li>
+<li>Push to ECR</li>
+<li>Run resolve-secrets.sh on task definitions</li>
+<li>Update ECS task definitions with new image tags</li>
+<li>Deploy to ECS</li>
+<li>Wait for deployment completion</li>
+</ol>
+<h2 id="cleanup" tabindex="-1">Cleanup <a class="header-anchor" href="#cleanup">#</a></h2>
+<p>Delete stacks in reverse order (06 → 01):</p>
+<pre class="language-bash" tabindex="0"><code class="language-bash">aws cloudformation delete-stack --stack-name myproject-test-compute-fargate-scaling
+aws cloudformation delete-stack --stack-name myproject-test-compute-alb
+aws cloudformation delete-stack --stack-name myproject-test-compute-ecs-cluster
+aws cloudformation delete-stack --stack-name myproject-test-data-rds
+aws cloudformation delete-stack --stack-name myproject-test-base-security-groups
+aws cloudformation delete-stack --stack-name myproject-test-base-vpc-networking
+</code></pre>
+<p>Manual cleanup needed: S3 buckets (CloudFormation won't delete non-empty buckets), ECR images, CloudWatch log groups with never-expire retention, Secrets Manager secrets (deletion protection enabled).</p>
 
-<ul class="links-nextprev"><li>Previous: <a href="/posts/vs2016-extensions/">Top Visual Studio 2015 Extensions I Use</a></li><li>Next: <a href="/posts/refactoring-a-feature-envy-code/">Feature envy refactoring - moving methods to their rightful home</a></li>
+<ul class="links-nextprev"><li>Previous: <a href="/posts/static-instance-singleton-pattern-in-flutter/">The Static-Instance Singleton Pattern in Flutter</a></li><li>Next: <a href="/posts/property-getters-vs-get-methods-when-to-use-which/">Property Getters vs Get Methods: When to Use Which</a></li>
 </ul>
 
 		</main>
 
 		<footer></footer>
 
-		<!-- This page `/posts/visual-studio-2017-notes/` was built on 2025-10-13T20:42:23.715Z -->
+		<!-- This page `/posts/my-cloudformation-template-organization/` was built on 2025-10-13T20:42:23.721Z -->
 
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8XNG7PNDG"></script>
