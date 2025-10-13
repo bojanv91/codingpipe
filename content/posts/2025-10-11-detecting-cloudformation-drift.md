@@ -1,9 +1,8 @@
 ---
 title: "Detecting Manual AWS Changes in CloudFormation Stacks"
-date: 2025-10-13
+date: 2025-10-11
 dateUpdated: Last Modified
 permalink: /posts/detecting-manual-aws-changes-in-cloudformation-stacks/
-
 tags:
   - DevOps
 layout: layouts/post.njk
