@@ -1,5 +1,5 @@
 {
-	"name": "codingpipe",
+	"name": "bojanv.dev",
 	"version": "8.0.0",
 	"scripts": {
 		"build": "npx @11ty/eleventy",

@@ -192,7 +192,7 @@ Tech stack:
 
 ## Other
 
-- I blog on [https://codingpipe.com/](https://codingpipe.com/) when time allows.
+- I blog on [https://bojanv.dev/](https://bojanv.dev/) when time allows.
 - Did several tech talks at local meetups and conferences:
   - "Real-world software design practices when developing ASP.NET web systems" - Code Camp (November 2014, Skopje)
   - "Single Page Applications with AngularJS, ASP.NET WebAPI and MongoDB" -  Informatijada (October 2014, Ohrid)
