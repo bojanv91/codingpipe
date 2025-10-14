@@ -2,357 +2,357 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 	
 	<url>
-		<loc>https://codingpipe.com/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/</loc>
+		<loc>https://bojanv.dev/posts/database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition/</loc>
 		<lastmod>2014-12-12</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/getting-started-with-rhino-security-structuremap/</loc>
+		<loc>https://bojanv.dev/posts/getting-started-with-rhino-security-structuremap/</loc>
 		<lastmod>2015-01-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/</loc>
+		<loc>https://bojanv.dev/posts/towards-good-enough-code-re-factoring-business-rule-check-specification-pattern/</loc>
 		<lastmod>2015-09-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/feature-folders-structure-in-asp-net/</loc>
+		<loc>https://bojanv.dev/posts/feature-folders-structure-in-asp-net/</loc>
 		<lastmod>2016-05-27</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/global-day-of-coderetreat-2016-haselt-macedonia/</loc>
+		<loc>https://bojanv.dev/posts/global-day-of-coderetreat-2016-haselt-macedonia/</loc>
 		<lastmod>2016-10-27</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/vs2016-extensions/</loc>
+		<loc>https://bojanv.dev/posts/vs2016-extensions/</loc>
 		<lastmod>2016-12-31</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/visual-studio-2017-notes/</loc>
+		<loc>https://bojanv.dev/posts/visual-studio-2017-notes/</loc>
 		<lastmod>2017-03-09</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/refactoring-a-feature-envy-code/</loc>
+		<loc>https://bojanv.dev/posts/refactoring-a-feature-envy-code/</loc>
 		<lastmod>2017-07-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/extending-select2-with-adapters/</loc>
+		<loc>https://bojanv.dev/posts/extending-select2-with-adapters/</loc>
 		<lastmod>2017-10-24</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/select-n-plus-1-problem/</loc>
+		<loc>https://bojanv.dev/posts/select-n-plus-1-problem/</loc>
 		<lastmod>2018-06-10</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</loc>
+		<loc>https://bojanv.dev/posts/strongly-typed-appsettings-configuration-in-net-core-with-validation/</loc>
 		<lastmod>2023-01-08</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/</loc>
+		<loc>https://bojanv.dev/posts/building-dynamic-sql-queries-in-dotnet-using-sqlkata/</loc>
 		<lastmod>2023-01-23</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/retry-failed-http-requests-in-dotnet/</loc>
+		<loc>https://bojanv.dev/posts/retry-failed-http-requests-in-dotnet/</loc>
 		<lastmod>2023-08-08</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/setting-up-postgresql-with-docker-compose/</loc>
+		<loc>https://bojanv.dev/posts/setting-up-postgresql-with-docker-compose/</loc>
 		<lastmod>2023-08-09</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</loc>
+		<loc>https://bojanv.dev/posts/test-specific-appsettings-in-aspnet-core-integration-tests/</loc>
 		<lastmod>2023-08-10</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/overriding-services-in-aspnet-core-integration-tests/</loc>
+		<loc>https://bojanv.dev/posts/overriding-services-in-aspnet-core-integration-tests/</loc>
 		<lastmod>2023-08-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/exporting-c-objects-to-excel-with-closedxml/</loc>
+		<loc>https://bojanv.dev/posts/exporting-c-objects-to-excel-with-closedxml/</loc>
 		<lastmod>2023-08-12</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/a-step-by-step-example-in-pseudocode-driven-programming/</loc>
+		<loc>https://bojanv.dev/posts/a-step-by-step-example-in-pseudocode-driven-programming/</loc>
 		<lastmod>2023-08-13</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</loc>
+		<loc>https://bojanv.dev/posts/configuring-serilog-in-net-core-worker-and-windows-service-applications/</loc>
 		<lastmod>2023-08-18</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/powershell-snippets/</loc>
+		<loc>https://bojanv.dev/posts/powershell-snippets/</loc>
 		<lastmod>2023-12-05</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/problem-solving-guide-for-developers/</loc>
+		<loc>https://bojanv.dev/posts/problem-solving-guide-for-developers/</loc>
 		<lastmod>2024-02-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/aws-cli-cheatsheet/</loc>
+		<loc>https://bojanv.dev/posts/aws-cli-cheatsheet/</loc>
 		<lastmod>2024-02-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/chocolatey-cheatsheet/</loc>
+		<loc>https://bojanv.dev/posts/chocolatey-cheatsheet/</loc>
 		<lastmod>2024-02-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/npm-nvm-cheatsheet/</loc>
+		<loc>https://bojanv.dev/posts/npm-nvm-cheatsheet/</loc>
 		<lastmod>2024-02-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/postgresql-cheatsheet/</loc>
+		<loc>https://bojanv.dev/posts/postgresql-cheatsheet/</loc>
 		<lastmod>2024-02-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/rabbitmq-cheatsheet/</loc>
+		<loc>https://bojanv.dev/posts/rabbitmq-cheatsheet/</loc>
 		<lastmod>2024-02-29</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/ssh-windows-snippets/</loc>
+		<loc>https://bojanv.dev/posts/ssh-windows-snippets/</loc>
 		<lastmod>2024-03-31</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/testing-problemdetails-in-aspnetcore-integration-tests/</loc>
+		<loc>https://bojanv.dev/posts/testing-problemdetails-in-aspnetcore-integration-tests/</loc>
 		<lastmod>2024-08-10</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/use-enums-over-booleans/</loc>
+		<loc>https://bojanv.dev/posts/use-enums-over-booleans/</loc>
 		<lastmod>2024-10-30</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/serilog-correlationid-background-task/</loc>
+		<loc>https://bojanv.dev/posts/serilog-correlationid-background-task/</loc>
 		<lastmod>2025-03-23</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/complex-loops-to-transformation-pipelines/</loc>
+		<loc>https://bojanv.dev/posts/complex-loops-to-transformation-pipelines/</loc>
 		<lastmod>2025-04-20</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/power-of-prototyping/</loc>
+		<loc>https://bojanv.dev/posts/power-of-prototyping/</loc>
 		<lastmod>2025-04-21</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/google-sheets-as-a-backend/</loc>
+		<loc>https://bojanv.dev/posts/google-sheets-as-a-backend/</loc>
 		<lastmod>2025-04-22</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/system-as-etl-pipeline/</loc>
+		<loc>https://bojanv.dev/posts/system-as-etl-pipeline/</loc>
 		<lastmod>2025-04-23</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/what-makes-code-unmaintainable/</loc>
+		<loc>https://bojanv.dev/posts/what-makes-code-unmaintainable/</loc>
 		<lastmod>2025-04-24</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/ef-core-migrations-quick-reference/</loc>
+		<loc>https://bojanv.dev/posts/ef-core-migrations-quick-reference/</loc>
 		<lastmod>2025-07-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/detecting-manual-aws-changes-in-cloudformation-stacks/</loc>
+		<loc>https://bojanv.dev/posts/detecting-manual-aws-changes-in-cloudformation-stacks/</loc>
 		<lastmod>2025-10-11</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/static-instance-singleton-pattern-in-flutter/</loc>
+		<loc>https://bojanv.dev/posts/static-instance-singleton-pattern-in-flutter/</loc>
 		<lastmod>2025-10-12</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/my-cloudformation-template-organization/</loc>
+		<loc>https://bojanv.dev/posts/my-cloudformation-template-organization/</loc>
 		<lastmod>2025-10-13</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/posts/property-getters-vs-get-methods-when-to-use-which/</loc>
+		<loc>https://bojanv.dev/posts/property-getters-vs-get-methods-when-to-use-which/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/about/</loc>
+		<loc>https://bojanv.dev/about/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/</loc>
+		<loc>https://bojanv.dev/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/links/</loc>
+		<loc>https://bojanv.dev/links/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/</loc>
+		<loc>https://bojanv.dev/tags/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/c/</loc>
+		<loc>https://bojanv.dev/tags/c/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/devops/</loc>
+		<loc>https://bojanv.dev/tags/devops/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/code/</loc>
+		<loc>https://bojanv.dev/tags/code/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/software-design/</loc>
+		<loc>https://bojanv.dev/tags/software-design/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/event/</loc>
+		<loc>https://bojanv.dev/tags/event/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/refactoring/</loc>
+		<loc>https://bojanv.dev/tags/refactoring/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/javascript/</loc>
+		<loc>https://bojanv.dev/tags/javascript/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/data-access/</loc>
+		<loc>https://bojanv.dev/tags/data-access/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net/</loc>
+		<loc>https://bojanv.dev/tags/net/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/configuration/</loc>
+		<loc>https://bojanv.dev/tags/configuration/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/asp-net-core/</loc>
+		<loc>https://bojanv.dev/tags/asp-net-core/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/postgres/</loc>
+		<loc>https://bojanv.dev/tags/postgres/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/docker/</loc>
+		<loc>https://bojanv.dev/tags/docker/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/testing/</loc>
+		<loc>https://bojanv.dev/tags/testing/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/code-snippet/</loc>
+		<loc>https://bojanv.dev/tags/code-snippet/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/serilog/</loc>
+		<loc>https://bojanv.dev/tags/serilog/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/powershell/</loc>
+		<loc>https://bojanv.dev/tags/powershell/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/snippets/</loc>
+		<loc>https://bojanv.dev/tags/snippets/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/productivity/</loc>
+		<loc>https://bojanv.dev/tags/productivity/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/net-core/</loc>
+		<loc>https://bojanv.dev/tags/net-core/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/logging/</loc>
+		<loc>https://bojanv.dev/tags/logging/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/architecture/</loc>
+		<loc>https://bojanv.dev/tags/architecture/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/software/</loc>
+		<loc>https://bojanv.dev/tags/software/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/design/</loc>
+		<loc>https://bojanv.dev/tags/design/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/ef-core/</loc>
+		<loc>https://bojanv.dev/tags/ef-core/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/reference/</loc>
+		<loc>https://bojanv.dev/tags/reference/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 	
 	<url>
-		<loc>https://codingpipe.com/tags/flutter/</loc>
+		<loc>https://bojanv.dev/tags/flutter/</loc>
 		<lastmod>2025-10-14</lastmod>
 	</url>
 </urlset>
