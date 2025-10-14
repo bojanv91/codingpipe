@@ -24,7 +24,7 @@
 &lt;li&gt;Feels like accessing a property&lt;/li&gt;
 &lt;li&gt;Fast/instant execution&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Get methods&lt;/strong&gt; - ****operations that do work:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Get methods&lt;/strong&gt; - operations that do work:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Async operations: needs async/await&lt;/li&gt;
 &lt;li&gt;Might throw exceptions&lt;/li&gt;
