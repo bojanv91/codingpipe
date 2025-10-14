@@ -17,7 +17,7 @@ I kept seeing inconsistent patterns in codebases - sometimes `obj.property`, som
 - Feels like accessing a property
 - Fast/instant execution
 
-**Get methods** - ****operations that do work:
+**Get methods** - operations that do work:
 
 - Async operations: needs async/await
 - Might throw exceptions
