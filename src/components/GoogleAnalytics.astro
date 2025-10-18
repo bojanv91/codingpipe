@@ -10,15 +10,12 @@ const isLocalhost = Astro.url.hostname === "localhost" || Astro.url.hostname ===
   googleAnalyticsId && isProduction && !isLocalhost && (
     <Fragment>
       <script
-        is:inline
-        type="text/partytown"
+        async
         src=`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
       ></script>
-      <script is:inline type="text/partytown" define:vars={{ googleAnalyticsId }}>
+      <script is:inline define:vars={{ googleAnalyticsId }}>
         window.dataLayer = window.dataLayer || [];
-        function gtag(...args) {
-          dataLayer.push(args);
-        }
+        function gtag(...args){dataLayer.push(args);}
         gtag("js", new Date());
         gtag("config", googleAnalyticsId);
       </script>
