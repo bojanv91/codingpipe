@@ -21,7 +21,15 @@ const isLocalhost = Astro.url.hostname === "localhost" || Astro.url.hostname ===
         }
         gtag("js", new Date());
         gtag("config", googleAnalyticsId, {
-          send_page_view: true
+          send_page_view: false  // Disable automatic page views for View Transitions
+        });
+        
+        // Send page view on initial load
+        gtag("event", "page_view");
+        
+        // Send page view on each navigation with View Transitions
+        document.addEventListener("astro:page-load", () => {
+          gtag("event", "page_view");
         });
       </script>
     </Fragment>
