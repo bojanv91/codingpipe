@@ -40,7 +40,6 @@ Standardize at the ingestion boundary:
 
 ![The solution](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-solution.png)
 
-
 Transform incoming readings to Celsius before saving:
 
 ```plaintext
