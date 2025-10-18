@@ -1,0 +1,16 @@
+graph LR
+    A[Sensor A22.5°C] --> D[Database Mixed Units]
+    B[Sensor B72°F] --> D
+    C[Sensor C295.65K] --> D
+    D --> E[Dashboard Convert to °C]
+    D --> F[Reports Convert to °C]
+    D --> G[API Convert to °C]
+
+graph LR
+    A[Sensor A22.5°C] --> N[Normalize to Celsius]
+    B[Sensor B72°F] --> N
+    C[Sensor C295.65K] --> N
+    N --> D[Database Celsius Only]
+    D --> E[Dashboard Direct Read]
+    D --> F[Reports Direct Read]
+    D --> G[API Direct Read]
