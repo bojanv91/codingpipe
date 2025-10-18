@@ -21,16 +21,18 @@ const isLocalhost = Astro.url.hostname === "localhost" || Astro.url.hostname ===
         }
         gtag("js", new Date());
         gtag("config", googleAnalyticsId, {
-          send_page_view: false  // Disable automatic page views for View Transitions
+          send_page_view: true  // This will work automatically now (when View Transitions are off)
+          //send_page_view: false  // Disable automatic page views for View Transitions
         });
         
+        {/* Don't need event handlers when NOT using View Transitions
         // Send page view on initial load
         gtag("event", "page_view");
         
         // Send page view on each navigation with View Transitions
         document.addEventListener("astro:page-load", () => {
           gtag("event", "page_view");
-        });
+        }); */}
       </script>
     </Fragment>
   )
