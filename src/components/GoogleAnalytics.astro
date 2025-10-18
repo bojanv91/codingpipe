@@ -1,0 +1,27 @@
+---
+import { SITE } from "@/config";
+const googleAnalyticsId = SITE.googleAnalyticsId;
+const isProduction = import.meta.env.PROD;
+const isLocalhost = Astro.url.hostname === "localhost" || Astro.url.hostname === "127.0.0.1";
+---
+
+<!-- Google tag (gtag.js) -->
+{
+  googleAnalyticsId && isProduction && !isLocalhost && (
+    <Fragment>
+      <script
+        is:inline
+        type="text/partytown"
+        src=`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`
+      ></script>
+      <script is:inline type="text/partytown" define:vars={{ googleAnalyticsId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(...args) {
+          dataLayer.push(args);
+        }
+        gtag("js", new Date());
+        gtag("config", googleAnalyticsId);
+      </script>
+    </Fragment>
+  )
+}
