@@ -1,6 +1,6 @@
 ---
 title: "Standardize Data at Write Time, Not Read Time"
-pubDatetime: 2025-10-17
+pubDatetime: 2025-10-18
 description: "Why I normalize data from multiple sources when saving to the database, not when displaying it. Using IoT temperature monitoring as a practical example."
 slug: standardize-data-at-write-time-not-read-time
 tags:
