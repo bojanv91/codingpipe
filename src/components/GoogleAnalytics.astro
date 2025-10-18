@@ -15,9 +15,14 @@ const isLocalhost = Astro.url.hostname === "localhost" || Astro.url.hostname ===
       ></script>
       <script is:inline define:vars={{ googleAnalyticsId }}>
         window.dataLayer = window.dataLayer || [];
-        function gtag(...args){dataLayer.push(args);}
+        function gtag(){
+          // eslint-disable-next-line prefer-rest-params
+          dataLayer.push(arguments);
+        }
         gtag("js", new Date());
-        gtag("config", googleAnalyticsId);
+        gtag("config", googleAnalyticsId, {
+          send_page_view: true
+        });
       </script>
     </Fragment>
   )
