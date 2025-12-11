@@ -32,11 +32,11 @@ Now every component that reads this data needs conversion logic:
 
 ![The problem](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-problem.png)
 
-Conversion logic scattered across dashboards, reports, and APIs. When aggregations are needed, the system converts in SQL with CASE statements before calculating which requires duplicating conversion logic.
+You end up with conversion logic scattered across dashboards, reports, and APIs. When you need aggregations, you're converting in SQL with CASE statements before calculating - duplicating conversion logic in yet another place. I've debugged conversion bugs in five different components. Fixing one doesn't fix the others.
 
 ## The Solution
 
-Standardize at the ingestion boundary:
+I standardize at the ingestion boundary:
 
 ![The solution](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-solution.png)
 
@@ -53,10 +53,8 @@ Right: Standardized units
 └────────┴───────────┴───────┴─────────┘
 ```
 
-Queries work correctly. Aggregations produce meaningful results. Conversion logic lives in one place. When a bug needs fixing, I update the ingestion layer, not dozens of components.
+Queries work without conversion logic. Aggregations produce meaningful results directly - AVG(value) calculates correctly without CASE statements. The conversion logic lives in the ingestion layer where you can test and maintain it centrally. When you need to fix a rounding bug, you update one place and redeploy, not hunt through dozens of components.
 
 ## Other Applications
 
-I've seen the same pattern in fitness apps integrating multiple smartwatch providers. One provider sends pace as seconds per kilometer, another as decimal minutes per kilometer, a third as pace per mile. Storing these mixed formats means conversion logic scattered across leaderboards, personal records, and pace zone calculations. Standardizing to seconds per kilometer at ingestion makes everything downstream work correctly.
-
-Same applies to any multi-source integration. Any ETL pipeline or system integration benefits from standardizing at write time, not read time.
+The pattern applies to any multi-source integration. ETL pipelines, API aggregation layers, and system integration points all benefit from standardizing at write time rather than read time.

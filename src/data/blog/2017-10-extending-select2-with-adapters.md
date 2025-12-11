@@ -10,9 +10,9 @@ tags:
 draft: false
 ---
 
-Starting from version 4.0, the Select2 jQuery plugin uses the adapter pattern as a way for developers to extend its features and behavior. Having implemented very custom select-based components, I can assure you that this is very powerful and useful feature.<!--excerpt-->
+Select2's adapter pattern (introduced in version 4.0) lets you extend its features and behavior. I've built custom select components for dashboards and search UIs using this approach.
 
-Unfortunately, the docs about this feature do not include concrete usage examples, so it's quite difficult to get started, to understand how to use it, and how to build on top of it - especially if you haven't worked with jQuery plugins for a while. So, this article offers usage examples and describes how to use Select2 [adapters and decorators](https://select2.org/advanced/adapters-and-decorators) feature.<!--excerpt-->
+The docs skip implementation examples. This article shows how to build custom [adapters and decorators](https://select2.org/advanced/adapters-and-decorators).
 
 ## What are adapters and decorators in Select2?
 
@@ -22,7 +22,7 @@ Decorator, attach additional responsibilities to an object dynamically. For exam
 
 Select2 has several built-in adapters that can be used, overridden, and modified. You can find them explained in the [advanced section in the docs](https://select2.org/advanced/default-adapters), and their source code in the [GitHub repository](https://github.com/select2/select2/tree/062c6c3af5f0f39794c34c0a343a3857e587cc97/src/js/select2). For example, here is how `SelectionAdapter` is implemented ([link to source file](https://github.com/select2/select2/blob/062c6c3af5f0f39794c34c0a343a3857e587cc97/src/js/select2/selection/single.js)).
 
-From the internal use of the adapters in select2 source code you can actually re-use and adapt their code in your apps. This is the approach that helped me to better understand how to use this feature.
+I learn adapter patterns by reading Select2's source code. The internal implementations show practical patterns you can reuse in your own apps.
 
 You can take total control of the appearance and behavior of select2-based elements in your web apps by learning and exposing the full potential of this feature.
 
@@ -45,9 +45,9 @@ $.fn.select2.amd.define("CustomSelectionAdapter",
 );
 ```
 
-This piece of code defines a custom `SelectionAdapter`. It should be executed only once. Usually it is called from application start, just after external libraries (like jQuery, Select2) are loaded, or just before it's first usage, in a lazy-execution way. For single-page applications, the lazy-execution is preferred approach.
+This defines a custom `SelectionAdapter`. I execute this once at application start, right after loading jQuery and Select2. In single-page apps, I use lazy execution - define the adapter just before first use.
 
-Custom adapters can be used when constructing select2 elements, by *requiring* the AMD module in which they are defined to the select2 configuration API. Bellow is an example where the already defined custom selection adapter is used.
+Custom adapters can be used when constructing select2 elements, by *requiring* the AMD module in which they are defined to the select2 configuration API. Here's how you use the adapter we just defined:
 
 ```typescript
 $(htmlElement).select2({
@@ -57,6 +57,8 @@ $(htmlElement).select2({
 ```
 
 Now, the `htmlElement` will be transformed to a select2 element with customized *selection* interface and behavior, as defined in `CustomSelectionAdapter`. Besides customizing the `selectionAdapter`, you can customize also the `resultsAdapter`, `dataAdapter`, `ajaxAdapter`, `resultsAdapter`, and `dropdownAdapter`.
+
+**Critical gotcha:** EventRelay must be in the decorator chain or selection events fail silently. I've debugged this multiple times when custom adapters stopped firing `selected` and `change` events. You'll see EventRelay included in the examples below.
 
 ## Example: Custom multiple select
 
