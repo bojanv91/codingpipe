@@ -1,5 +1,5 @@
 ---
-title: "Don't Use Navigation Properties in EF Core"
+title: "Don't use navigation properties in EF Core"
 pubDatetime: 2025-12-11
 description: "How avoiding navigation properties in EF Core eliminates N+1 queries and makes data dependencies explicit."
 slug: no-navigation-properties-ef-core
