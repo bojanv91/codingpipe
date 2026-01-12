@@ -1,4 +1,4 @@
-# codingpipe blog (<https://bojanv.dev/>)
+# codingpipe blog (<https://codingpipe.com/>)
 
 Prerequisites is to install npm via nvm.
 

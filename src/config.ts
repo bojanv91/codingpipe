@@ -1,9 +1,9 @@
 export const SITE = {
-  website: "https://bojanv.dev/", // replace this with your deployed domain
+  website: "https://codingpipe.com/", // replace this with your deployed domain
   author: "Bojan Veljanovski",
-  profile: "https://bojanv.dev/",
+  profile: "https://codingpipe.com/",
   desc: "Bojan Veljanovski's Tech Blog.",
-  title: "bojanv.dev",
+  title: "codingpipe.com",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
   googleAnalyticsId: "G-V8XNG7PNDG",
