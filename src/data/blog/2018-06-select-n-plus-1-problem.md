@@ -4,9 +4,7 @@ description: "A deep dive into diagnosing and fixing the N+1 query anti-pattern 
 pubDatetime: 2018-06-10
 slug: select-n-plus-1-problem
 tags:
-  - database
-  - performance
-  - orm
+  - data
 draft: false
 ---
 

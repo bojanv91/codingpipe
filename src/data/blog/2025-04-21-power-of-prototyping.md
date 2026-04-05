@@ -1,63 +1,34 @@
 ---
-title: "Prototype first, production second"
-description: "How prototyping reduces development risk by allowing safe experimentation and validation before making production changes, with practical examples and best practices."
+title: "Build the throwaway prototype first"
+description: "Before integrating unfamiliar code into production, explore it in a throwaway project first."
 pubDatetime: 2025-04-21
 slug: power-of-prototyping
 tags:
   - practices
-  - design
-  - architecture
 draft: false
 ---
 
-When working with unfamiliar or complex codebases, building a quick prototype in a separate project can save you time and reduce risks before making production changes. With modern AI tools, you can create prototypes much faster than before.
+Something I reach for before touching production in unfamiliar territory: a prototype project.
 
-## Why Build a Prototype?
+**When to prototype:** Unfamiliar SDK. Complex refactoring with unclear blast radius. Performance uncertainty. Any integration where you don't know what you don't know yet.
 
-A prototype gives you a safe space to experiment without breaking existing code:
-
-- **Better understanding** - Test your approach in isolation to fully grasp how it works
-- **Lower risk** - Find technical limitations and issues early, before touching production code
-- **Accurate planning** - Give better time estimates based on actual experience
-- **Clearer communication** - Show stakeholders something concrete instead of just explaining ideas
-
-## How to Create Effective Prototypes
-
-Create a dedicated prototype project structure:
+**Structure:** Keep prototypes in a dedicated folder inside your solution:
 
 ```plaintext
 YourSolution/
 └── Prototypes/
-    ├── NewIntegration.Tests/
     ├── EmailApiTrial/
-    ├── UIPlayground/
-    ├── RefactoringProposal02/
+    ├── NewSdkExploration/
+    ├── RefactoringProposal/
     └── PerformanceBenchmarks/
 ```
 
-Keep prototypes minimal, disposable, self-contained, and documented. Test only what you need to understand, don't worry about code quality, avoid production dependencies, and capture what you learned.
+**Constraints:** Minimal, disposable, self-contained. Document what you learned, not how the code works. Don't carry production quality expectations in here.
 
-**After prototyping, bring the concepts to production code, not the prototype code itself.**
+**Bring concepts, not code.** The output of a prototype is understanding. When you're done, production code gets written from scratch using what you learned — not copy-pasted from the prototype.
 
-## Just Start Prototyping
+**With AI:** LLMs accelerate prototyping significantly. For a new SDK: _"Generate a C# test project that exercises [SDK] authentication, main API calls, and error handling."_ You get scaffolding in seconds. From there, test error cases, check limits, understand the failure modes before committing to an abstraction.
 
-You don't need special approval to create a prototype. A few hours of prototyping can prevent weeks of problems. When stakeholders want fast delivery, prototyping actually saves time.
+**Why it saves time:** A few hours of prototyping surfaces technical limits and wrong assumptions before they become production bugs. Estimates get more accurate. Design decisions get grounded in something real rather than what you imagined the SDK would do.
 
-The most effective developers make prototyping a regular practice. When faced with unfamiliar code, complex design decisions, or integration uncertainties, create a quick prototype first, then make production changes with confidence.
-
-## Example: Testing a New SDK
-
-Instead of immediately creating abstractions for an SDK you don't understand:
-
-1. Create a prototype project
-2. Use AI to generate scaffolding: "Generate a C# test project that explores the key features of [SDK], including authentication, main API calls, and error handling"
-3. Try different SDK features directly
-4. Test error cases and limits
-5. Understand how the SDK actually works
-6. Then design your production integration based on what you learned
-
-This lets you experiment freely before committing to a design in your production codebase.
-
-## Summary
-
-Hours or days of prototyping can prevent weeks of production issues. Create separate projects where you can safely explore unfamiliar code and accelerate learning without risk.
+**TLDR:** Create a throwaway project and explore there first. The prototype teaches you what to build. Then build it properly.

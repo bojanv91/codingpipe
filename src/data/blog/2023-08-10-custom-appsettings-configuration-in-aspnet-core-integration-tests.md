@@ -5,8 +5,6 @@ description: "How to properly configure and manage test-specific application set
 slug: test-specific-appsettings-in-aspnet-core-integration-tests
 tags:
   - dotnet
-  - testing
-  - configuration
 draft: false
 ---
 

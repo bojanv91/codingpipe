@@ -3,7 +3,7 @@ title: "Don't treat code like magic"
 pubDatetime: 2025-12-12
 description: "Why you should reproduce problems reliably, document your investigation, test assumptions, and map dependencies before implementing fixes."
 slug: dont-treat-code-like-magic
-tags: [debugging, practices, software-engineering]
+tags: [practices]
 ---
 
 I refuse to implement solutions I don't understand. When code behaves unexpectedly, I don't reach for quick fixes.

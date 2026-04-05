@@ -5,8 +5,7 @@ description: "A comprehensive guide on implementing database versioning with Flu
 slug: database-development-guide-for-dotnet-teams-with-fluentmigrator-2014-edition
 tags:
   - dotnet
-  - databases
-  - deployment
+  - data
 ---
 
 I have been thinking a lot lately about how properly and simply to implement database versioning strategy. These years I've experienced working with different types of database setup and furthermore researched and analyzed some more approaches and tools regarding this topic. In this posting I write about my findings and why I like Fluent Migrator as a help tool in order to get the job done. But first, let's talk about the _goals_ we try to achieve. <!--excerpt-->
@@ -203,6 +202,3 @@ In VersionInfo table you can see the "commits".
 (example: class M201411131015\_created\_all\_initial\_tables { .. }
 - MSBuildMigrationRunner.proj, ConnectionStrings.config, MSBuildMigrator.Migrate.bat are stored in Migration project root folder
 
----
-
-Happy coding folks! Having questions or concerns? Shoot me a tweet -> @bojanv91

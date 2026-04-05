@@ -4,9 +4,7 @@ pubDatetime: 2015-09-29
 description: "A practical guide to implementing the Specification pattern for cleaner and more maintainable business rule validation in your code."
 slug: towards-good-enough-code-re-factoring-business-rule-check-specification-pattern
 tags:
-  - patterns
-  - refactoring
-  - architecture
+  - design
 draft: false
 ---
 

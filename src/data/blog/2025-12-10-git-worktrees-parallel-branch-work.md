@@ -3,7 +3,7 @@ title: "Git worktrees for parallel branch work"
 pubDatetime: 2025-12-10
 description: "Using git worktrees to work on multiple branches simultaneously without managing local file changes."
 slug: git-worktrees-parallel-branch-work
-tags: [git, practices]
+tags: [devops]
 ---
 
 I discovered git worktrees, a feature that's been in git for years but I only learned about recently.

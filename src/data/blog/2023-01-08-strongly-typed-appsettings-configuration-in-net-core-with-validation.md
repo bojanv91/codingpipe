@@ -5,8 +5,6 @@ description: "Implementing strongly-typed configuration in .NET Core application
 slug: strongly-typed-appsettings-configuration-in-net-core-with-validation
 tags:
   - dotnet
-  - configuration
-  - validation
 draft: false
 ---
 

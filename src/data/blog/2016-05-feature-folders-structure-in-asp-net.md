@@ -5,8 +5,7 @@ description: "How to organize ASP.NET MVC5 projects using feature folders for be
 slug: feature-folders-structure-in-asp-net
 tags:
   - dotnet
-  - architecture
-  - web
+  - design
 draft: false
 ---
 

@@ -5,8 +5,6 @@ description: "How to implement and manage correlation IDs in background tasks us
 slug: serilog-correlationid-background-task
 tags:
   - dotnet
-  - logging
-  - debugging
 draft: false
 ---
 

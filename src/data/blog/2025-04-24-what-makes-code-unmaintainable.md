@@ -5,8 +5,6 @@ description: "A comprehensive guide to identifying and avoiding common practices
 slug: what-makes-code-unmaintainable
 tags:
   - practices
-  - quality
-  - maintenance
 draft: false
 ---
 

@@ -4,9 +4,7 @@ description: "A practical guide to identifying and fixing Feature Envy code smel
 pubDatetime: 2017-07-24
 slug: refactoring-a-feature-envy-code
 tags:
-  - csharp
-  - refactoring
-  - patterns
+  - design
 draft: false
 ---
 

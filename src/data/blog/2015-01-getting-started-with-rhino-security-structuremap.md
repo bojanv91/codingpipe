@@ -5,8 +5,6 @@ description: "A comprehensive guide to integrating Rhino Security with Structure
 slug: getting-started-with-rhino-security-structuremap
 tags:
   - dotnet
-  - security
-  - dependency-injection
 draft: false
 ---
 

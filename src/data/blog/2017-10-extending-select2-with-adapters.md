@@ -4,9 +4,7 @@ description: "A guide to extending Select2's functionality using its adapter and
 pubDatetime: 2017-10-24
 slug: extending-select2-with-adapters
 tags:
-  - javascript
-  - ui
-  - patterns
+  - design
 draft: false
 ---
 

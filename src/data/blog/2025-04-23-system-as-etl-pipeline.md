@@ -1,27 +1,26 @@
 ---
-title: The hidden ETL pipeline in your system
+title: Your system is an ETL pipeline
 pubDatetime: 2025-04-23
 description: "Understanding how most software systems inherently function as ETL pipelines and how to leverage this perspective for better system design."
 slug: system-as-etl-pipeline
 tags:
-  - architecture
+  - design
   - data
-  - patterns
 draft: false
 ---
 
-I worked on a connected devices project where mobile app communicated with hardware devices via Bluetooth, processed raw data sent from different device manufacturers and sent it to cloud services in a standardized format. During development, I realized one part of the system was functioning as an ETL pipeline, but it was not originally designed as one.
+Working on a connected devices project, I kept adjusting the mobile app's data handling — buffering reads from hardware, normalizing formats across manufacturers, batching uploads to the cloud. It felt like plumbing. It was plumbing. It took me longer than I'd like to admit to name what I was building: an ETL pipeline.
 
-This reminded me of a security system I had worked on years earlier. Edge controllers collected data from card readers and door locks (also from different manufacturers), then sent it to the cloud for storage and real-time reporting. These controllers extracted data from different hardware types, transformed multiple formats into one standard format, and loaded everything to cloud services. We had deliberately designed this sub-system as an ETL pipeline.
+Years earlier I'd built one deliberately. Edge controllers in a security system collected data from card readers and door locks across different manufacturers, normalized everything into one format, and pushed it to the cloud for storage and reporting. Extract, transform, load. We called it an ETL pipeline from day one.
 
-Both systems followed the same pattern: extract, transform, load. The mobile app in our connected device project was performing the exact same role as those edge controllers.
+The mobile app was doing the same thing. I just hadn't named it.
 
-Recognizing this pattern opened up opportunities to improve the existing system. The mobile app was our transformation engine. Local storage existed for reliability, not offline functionality. The data transformation rules were our most valuable code. This let us improve each part separately: extract data from devices reliably, transform it more efficiently, and optimize the load to servers.
+Naming it changed how I thought about the system. Local storage wasn't an offline feature — it was the extraction buffer. The normalization code was the transformation layer, and the most valuable part of the codebase. The upload logic was the load step. Once I saw it that way, each piece had a clear job and could be improved independently.
 
-It also clarified architectural decisions. Reporting belonged at the backend where data was already processed and aggregated, not on devices or mobile app.
+It also resolved an argument we'd been having. The team wanted reporting on the device. I kept resisting without being able to say exactly why. The reason: reporting belongs where data is already aggregated — at the backend, after the load step. Putting it earlier means working with incomplete, un-normalized data.
 
-While both systems sent data back down (settings and configurations), this was separate from the ETL process. Keeping these concerns apart made the design cleaner.
+There was bidirectional data too — settings and configuration pushed back down to devices. That's not ETL. Keeping it separate kept the design clean.
 
-Seeing this as ETL opened up standard optimizations: batching data before sending, cleaning up glitches, removing duplicates, and compressing data for efficient transfer.
+Once the pattern was named, standard ETL optimizations became obvious: batch before sending, deduplicate, compress. Not novel solutions — just solutions we already knew, applied to a problem we finally recognized.
 
-What looked like a unique technical challenge was actually a familiar problem in disguise. The key was recognizing the pattern and applying proven solutions.
+Most data-moving systems are ETL pipelines. The ones that weren't designed as one are just unnamed ones.

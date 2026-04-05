@@ -4,46 +4,37 @@ pubDatetime: 2025-10-18
 description: "Why I normalize data from multiple sources when saving to the database, not when displaying it. Using IoT temperature monitoring as a practical example."
 slug: standardize-data-at-write-time-not-read-time
 tags:
-  - practices
-  - databases
-  - architecture
+  - design
+  - data
 ---
 
-I've worked with systems where the same database field stores different value formats depending on which external API sent the data. For example, temperature readings might be 22.5 from one sensor, 72 from another, and 295.65 from a third. They mean entirely different things. Every query needs logic to convert based on source.
+I've debugged the same conversion bug in five different components. Each one fixed independently. Each one free to drift apart again.
 
-Converting for user preferences at display time is fine. Storing inconsistent formats from different sources is the problem. This is where the [Canonical Data Model](https://www.enterpriseintegrationpatterns.com/patterns/messaging/CanonicalDataModel.html) pattern applies: **standardize during writes to the database, not during reads. The database stores values in one standard format. Reads don't need to know how external sources formatted their data.**
-
-## The Problem
-
-I work with a system that aggregates sensor data from multiple IoT vendors. Each vendor sends temperature in their preferred format:
+The system aggregates sensor data from multiple IoT vendors. Each sends temperature in a different unit:
 
 ```plaintext
-Wrong: Mixed units stored as-is
-┌────────┬───────────┬───────┬──────────┐
-│ id     │ sensor_id │ value │ unit     │
-├────────┼───────────┼───────┼──────────┤
-│ 1      │ A-101     │ 22.5  │ celsius  │
-│ 2      │ B-202     │ 72    │ fahrenheit│
-│ 3      │ C-303     │ 295.65│ kelvin   │
-└────────┴───────────┴───────┴──────────┘
+Mixed units stored as-is
+┌────────┬───────────┬───────┬────────────┐
+│ id     │ sensor_id │ value │ unit       │
+├────────┼───────────┼───────┼────────────┤
+│ 1      │ A-101     │ 22.5  │ celsius    │
+│ 2      │ B-202     │ 72    │ fahrenheit │
+│ 3      │ C-303     │ 295.65│ kelvin     │
+└────────┴───────────┴───────┴────────────┘
 ```
 
-Now every component that reads this data needs conversion logic:
+Every component that reads this data carries its own conversion logic. Dashboards convert. Reports convert. SQL aggregations convert — CASE statements before every AVG. When a rounding error surfaces, you find it in one place and miss it in four others.
 
 ![The problem](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-problem.png)
 
-You end up with conversion logic scattered across dashboards, reports, and APIs. When you need aggregations, you're converting in SQL with CASE statements before calculating - duplicating conversion logic in yet another place. I've debugged conversion bugs in five different components. Fixing one doesn't fix the others.
+---
 
-## The Solution
+The fix isn't in the reads. It's in the writes.
 
-I standardize at the ingestion boundary:
-
-![The solution](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-solution.png)
-
-Transform incoming readings to Celsius before saving:
+Transform incoming readings to a standard unit at the ingestion boundary. Before anything touches the database, convert to Celsius:
 
 ```plaintext
-Right: Standardized units
+Standardized to Celsius
 ┌────────┬───────────┬───────┬─────────┐
 │ id     │ sensor_id │ value │ unit    │
 ├────────┼───────────┼───────┼─────────┤
@@ -53,8 +44,12 @@ Right: Standardized units
 └────────┴───────────┴───────┴─────────┘
 ```
 
-Queries work without conversion logic. Aggregations produce meaningful results directly - AVG(value) calculates correctly without CASE statements. The conversion logic lives in the ingestion layer where you can test and maintain it centrally. When you need to fix a rounding bug, you update one place and redeploy, not hunt through dozens of components.
+![The solution](/img/2025-10-18-standardize-data-at-write-time-not-read-time/the-solution.png)
 
-## Other Applications
+Queries work without conversion logic. AVG(value) calculates correctly. The conversion logic lives in one layer — testable, deployable, fixable once.
 
-The pattern applies to any multi-source integration. ETL pipelines, API aggregation layers, and system integration points all benefit from standardizing at write time rather than read time.
+---
+
+This isn't specific to IoT. ETL pipelines, API aggregation layers, any integration point pulling from multiple sources - it's the same pattern. Standardize at the boundary. The database stores one format. Reads don't need to know how the data arrived.
+
+The conversion bug you keep finding in new places isn't a bug. It's a write-time decision you didn't make.

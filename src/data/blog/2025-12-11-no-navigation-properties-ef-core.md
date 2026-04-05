@@ -1,9 +1,9 @@
 ---
-title: "Don't use navigation properties in EF Core"
+title: "EF navigation properties hide your queries"
 pubDatetime: 2025-12-11
 description: "How avoiding navigation properties in EF Core eliminates N+1 queries and makes data dependencies explicit."
 slug: no-navigation-properties-ef-core
-tags: [dotnet, ef-core, practices]
+tags: [dotnet, data]
 ---
 
 I use foreign key IDs. Not navigation properties.
@@ -27,34 +27,50 @@ public class Order
 }
 ```
 
-## Why
+Navigation properties hide database calls. `order.Customer.Name` looks like property access, but triggers a query. `order.Customer.Status = "inactive"` looks like a field set — `SaveChanges()` updates two records. `Include()` on an order with 10 items and 3 payments returns 30 rows, order data duplicated across each.
 
-Navigation properties hide database calls. `order.Customer.Name` looks like property access, but triggers a query.
+The problem isn't performance alone. It's that none of this is visible at the call site.
 
-You can accidentally modify related entities. Change `order.Customer.Status` and SaveChanges() updates both records. With foreign keys, you load and save explicitly.
+---
 
-Include() creates cartesian products. An order with 10 items and 3 payments returns 30 rows—order data duplicated in each row.
+Early in my career, I worked on a project where navigation properties were everywhere. N+1 problems accumulated silently and only surfaced under production load.
 
-## The real problem
-
-I've debugged code like this:
+I've seen code like this more than once:
 
 ```csharp
 public void RecalculatePrice() 
 {
-    foreach (var item in this.Items)          // query
+    foreach (var item in this.Items)      // query
     {
-        var price = item.Product.Price;       // query
-        // calculations
-        item.Price = calculatedPrice;         // marks for update
+        var price = item.Product.Price;   // query per item
+        item.Price = calculatedPrice;     // marks for update
     }
 }
 ```
 
-Looks clean. It's a cascade of hidden queries. Hard to test without full object graphs.
+It looks like a clean domain method. It's a cascade of hidden queries. And it's untestable without a full object graph loaded.
 
-## What I learned
+---
 
-Early in my career, I've worked on a project where the team used navigation properties everywhere. The codebase accumulated N+1 problems that only appeared under production load. In consulting/agencies where team members rotate frequently, explicit code (queries in our case) causes fewer bugs. New developers see exactly what data loads and where.
+With foreign key IDs, you load explicitly:
+
+```csharp
+var items = await _db.OrderItems
+    .Where(i => i.OrderId == order.Id)
+    .ToListAsync();
+
+var productIds = items.Select(i => i.ProductId).ToList();
+
+var prices = await _db.Products
+    .Where(p => productIds.Contains(p.Id))
+    .Select(p => new { p.Id, p.Price })
+    .ToDictionaryAsync(p => p.Id, p => p.Price);
+```
+
+Two queries, both visible, both testable with a mocked `DbContext`. The data dependency is in the code, not in EF Core's change tracker.
+
+---
+
+In consulting, teams rotate. A new developer sees `order.Customer.Name` and has no idea what fires underneath. With explicit loads, they see exactly what hits the database and where.
 
 Performance problems show in code review, not production.

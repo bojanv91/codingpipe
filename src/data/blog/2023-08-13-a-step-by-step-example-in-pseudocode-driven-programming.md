@@ -4,9 +4,7 @@ pubDatetime: 2023-08-13
 description: "A practical demonstration of pseudocode-driven development for designing maintainable software, with a real-world example from requirements to implementation."
 slug: a-step-by-step-example-in-pseudocode-driven-programming
 tags:
-  - design
   - practices
-  - programming
 draft: false
 ---
 

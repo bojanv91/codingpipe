@@ -1,48 +1,54 @@
 ---
 title: Problem-solving guide for developers
 pubDatetime: 2024-02-11
-description: "A systematic framework for tackling complex programming challenges, with practical strategies and mental models for efficient problem analysis and resolution."
+description: "The four-step process I use to understand programming problems, choose an approach, implement safely, and improve the result without wasting time."
 slug: problem-solving-guide-for-developers
 tags:
   - practices
-  - productivity
-  - programming
 draft: false
 ---
 
-Jumping straight into writing code without understanding the problem clearly often leads to wasted time and effort. A structured approach helps avoid this common pitfall.
+I used to lose a lot of time by starting implementation too early. I would make progress fast for an hour, then realize I had solved the wrong problem or picked an approach that made the rest of the work harder than it needed to be.
 
-A couple of years ago I discovered George Pólya's "How to Solve It." The ideas from his book helped me categorize and describe a similar process I was already using. Here's the four-step process:
+Over time I noticed I was following the same pattern whenever I solved hard problems well. It comes down to four steps:
 
-1. **Analyze** - Understand the problem
-2. **Plan** - Determine how to resolve the problem  
-3. **Implement** and test your solution incrementally
-4. **Review** and refine your solution
+1. **Analyze**: understand the problem
+2. **Plan**: decide how to solve it
+3. **Implement**: ship in small, testable steps
+4. **Review**: check the result and refine it
 
 ## Step 1: Analyze - understand the problem
 
-I start by defining the problem clearly, often rewriting the problem statement until I truly understand it. For complex problems, I break them down into smaller, manageable pieces.
+I start by restating the problem in my own words. If I cannot explain what is broken, missing, or risky in one or two plain sentences, I am usually not ready to code.
 
-When dealing with bugs, I focus on reproduction first. Can I reproduce it locally? Is it environment-specific or tied to particular data state? For third-party library issues, I create prototypes and PoCs to reproduce problems in isolation, dive into official documentation and GitHub issues using specific error messages, and leverage Google searches and LLM tools for additional context.
+For bugs, reproduction comes first. Can I reproduce it locally? Does it happen only with certain data? Is it specific to one environment? Until I can answer those questions, everything else is guesswork.
 
-For new features, I read all related specs and explore the existing codebase in that area. This helps me understand the problem better and ask informed questions.
+For third-party library issues, I usually build a tiny prototype before touching production code. That tells me whether the problem is in my code, in my assumptions, or in the library itself. It also gives me a much better search query for docs, issue trackers, and source code.
 
-The key is knowing when to stop analyzing and avoid analysis paralysis.
+For features, I read the spec, inspect the existing code in that area, and look for nearby patterns that the team already trusts. That helps me ask better questions before I start building.
+
+The important part is to stop once the problem is clear enough. Analysis is useful until it becomes procrastination.
 
 ## Step 2: Plan - determine how to resolve the problem
 
-I use prototyping (or you may call it spiking, PoC-ing, experimenting, investigating, etc.) as a key tool for learning and determining multiple approaches to find the best solution. I brainstorm possible solutions and involve my team in evaluating each option's pros, cons, and trade-offs within our business context.
+I use prototypes to learn fast. Sometimes I need to answer a design question, sometimes I need to measure performance, and sometimes I just need to prove that an idea works before I commit to it.
 
-After prototyping and evaluation, I create solution designs (tech specs) or brief implementation plans depending on team maturity and system complexity. Sometimes that's two paragraphs, sometimes a diagram, and sometimes a dozen pages with various diagrams and references.
+Once I understand the options, I compare them against the constraints that actually matter: delivery time, complexity, failure modes, team familiarity, and long-term maintenance.
+
+Then I write down a plan. Sometimes that is a short note with three implementation steps. Sometimes it is a larger design document with diagrams and trade-offs. The format matters less than the outcome: I want a plan that makes the next coding step obvious.
 
 ## Step 3: Implement and test incrementally
 
-I start with the simplest or most critical piece and write working code. Small, testable changes work better than big rewrites. I test each iteration and use debugging tools, logging, and automated tests to catch issues before QA or users do.
+I start with the smallest slice that proves I am moving in the right direction. That might be a failing test, a narrow refactoring, or the most critical piece of behavior.
 
-Communication with the team and adjusting the plan as needed keeps the implementation on track.
+Small changes are easier to reason about, easier to review, and easier to roll back. They also reveal bad assumptions early, before those assumptions spread through the rest of the implementation.
+
+As I go, I keep testing. Depending on the problem, that can mean automated tests, local debugging, targeted logging, or manual verification. I also keep the team in the loop when a discovery changes the plan.
 
 ## Step 4: Review and refine
 
-I ensure the solution actually solves the original problem, then review the code as if someone else wrote it. I refactor for readability and performance, but stay pragmatic about what needs optimization.
+Before I call the work done, I check whether I actually solved the original problem instead of just producing code that looks reasonable.
 
-This process has saved me countless hours of debugging poorly planned solutions. The time invested upfront in understanding and planning pays dividends when the implementation goes smoothly.
+Then I review the code as if I were reading it for the first time. Is the intent obvious? Are the trade-offs acceptable? Did I leave behind unnecessary complexity? If performance matters, I verify it instead of assuming it is fine.
+
+Rule of thumb: if I feel pressure to code immediately, that is usually a sign I should slow down and spend a few more minutes understanding the problem first.

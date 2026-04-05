@@ -1,41 +1,34 @@
 ---
 title: "Detecting Manual AWS Changes in CloudFormation Stacks"
 pubDatetime: 2025-10-11
-description: "How to detect and manage configuration drift in AWS CloudFormation stacks, ensuring infrastructure consistency and preventing unauthorized changes."
+description: "How to detect and manage configuration drift in AWS CloudFormation stacks."
 slug: detecting-manual-aws-changes-in-cloudformation-stacks
 tags:
-  - aws
-  - infrastructure
-  - monitoring
+  - devops
 draft: false
 ---
 
-Manual infrastructure changes happen when someone "quickly fixes" something in production through the AWS Console and forgets to update and re-run the CloudFormation code. Someone scales up an RDS instance during an incident. Someone tweaks a security group rule to debug connectivity. Someone changes an environment variable to test a fix.
+Manual infrastructure changes happen when someone "quickly fixes" something in production through the AWS Console. Someone scales up an RDS instance during an incident. Someone tweaks a security group rule to debug connectivity. Someone changes an environment variable to test a fix.
 
-The changes work, the immediate problem is solved, and the team forgets. The next day, a routine deployment reverts those undocumented changes. Production breaks, but nobody knows why.
+The change works, the immediate problem is solved, and everyone moves on. The next day, a routine deployment reverts those changes. Production breaks and nobody knows why.
 
-CloudFormation's drift detection catches these manual changes by comparing your stack template definition against actual resources running in AWS.
+CloudFormation's drift detection catches this by comparing your stack template against the actual resources running in AWS.
 
 ## How Drift Detection Works
 
 ```bash
-# Trigger drift detection
 aws cloudformation detect-stack-drift --stack-name prod-infrastructure
-
-# Get the results
 aws cloudformation describe-stack-resource-drifts --stack-name prod-infrastructure
 ```
 
-The first command starts the detection process. The second retrieves the results. For large stacks, detection takes a few seconds to a few minutes.
+The first command starts detection. The second retrieves results. For large stacks, detection takes a few seconds to a few minutes.
 
-When CloudFormation finds drift, the output shows exactly what changed:
+When drift is found, the output shows exactly what changed:
 
 ```json
 {
   "StackResourceDrift": {
-    "StackId": "arn:aws:cloudformation:...",
     "LogicalResourceId": "DatabaseInstance",
-    "PhysicalResourceId": "prod-postgres-main",
     "ResourceType": "AWS::RDS::DBInstance",
     "ExpectedProperties": "{\"DBInstanceClass\":\"db.t3.medium\"}",
     "ActualProperties": "{\"DBInstanceClass\":\"db.t3.large\"}",
@@ -52,30 +45,28 @@ When CloudFormation finds drift, the output shows exactly what changed:
 }
 ```
 
-Someone changed the instance class from `db.t3.medium` to `db.t3.large`. The code says medium, but AWS is running large.
+The instance class changed from `db.t3.medium` to `db.t3.large`. The template says medium, AWS is running large.
 
-## What I Do With Detected Drift
+## What to Do With Detected Drift
 
-Two options when drift is detected:
+**Update the template to match reality** — the change was intentional and should be permanent. Update the CloudFormation template, commit it, redeploy.
 
-**Update the code to match reality:** The change was intentional and should be permanent. I update my CloudFormation template to reflect the actual state, commit it, and redeploy.
+**Revert the infrastructure** — the change was temporary or a mistake. Redeploy the stack and let CloudFormation restore the resource to what the template specifies.
 
-**Revert the infrastructure:** The change was a temporary fix or a mistake. I redeploy the CloudFormation stack, which reverts the resource to what the template specifies.
-
-I decide based on why the change happened:
-
-- Performance fix during incident -> update code
-- Debug tweak meant to be temporary -> revert infrastructure
-- Configuration experiment that worked -> update code
+The decision comes down to intent: a performance fix during an incident belongs in the template. A debug tweak that was never meant to stick belongs reverted.
 
 ## Limitations
 
-Drift detection only catches changes to resources CloudFormation manages. If someone creates a new resource outside CloudFormation, drift detection won't find it.
+Drift detection only catches changes to resources CloudFormation manages. Resources created outside CloudFormation entirely won't appear.
+
+---
+
+**TLDR:** Manual AWS changes silently diverge from your IaC. Drift detection surfaces the diff. Either update the template or redeploy to reconcile.
 
 ---
 
 **References:**
 
-- [Detect unmanaged configuration changes to stacks and resources with drift detection - AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html)
-- [DetectStackDrift - AWS CloudFormation API Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
-- [Detect drift on an entire CloudFormation stack - AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/detect-drift-stack.html)
+- [Detect unmanaged configuration changes to stacks and resources](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html)
+- [DetectStackDrift API Reference](https://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_DetectStackDrift.html)
+- [Detect drift on an entire CloudFormation stack](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/detect-drift-stack.html)

@@ -4,9 +4,7 @@ pubDatetime: 2024-10-30
 description: "Why and how to use enumerated types instead of boolean flags for status fields, improving code maintainability and preventing future refactoring headaches."
 slug: use-enums-over-booleans
 tags:
-  - practices
   - design
-  - patterns
 draft: false
 ---
 

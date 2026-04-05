@@ -5,8 +5,7 @@ description: "A comparison of approaches to building dynamic SQL queries in .NET
 slug: building-dynamic-sql-queries-in-dotnet-using-sqlkata
 tags:
   - dotnet
-  - sql
-  - databases
+  - data
 draft: false
 ---
 

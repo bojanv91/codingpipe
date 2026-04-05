@@ -4,8 +4,7 @@ pubDatetime: 2025-10-14
 description: "A detailed guide on choosing between property getters and get methods in object-oriented programming, with practical examples and best practices for API design."
 slug: property-getters-vs-get-methods-when-to-use-which
 tags:
-  - practices
-  - api
+  - dotnet
   - design
 ---
 

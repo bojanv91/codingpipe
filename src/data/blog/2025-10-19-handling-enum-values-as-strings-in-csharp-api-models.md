@@ -5,8 +5,7 @@ description: "A practical pattern for working with enums in API request models -
 slug: handling-enum-values-as-strings-in-csharp-api-models
 tags:
   - dotnet
-  - api
-  - practices
+  - design
 ---
 
 A common issue when building APIs is deciding how to represent enum values. Send them as integers and your requests become unreadable - is status `2` active or expired? Send them as strings and you end up with string comparisons scattered throughout your business logic. I use a pattern that solves both: store the enum as a string in the request model, but provide a conversion method that returns the strongly-typed enum.
