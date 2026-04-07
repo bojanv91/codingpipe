@@ -6,6 +6,7 @@ slug: what-makes-code-unmaintainable
 tags:
   - practices
   - software-design
+  - reference
 draft: false
 ---
 
