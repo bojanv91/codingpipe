@@ -1,81 +1,63 @@
 ---
-title: 8 factors that make code unmaintainable
+title: What makes code unmaintainable
 pubDatetime: 2025-04-24
-description: "A comprehensive guide to identifying and avoiding common practices that lead to unmaintainable code, with real-world examples and practical solutions."
+description: "Why code becomes hard to change: cohesion failures, coupling failures, leaked decisions, and other structural causes of unmaintainable software."
 slug: what-makes-code-unmaintainable
 tags:
   - practices
+  - software-design
 draft: false
 ---
 
-Software systems inevitably change. The challenge is we rarely know when or where changes will be needed. Experience in a domain helps make better design decisions, especially for systems in production where you need frequent updates without breaking functionality.
+These are the structural causes I keep finding across projects. Not style issues. Not naming preferences. The things that make a codebase genuinely hard to change.
 
-## 1. Excessive coupling
+They group into two buckets: code that's in the wrong place, and code that knows too much about other code.
 
-Code coupled with many dependencies creates a chain reaction of changes. Modifying one class requires changes in other dependent classes, which triggers more changes elsewhere. This "dependency hell" is why simple changes often take days instead of minutes.
+---
 
-I've seen teams spend entire sprints on what should have been simple configuration changes because they required updates across dozens of tightly coupled components. When you can't change anything without changing everything, maintenance becomes a nightmare.
+**Cohesion failures — code in the wrong place:**
 
-## 2. Solving imaginary future problems
+**Feature Envy.** A method that spends most of its time on another class's data. A `TaskNotificationService` computing `DueDate < DateTime.UtcNow && Status != TaskStatus.Completed` to decide if a task is overdue. That logic belongs on `Task`. When it doesn't live there, it gets duplicated, diverges, and the definition of overdue becomes a matter of which file you happen to be reading.
 
-Code that tries to solve future or speculative problems that haven't happened yet quickly becomes unmaintainable. We often don't know what tomorrow's problems will be, yet many developers build "just in case" features.
+**Semantic duplication.** Two implementations of the same concept with different names. One handler checks `DueDate < now`. Another checks `DueDate < now && Status != Completed`. Both mean overdue. No linter catches this because the names don't match — only domain knowledge does. The cost is paid later, when someone changes one and misses the other.
 
-The key is making things right for today while enabling tomorrow's changes without implementing them. Follow YAGNI: don't add functionality until you need it.
+**Mixed abstraction levels.** A coordinator method that orchestrates a workflow in the first half and enforces a business rule inline in the second. A coordinator should read like a table of contents. When it doesn't, the rule becomes invisible to anyone navigating from the outside.
 
-## 3. Side effects and unclear intentions
+---
 
-Consider this example:
+**Coupling failures — code that knows too much:**
+
+**Excessive chaining.** `_projectService.GetProject(id).Members.First(m => m.UserId == userId).Role` — coupled to `Project`, its `Members` collection, `Member`'s shape, and the `Role` enum, to answer a yes/no authorization question. Every link in that chain is a change that can break the caller. `_projectService.CanUserAssignTasks(projectId, userId)` answers the same question with one dependency.
+
+**Leaked decisions.** The rule for what makes a task assignable written four different ways across four handlers. Each one someone's best guess at the moment they needed it.
 
 ```csharp
-void DepositAmount(Account account, decimal amount)
+// In AssignTaskHandler
+if (task.Status != TaskStatus.Completed && task.AssigneeId == null)
+    task.AssigneeId = command.UserId;
+
+// In BulkAssignHandler
+if (task.AssigneeId == null)
+    task.AssigneeId = command.UserId;
+```
+
+The decision belongs on `Task`:
+
+```csharp
+public bool TryAssign(Guid userId)
 {
-    account.Balance += amount;
-    account.LastActivityDate = DateTime.Now;
-    account.UpgradeAccountTier();  // Side effect!
-    SendPromotionalEmails(account);  // Another unexpected side effect!
+    if (Status == TaskStatus.Completed || AssigneeId != null) return false;
+    AssigneeId = userId;
+    return true;
 }
 ```
 
-From the method name "DepositAmount", would you expect it to upgrade the account tier and send emails? Methods should do what their name suggests, nothing more. When code does unexpected things, debugging becomes a puzzle where every method call might trigger hidden behavior across the system.
+One place. One rule. Every caller gets the same answer.
 
-## 4. Knowledge duplication
+**Inappropriate intimacy.** External code that mutates another object's state directly — skipping the method that enforces invariants, writing to `task.AssigneeId` instead of calling `TryAssign`. The object loses control of itself. This is the endpoint of leaked decisions left unfixed.
 
-When code is duplicated, changing requirements means updating multiple places. Miss one, and you create bugs. Business rules duplicated across the codebase often drift apart over time.
+**Multiple roles.** A class whose purpose requires "and" to describe — validator and coordinator and notifier. Coordinator, composer and implementator. Each role it accumulates is a reason for an unrelated caller to depend on it. Changes to one role risk the others.
 
-I follow the Rule of Three: tolerate duplication twice, but refactor on the third occurrence. Just ensure the duplicated code truly represents the same concept. Sometimes similar-looking code serves different purposes and should remain separate.
+---
 
-## 5. Inconsistent coding style
-
-When code follows different conventions and patterns, developers waste mental energy switching contexts. Inconsistency goes beyond formatting: it includes naming, error handling, and how concepts are represented. The codebase should look like it was written by one person.
-
-## 6. Poor structure
-
-Code becomes unmaintainable when it's difficult to find where to make changes. Since developers spend about 10 times more time reading code than writing it, structure matters. The fundamental rule: code that changes together should be placed together. When related functionality is scattered across the codebase, even simple additions require modifying many files, increasing the risk of overlooked side effects."
-
-## 7. Over-engineering
-
-The worst over-engineering happens in the name of extensibility. Code designed to handle every possible future scenario often can't handle the actual changes that occur.
-
-Design for changes you've already seen. If configuration values changed three times last year, make them configurable. If the core algorithm has been stable for two years, leave it alone. The paradox: 'flexible' code often becomes inflexible for real-world changes.
-
-## 8. Under-engineering
-
-Under-engineering creates technical debt through copy-paste coding, magic numbers, missing error handling, and functions doing too much. What seems faster initially slows all future development.
-
-## Focus on what changes most often
-
-Git can identify your most frequently changed files with:
-
-```shell
-git log --format=format: --name-only | grep -v '^$' | sort | uniq -c | sort -nr | head -20. 
-```
-
-Files appearing in more than 25% of commits deserve extra attention for maintainability.
-
-## Final thoughts
-
-The true test of maintainable code isn't whether it works today, but whether a new team member can understand and modify it six months from now. As Joel Spolsky noted, "It's harder to read code than to write it" -- which is why our job isn't just writing code that works, but code that others can easily understand and change.
-
-Every decision that makes code harder to understand compounds over time, eventually creating what Michael Feathers calls "legacy code": code we're afraid to change. When reviewing or writing code, ask yourself if you're introducing any of these maintainability problems. Awareness alone can help you avoid the most common pitfalls.
-
-***EDIT (2025):** Even AI tools work better when the codebase is maintainable. AI assistants can more accurately suggest improvements and detect bugs when code follows consistent patterns, has clear naming, and maintains proper separation of concerns. Conversely, the maintainability issues described above often confuse AI tools just as they confuse human developers.
+**TLDR:** Maintainability breaks when logic drifts away from the data it operates on, or when a class accumulates knowledge about things outside its boundary. Both are detectable early. Both compound silently if left alone.

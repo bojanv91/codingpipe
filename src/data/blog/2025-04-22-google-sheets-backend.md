@@ -20,4 +20,4 @@ In our case, the pricing team kept refining rules directly in the template. Sale
 
 This pattern has real constraints. Google's API rate limits make it unsuitable for high-throughput systems. Each API call adds latency. Session isolation via spreadsheet copies adds overhead. For internal tools with moderate traffic, none of these are dealbreakers. For anything requiring high concurrency, they are.
 
-The question isn't whether spreadsheets make good databases. It's who should own the business logic — developers or domain experts. Sometimes that's already decided. You just haven't looked at what's already running.
+What matters here is who owns the business logic. In some systems, that ownership already sits with domain experts and the spreadsheets they rely on every day. The real opportunity is to recognize that and build around it.

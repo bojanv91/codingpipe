@@ -21,6 +21,6 @@ It also resolved an argument we'd been having. The team wanted reporting on the 
 
 There was bidirectional data too — settings and configuration pushed back down to devices. That's not ETL. Keeping it separate kept the design clean.
 
-Once the pattern was named, standard ETL optimizations became obvious: batch before sending, deduplicate, compress. Not novel solutions — just solutions we already knew, applied to a problem we finally recognized.
+Once the pattern was named, standard ETL optimizations became obvious: batch before sending, deduplicate, compress. They were familiar solutions, applied once the problem came into focus.
 
-Most data-moving systems are ETL pipelines. The ones that weren't designed as one are just unnamed ones.
+Most data-moving systems are ETL pipelines. Many operate that way even when nobody names them that way in the design.
