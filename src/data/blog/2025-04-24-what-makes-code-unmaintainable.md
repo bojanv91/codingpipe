@@ -22,7 +22,7 @@ They group into two buckets: code that's in the wrong place, and code that knows
 
 **Semantic duplication.** Two implementations of the same concept with different names. One handler checks `DueDate < now`. Another checks `DueDate < now && Status != Completed`. Both mean overdue. No linter catches this because the names don't match — only domain knowledge does. The cost is paid later, when someone changes one and misses the other.
 
-**Mixed abstraction levels.** A coordinator method that orchestrates a workflow in the first half and enforces a business rule inline in the second. A coordinator should read like a table of contents. When it doesn't, the rule becomes invisible to anyone navigating from the outside.
+**Mixed abstraction levels.** A coordinator method that starts by calling `LoadOrder`, `ValidatePayment`, `ReserveInventory`, then suddenly drops into `if (order.Total > 1000 && customer.Status != Preferred)` halfway through. A coordinator should read like a table of contents. When it mixes orchestration with inline business rules, the rule becomes invisible to anyone navigating from the outside.
 
 ---
 
@@ -55,9 +55,9 @@ public bool TryAssign(Guid userId)
 
 One place. One rule. Every caller gets the same answer.
 
-**Inappropriate intimacy.** External code that mutates another object's state directly — skipping the method that enforces invariants, writing to `task.AssigneeId` instead of calling `TryAssign`. The object loses control of itself. This is the endpoint of leaked decisions left unfixed.
+**Inappropriate intimacy.** External code that mutates another object's state directly — skipping the method that enforces invariants, writing to `task.AssigneeId` instead of calling `TryAssign`. The object loses control of itself. The caller now has to remember which fields are safe to change, and in what combination, to keep the object valid. This is the endpoint of leaked decisions left unfixed.
 
-**Multiple roles.** A class whose purpose requires "and" to describe — validator and coordinator and notifier. Coordinator, composer and implementator. Each role it accumulates is a reason for an unrelated caller to depend on it. Changes to one role risk the others.
+**Multiple roles.** A class whose purpose requires "and" to describe — validator and coordinator and notifier. Composer, policy checker, and side-effect runner. Each role it accumulates is a reason for an unrelated caller to depend on it. Changes to one role risk the others.
 
 ---
 
