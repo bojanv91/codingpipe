@@ -16,7 +16,7 @@ They group into two buckets: code that's in the wrong place, and code that knows
 
 ---
 
-**Cohesion failures — code in the wrong place:**
+## Cohesion failures — code in the wrong place
 
 **Feature Envy.** A method that spends most of its time on another class's data. A `TaskNotificationService` computing `DueDate < DateTime.UtcNow && Status != TaskStatus.Completed` to decide if a task is overdue. That logic belongs on `Task`. When it doesn't live there, it gets duplicated, diverges, and the definition of overdue becomes a matter of which file you happen to be reading.
 
@@ -26,7 +26,7 @@ They group into two buckets: code that's in the wrong place, and code that knows
 
 ---
 
-**Coupling failures — code that knows too much:**
+## Coupling failures — code that knows too much:
 
 **Excessive chaining.** `_projectService.GetProject(id).Members.First(m => m.UserId == userId).Role` — coupled to `Project`, its `Members` collection, `Member`'s shape, and the `Role` enum, to answer a yes/no authorization question. Every link in that chain is a change that can break the caller. `_projectService.CanUserAssignTasks(projectId, userId)` answers the same question with one dependency.
 
@@ -53,7 +53,7 @@ public bool TryAssign(Guid userId)
 }
 ```
 
-One place. One rule. Every caller gets the same answer.
+One place and one rule. Every caller gets the same answer.
 
 **Inappropriate intimacy.** External code that mutates another object's state directly — skipping the method that enforces invariants, writing to `task.AssigneeId` instead of calling `TryAssign`. The object loses control of itself. The caller now has to remember which fields are safe to change, and in what combination, to keep the object valid. This is the endpoint of leaked decisions left unfixed.
 
@@ -61,4 +61,4 @@ One place. One rule. Every caller gets the same answer.
 
 ---
 
-**TLDR:** Maintainability breaks when logic drifts away from the data it operates on, or when a class accumulates knowledge about things outside its boundary. Both are detectable early. Both compound silently if left alone.
+Maintainability breaks when logic drifts away from the data it operates on, or when a class accumulates knowledge about things outside its boundary. Both are detectable early. Both compound silently if left alone.
