@@ -9,7 +9,7 @@ draft: false
 
 Code that compiles and passes tests isn't necessarily well structured. The failures that make it hard to maintain are recognizable. They show up in the same forms across different codebases and teams, no matter what the technology is.
 
-These are the ones I fix most often.
+Current LLM models and coding agents make the same mistakes. They produce code that works — correct syntax, passing tests — but they default to the same structural failures: logic placed where it's convenient, concepts duplicated with different names, methods doing everything at once, classes that know too much. Reviewing AI-generated code means reviewing these patterns at higher volume.
 
 ---
 
